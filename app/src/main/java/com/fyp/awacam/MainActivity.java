@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         return path;
     }
 
-    private void createServerSocket(int portNum) {
+    public void createServerSocket(int portNum) {
         Thread t1 = new Thread(() ->
         {
             try {
