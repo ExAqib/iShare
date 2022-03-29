@@ -27,19 +27,17 @@ public class drive_navigation extends AppCompatActivity {
     private ActivityDriveNavigationBinding binding;
     static final String TAG = "tag";
 
-    int l=1;
-
     static final int PORT_NUM = 9999;
     static final String IP_ADDRESS = "192.168.0.113";
+
     Socket socket;
-
     static Handler handler;
-
     static int ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityDriveNavigationBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -75,10 +73,10 @@ public class drive_navigation extends AppCompatActivity {
                 socket = new Socket(IP_ADDRESS, PORT_NUM);
 
                 Connect connect = new Connect();
-                connect.execute(socket);
+                connect.execute();
 
-//                    ConnectClient client = new ConnectClient(socket, PORT_NUM, handler);
-//                    client.start();
+//              ConnectClient client = new ConnectClient(socket, PORT_NUM, handler);
+//              client.start();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -88,10 +86,10 @@ public class drive_navigation extends AppCompatActivity {
         t1.start();
     }
 
-    class Connect extends AsyncTask<Socket, Bundle, Bundle> {
+    class Connect extends AsyncTask<Void, Bundle, Bundle> {
 
         @Override
-        protected Bundle doInBackground(Socket... sockets) {
+        protected Bundle doInBackground(Void... voids) {
             setDriveNames();
             return null;
         }
@@ -101,15 +99,29 @@ public class drive_navigation extends AppCompatActivity {
             super.onProgressUpdate(values);
 
             View myLayout = getLayoutInflater().inflate(R.layout.drive_info, null, false);
+
             CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(5, 10, 5, 10);
             myLayout.setLayoutParams(layoutParams);
+
+            if (values[0].getString("name").trim().equals("Exception")) {
+
+                View exceptionLayout= getLayoutInflater().inflate(R.layout.exception_file,null,false);
+                myLayout.setLayoutParams(layoutParams);
+                TextView message = exceptionLayout.findViewById(R.id.exception_message);
+                message.setText(values[0].getString("Exception").trim());
+
+                binding.parentConstraint.addView(exceptionLayout);
+                return;
+            }
+
             TextView name = myLayout.findViewById(R.id.tv_drive_name);
             TextView label = myLayout.findViewById(R.id.tv_drive_label);
             TextView type = myLayout.findViewById(R.id.tv_drive_type);
             TextView format = myLayout.findViewById(R.id.tv_drive_format);
 
             name.setText(values[0].getString("name"));
+
             if (values[0].getString("label").trim().equals("Null")) {
                 label.setText(null);
             } else {
@@ -118,6 +130,7 @@ public class drive_navigation extends AppCompatActivity {
             type.append(values[0].getString("type"));
             format.append(values[0].getString("format"));
 
+            //Assigning ID just for testing. Will Remove at last
             myLayout.setId(ID);
             ID++;
             binding.parentConstraint.addView(myLayout);
@@ -128,15 +141,11 @@ public class drive_navigation extends AppCompatActivity {
                     Log.d(TAG, "onClick: ");
                     DirectoryProcessor directoryProcessor = new DirectoryProcessor(v);
                     directoryProcessor.execute(values[0].getString("name"));
+//                    SubDirectoryProcessor subDirectoryProcessor=new SubDirectoryProcessor(v,values[0].getString("name").trim());
+//                    subDirectoryProcessor.execute(socket);
                 }
 
             });
-        }
-
-        @Override
-        protected void onPostExecute(Bundle s) {
-            super.onPostExecute(s);
-            Log.d(TAG, "onPostExecute: ");
         }
 
         private void sendRequest(String request) {
@@ -159,16 +168,28 @@ public class drive_navigation extends AppCompatActivity {
             try {
                 sendRequest("driveNames");
                 Log.d(TAG, "Receiving Data from client");
+
                 InputStream inputStream = socket.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String data;
                 Bundle bundle = new Bundle();
-
                 int loop = 0;
+
                 while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
 
                     Log.d(TAG, "Data received is " + data);
+                    if(data.equals("Exception"))
+                    {
+                        data = bufferedReader.readLine();
+                        Log.d(TAG, "setDriveNames: Exception>> "+data);
+                        bundle.putString("name", "Exception");
+                        bundle.putString("Exception", data);
+                        publishProgress(bundle);
+                        bundle = new Bundle();
+                        loop=0;
+                        continue;
+                    }
 
                     switch (loop) {
                         case 0:
@@ -202,7 +223,7 @@ public class drive_navigation extends AppCompatActivity {
 
     }
 
-    class DirectoryProcessor extends AsyncTask<String, Bundle, Bundle> {
+    class DirectoryProcessor extends AsyncTask<String, String, Bundle> {
         View v;
 
         public DirectoryProcessor(View v) {
@@ -213,20 +234,19 @@ public class drive_navigation extends AppCompatActivity {
         protected Bundle doInBackground(String... strings) {
 
             Log.d(TAG, "doInBackground: ");
-            getDirectories(strings[0]);
+            //getDirectories(strings[0]);
+            getDirectory(strings[0]);
 
             return null;
         }
 
-        @Override
+       /* @Override
         protected void onProgressUpdate(Bundle... values) {
-            super.onProgressUpdate(values);
 
-            if (l==1)
-            {
-                l++;
-                return;
-            }
+            // This ProgressUpdate was called by getDirectories method which provides him bundle
+            //
+
+            super.onProgressUpdate(values);
             View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
 
             CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
@@ -241,7 +261,7 @@ public class drive_navigation extends AppCompatActivity {
                 public void onClick(View v) {
 
                     SubDirectoryProcessor subDirectoryProcessor=new SubDirectoryProcessor(v,directoryName.getText().toString());
-                    subDirectoryProcessor.execute(socket);
+                    subDirectoryProcessor.execute();
                 }
             });
 
@@ -280,7 +300,69 @@ public class drive_navigation extends AppCompatActivity {
 
         }
 
-        boolean sendRequest(String request) {
+        */
+
+       @Override
+       protected void onProgressUpdate(String... values) {
+           super.onProgressUpdate(values);
+
+           if(values[0].equals("InaccessibleFile"))
+           {
+               sendToast("File Inaccessible");
+               Log.d(TAG, "File Inaccessible ");
+           }
+           else if (values[0].equals("UnAuthorizedAccess"))
+           {
+               sendToast("Access Denied");
+               Log.d(TAG, "Access Denied");
+           }
+           else
+           {
+               View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
+
+               CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
+               layoutParams.setMargins(5, 10, 5, 10);
+               myLayout.setLayoutParams(layoutParams);
+
+               TextView directoryName = myLayout.findViewById(R.id.directory_name);
+               directoryName.setText(values[0]);
+
+               myLayout.setOnClickListener((View v)->{
+                   SubDirectoryProcessor subDirectoryProcessor=new SubDirectoryProcessor(v,values[0]);
+                   subDirectoryProcessor.execute();
+               });
+
+               runOnUiThread(() -> {
+                   LinearLayout layout = v.findViewById(R.id.show_directory);
+                   layout.addView(myLayout);
+               });
+
+           }
+       }
+
+        private void getDirectory(String path)
+        {
+            sendRequest("subDirectories");
+            sendRequest(path);
+
+            try {
+                InputStream inputStream = socket.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String data;
+
+                while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
+                    Log.d(TAG, "SubDirectory is " + data);
+                    onProgressUpdate(data);
+                }
+                Log.d(TAG, "Socket data ended " + data);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        void sendRequest(String request) {
             try {
 
                 Log.d(TAG, "Sending Request to Server i.e >>  " + request);
@@ -290,18 +372,19 @@ public class drive_navigation extends AppCompatActivity {
 
                 //Log.d(TAG,"printWriter closed");
                 //printWriter.close();
-
-                return true;
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "Exception in sendRequest() " + e);
-                return false;
             }
         }
-
+        private void sendToast(String message){
+            runOnUiThread(() -> {
+                Toast.makeText(drive_navigation.this, message, Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
-    class SubDirectoryProcessor extends AsyncTask<Socket, String, Void> {
+    class SubDirectoryProcessor extends AsyncTask<Void, String, Void> {
         View v;
         String path;
 
@@ -311,9 +394,8 @@ public class drive_navigation extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Socket... sockets) {
+        protected Void doInBackground(Void... voids) {
             getDirectory(path);
-
             return null;
         }
 
@@ -321,15 +403,19 @@ public class drive_navigation extends AppCompatActivity {
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
 
-            if(values[0].equals("InaccessibleFile"))
+            if(values[0].equals("File"))
+            {
+                sendToast("File");
+            }
+            else if(values[0].equals("InaccessibleFile"))
             {
                 sendToast("File Inaccessible");
-                Log.d(TAG, "File Inaccessible" );
+                Log.d(TAG, "File Inaccessible ");
             }
             else if (values[0].equals("UnAuthorizedAccess"))
             {
-                sendToast("UnAuthorizedAccess");
-                Log.d(TAG, "Access Denied" );
+                sendToast("Access Denied");
+                Log.d(TAG, "Access Denied");
             }
             else
             {
@@ -344,7 +430,7 @@ public class drive_navigation extends AppCompatActivity {
 
                 myLayout.setOnClickListener((View v)->{
                     SubDirectoryProcessor subDirectoryProcessor=new SubDirectoryProcessor(v,values[0]);
-                    subDirectoryProcessor.execute(socket);
+                    subDirectoryProcessor.execute();
                 });
 
                 runOnUiThread(() -> {
@@ -354,7 +440,8 @@ public class drive_navigation extends AppCompatActivity {
 
             }
         }
-        boolean sendRequest(String request) {
+
+        void sendRequest(String request) {
             try {
 
                 Log.d(TAG, "Sending Request to Server i.e >>  " + request);
@@ -365,13 +452,12 @@ public class drive_navigation extends AppCompatActivity {
                 //Log.d(TAG,"printWriter closed");
                 //printWriter.close();
 
-                return true;
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "Exception in sendRequest() " + e);
-                return false;
             }
         }
+
         private void getDirectory(String path)
         {
             sendRequest("subDirectories");
@@ -398,7 +484,5 @@ public class drive_navigation extends AppCompatActivity {
                 Toast.makeText(drive_navigation.this, message, Toast.LENGTH_SHORT).show();
             });
         }
-
-
     }
 }
