@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_drive_navigation.xml",
+        "source": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\src\\main\\res\\layout\\activity_drive_navigation.xml"
+    },
+    {
+        "merged": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\exception_file.xml",
+        "source": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\src\\main\\res\\layout\\exception_file.xml"
+    },
+    {
+        "merged": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\drive_info.xml",
+        "source": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\src\\main\\res\\layout\\drive_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\directory.xml",
+        "source": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\src\\main\\res\\layout\\directory.xml"
+    },
+    {
+        "merged": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\activity_main.xml",
+        "source": "C:\\Users\\loffy\\AndroidStudioProjects\\AwaCam\\app\\src\\main\\res\\layout\\activity_main.xml"
+    }
+]

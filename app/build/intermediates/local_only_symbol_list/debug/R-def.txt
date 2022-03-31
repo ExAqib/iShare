@@ -1,0 +1,32 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id directory_name
+id exception_message
+id parentConstraint
+id show_directory
+id show_sub_directory
+id start_recording
+id stop_recording
+id textView
+id tv_drive_format
+id tv_drive_label
+id tv_drive_name
+id tv_drive_type
+layout activity_drive_navigation
+layout activity_main
+layout directory
+layout drive_info
+layout exception_file
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style Theme.AwaCam
