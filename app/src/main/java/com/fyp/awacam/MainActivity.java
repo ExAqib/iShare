@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContextWrapper;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     ServerSocket serverSocket;
     Socket socket;
     static final int PORT_NUM = 9999;
-    static final String IP_ADDRESS = "192.168.0.112";
+    static final String IP_ADDRESS = "192.168.10.99";
     static boolean CLIENT_CONNECTED = false;
 
     AudioRecord recorder;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         //createClientSocket(IP_ADDRESS,PORT_NUM);
 
         binding.startRecording.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission") // if mic permssion was not granted
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Start Button Clicked");
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                                         , AudioTrack.MODE_STREAM);
 
                                 audioTrack.setPlaybackRate(sampleRate);
-                                audioTrack.play();
+                                //audioTrack.play();
 
                                 buffer = new short[bufferSize / 4];
 
