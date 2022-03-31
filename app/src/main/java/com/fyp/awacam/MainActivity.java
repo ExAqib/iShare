@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     static final String TAG = "tag";
     ServerSocket serverSocket;
     Socket socket;
-    static final int PORT_NUM = 9999;
+    static final int PORT_NUM = 4444;
     static final String IP_ADDRESS = "192.168.10.99";
     static boolean CLIENT_CONNECTED = false;
 
