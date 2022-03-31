@@ -37,7 +37,7 @@ public class ConnectClient extends Thread {
         try {
             if (message == "") {
                 message = "This is testing message from server ";
-                }
+            }
 
             Log.d(TAG, "Sending Message to Client i.e >>  " + message);
             PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -84,7 +84,7 @@ public class ConnectClient extends Thread {
                         bundle.putString("format", data);
                         message.setData(bundle);
                         uiThreadHandler.sendMessage(message);
-                        bundle=new Bundle();
+                        bundle = new Bundle();
                         message = Message.obtain();
                         loop = -1;
                         break;

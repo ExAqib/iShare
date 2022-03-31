@@ -132,10 +132,10 @@ public class MainActivity extends AppCompatActivity {
 
                                     try {
                                         //converting buffer(short) to bytes
-                                        byte socketBuffer[]=new byte[buffer.length*2];
+                                        byte socketBuffer[] = new byte[buffer.length * 2];
                                         ByteBuffer.wrap(socketBuffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(buffer);
 
-                                         outputStream.write(socketBuffer, 0, socketBuffer.length);
+                                        outputStream.write(socketBuffer, 0, socketBuffer.length);
 
                                     } catch (Exception e) {
                                         Log.d(TAG, "Exception>>" + e.toString());
