@@ -15,12 +15,14 @@ import android.widget.Toast;
 import com.fyp.awacam.databinding.ActivityDriveNavigationBinding;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class drive_navigation extends AppCompatActivity {
 
@@ -72,8 +74,11 @@ public class drive_navigation extends AppCompatActivity {
             try {
                 socket = new Socket(IP_ADDRESS, PORT_NUM);
 
-                Connect connect = new Connect();
-                connect.execute();
+                ReceiveFile receiveFile=new ReceiveFile();
+                receiveFile.execute();
+
+//                Connect connect = new Connect();
+//                connect.execute();
 
 //              ConnectClient client = new ConnectClient(socket, PORT_NUM, handler);
 //              client.start();
@@ -485,4 +490,29 @@ public class drive_navigation extends AppCompatActivity {
             });
         }
     }
+
+    class ReceiveFile extends AsyncTask<Void, String, Void>
+    {
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            DataInputStream dIn = null;
+            try {
+                dIn = new DataInputStream(socket.getInputStream());
+                int length = dIn.readInt(); // read length of incoming message
+                Log.d(TAG, "doInBackground: length is "+length);
+                if(length>0) {
+                    byte[] message = new byte[length];
+                    dIn.readFully(message, 0, message.length); // read the message
+                    Log.d(TAG, "doInBackground: data is  "+ Arrays.toString(message));
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
 }
