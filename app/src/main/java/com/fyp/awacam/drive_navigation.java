@@ -1,10 +1,14 @@
 package com.fyp.awacam;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -14,13 +18,19 @@ import android.widget.Toast;
 
 import com.fyp.awacam.databinding.ActivityDriveNavigationBinding;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class drive_navigation extends AppCompatActivity {
 
@@ -406,6 +416,23 @@ public class drive_navigation extends AppCompatActivity {
             if(values[0].equals("File"))
             {
                 sendToast("File");
+                runOnUiThread(() -> {
+
+                    AlertDialog.Builder confirmationMessage=new AlertDialog.Builder(drive_navigation.this);
+                    confirmationMessage.setTitle("Download File");
+                    confirmationMessage.setMessage("Do you want to download?");
+                    confirmationMessage.setPositiveButton("Yes", (dialog, which) -> {
+                        ReceiveFile receiveFile=new ReceiveFile(path);
+                        receiveFile.execute();
+                    });
+                    confirmationMessage.setNegativeButton("No", (dialog, which) -> {
+                    });
+
+                    confirmationMessage.setCancelable(false);
+                    confirmationMessage.show();
+                    Log.d(TAG, "onProgressUpdate: Confirmation message dispalyed");
+                });
+
             }
             else if(values[0].equals("InaccessibleFile"))
             {
@@ -485,4 +512,89 @@ public class drive_navigation extends AppCompatActivity {
             });
         }
     }
+
+    class ReceiveFile extends AsyncTask<Void, String, Void> {
+        String FilePath;
+
+        public ReceiveFile(String filePath) {
+            FilePath = filePath;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            sendRequest("downloadFile");
+            sendRequest(FilePath);
+
+            DataInputStream dIn ;
+            try {
+                Log.d(TAG, "Receiving File");
+
+               //To receive the file name
+                InputStream inputStream = socket.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String fileName=bufferedReader.readLine();
+                Log.d(TAG, "Received File Name is "+fileName);
+
+                //For buffer size
+                String fileSize=bufferedReader.readLine();
+                Log.d(TAG, "Received File size is "+fileSize);
+
+                //For getting File data from server
+                dIn = new DataInputStream(socket.getInputStream());
+                byte [] b = new byte[Integer.parseInt(fileSize)];
+                Log.d(TAG, "reading");
+                dIn.read(b,0,b.length);
+
+                //For saving in File
+                DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(getFilePath(fileName))));
+                dataOutputStream.write(b);
+                dataOutputStream.flush();
+                dataOutputStream.close();
+
+                Log.d(TAG, "doInBackground: File Received");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, "doInBackground: Exception>> "+e);
+
+            }
+
+            return null;
+        }
+
+        private String getFilePath(String Name) {
+            Log.d(TAG, "Creating File ");
+
+            ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+            File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+            File file = new File(musicDirectory, Name);
+            if (file.exists()) {
+                Log.d(TAG, "File Already exists:");
+            } else {
+                Log.d(TAG, "New file creted ");
+            }
+            String path = file.getPath();
+            Log.d(TAG, "File path is:" + path);
+
+            return path;
+        }
+        void sendRequest(String request) {
+            try {
+                Log.d(TAG, "Sending Request to Server i.e >>  " + request);
+                PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+                printWriter.println(request);
+                printWriter.flush();
+
+                //Log.d(TAG,"printWriter closed");
+                //printWriter.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "Exception in sendRequest() " + e);
+            }
+        }
+
+    }
+
 }

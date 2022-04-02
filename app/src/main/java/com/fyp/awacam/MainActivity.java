@@ -234,11 +234,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getRecordingFilePath() {
-        Log.d(TAG, "Creating File for Audio");
+        Log.d(TAG, "Creating File ");
 
         ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
         File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-        File file = new File(musicDirectory, "testAudioFile.pcm");
+        File file = new File(musicDirectory, "abc.txt");
         if (file.exists()) {
             Log.d(TAG, "File Already exists:");
         } else {
