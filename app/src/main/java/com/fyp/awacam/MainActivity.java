@@ -5,7 +5,9 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ContextWrapper;
+
+import com.fyp.awacam.databinding.ActivityMainBinding;
+
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -13,26 +15,16 @@ import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fyp.awacam.databinding.ActivityMainBinding;
-
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -76,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         if (!permissionsGranted()) {
             grantPermissions();
         }
+
 
         createServerSocket(PORT_NUM);
         //createClientSocket(IP_ADDRESS,PORT_NUM);
@@ -129,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                                     //giving data to audioTrack for playing audio simultaneously
                                     audioTrack.write(buffer, 0, bufferSize / 4);
 
-
                                     try {
                                         //converting buffer(short) to bytes
                                         byte socketBuffer[] = new byte[buffer.length * 2];
@@ -151,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
                                     //Send data via socket
                                     outputStream.flush();
                                     outputStream.close();
+
+
                                     socket.close();
                                     Log.d(TAG, "Socket closed");
 
@@ -176,11 +170,57 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 audioPlaying = false;
+                /*try {
+                    //Stop The recording (audioPlaying flag would be set to false when clicked on stop button)
+
+                    recorder.stop();
+
+                    //Send data via socket
+                    outputStream.flush();
+                    outputStream.close();
+                    socket.close();
+                    Log.d(TAG, "Socket closed");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(TAG, ">>Exception>>" + e.toString());
+                }*/
+
+            }
+
+        });
+
+        binding.openSocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createServerSocket(PORT_NUM);
+            }
+
+        });
+
+        binding.closeSocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                audioPlaying = false;
+                try {
+                    socket.close();
+                    Log.d(TAG, "Socket closed");
+                    if (socket != null) {
+                        // socket.close();
+                        // Log.d(TAG, "Socket closed");
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.d(TAG, ">>Exception>>" + e.toString());
+                }
+
             }
 
         });
 
     }
+
 
     public void createServerSocket(int portNum) {
         Thread t1 = new Thread(() ->
