@@ -4,15 +4,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.ProgressDialog;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 public class drive_navigation extends AppCompatActivity {
@@ -44,6 +53,8 @@ public class drive_navigation extends AppCompatActivity {
     static Handler handler;
     static int ID = 0;
 
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +62,15 @@ public class drive_navigation extends AppCompatActivity {
         binding = ActivityDriveNavigationBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        progressBar = new ProgressBar(this);
+        progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setIndeterminate(false);
+        progressBar.setProgress(20);
+
+
+        Log.d(TAG, "onCreate: Program started");
 
         /*handler = new Handler(getApplicationContext().getMainLooper()) {
             @Override
@@ -116,7 +136,7 @@ public class drive_navigation extends AppCompatActivity {
 
             if (values[0].getString("name").trim().equals("Exception")) {
 
-                View exceptionLayout= getLayoutInflater().inflate(R.layout.exception_file,null,false);
+                View exceptionLayout = getLayoutInflater().inflate(R.layout.exception_file, null, false);
                 myLayout.setLayoutParams(layoutParams);
                 TextView message = exceptionLayout.findViewById(R.id.exception_message);
                 message.setText(values[0].getString("Exception").trim());
@@ -189,15 +209,14 @@ public class drive_navigation extends AppCompatActivity {
                 while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
 
                     Log.d(TAG, "Data received is " + data);
-                    if(data.equals("Exception"))
-                    {
+                    if (data.equals("Exception")) {
                         data = bufferedReader.readLine();
-                        Log.d(TAG, "setDriveNames: Exception>> "+data);
+                        Log.d(TAG, "setDriveNames: Exception>> " + data);
                         bundle.putString("name", "Exception");
                         bundle.putString("Exception", data);
                         publishProgress(bundle);
                         bundle = new Bundle();
-                        loop=0;
+                        loop = 0;
                         continue;
                     }
 
@@ -243,115 +262,45 @@ public class drive_navigation extends AppCompatActivity {
         @Override
         protected Bundle doInBackground(String... strings) {
 
-            Log.d(TAG, "doInBackground: ");
-            //getDirectories(strings[0]);
             getDirectory(strings[0]);
 
             return null;
         }
 
-       /* @Override
-        protected void onProgressUpdate(Bundle... values) {
-
-            // This ProgressUpdate was called by getDirectories method which provides him bundle
-            //
-
+        @Override
+        protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
 
-            CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(5, 10, 5, 10);
-            myLayout.setLayoutParams(layoutParams);
+            if (values[0].equals("InaccessibleFile")) {
+                sendToast("File Inaccessible");
+                Log.d(TAG, "File Inaccessible ");
+            } else if (values[0].equals("UnAuthorizedAccess")) {
+                sendToast("Access Denied");
+                Log.d(TAG, "Access Denied");
+            } else {
+                View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
 
-            TextView directoryName = myLayout.findViewById(R.id.directory_name);
-            directoryName.setText(values[0].getString("name"));
+                CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(5, 10, 5, 10);
+                myLayout.setLayoutParams(layoutParams);
 
-            myLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                TextView directoryName = myLayout.findViewById(R.id.directory_name);
+                directoryName.setText(values[0]);
 
-                    SubDirectoryProcessor subDirectoryProcessor=new SubDirectoryProcessor(v,directoryName.getText().toString());
+                myLayout.setOnClickListener((View v) -> {
+                    SubDirectoryProcessor subDirectoryProcessor = new SubDirectoryProcessor(v, values[0]);
                     subDirectoryProcessor.execute();
-                }
-            });
+                });
 
-            runOnUiThread(() -> {
-                LinearLayout layout = v.findViewById(R.id.show_directory);
-                layout.addView(myLayout);
-            });
+                runOnUiThread(() -> {
+                    LinearLayout layout = v.findViewById(R.id.show_directory);
+                    layout.addView(myLayout);
+                });
 
-        }
-
-        private void getDirectories(String drive) {
-            try {
-                sendRequest("driveDirectories");
-                sendRequest(drive);
-
-                Log.d(TAG, "Getting directories");
-                InputStream inputStream = socket.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String data;
-
-                Bundle bundle = new Bundle();
-                while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
-                    Log.d(TAG, "Directory is " + data);
-                    bundle.putString("name", data);
-                    onProgressUpdate(bundle);
-                    bundle = new Bundle();
-                }
-                Log.d(TAG, "Socket Data Ended");
-
-                //socket.close();
-                //Log.d(TAG, "Socket Closed");
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.d(TAG, "Exception in getDirectories()>> " + e);
             }
-
         }
 
-        */
-
-       @Override
-       protected void onProgressUpdate(String... values) {
-           super.onProgressUpdate(values);
-
-           if(values[0].equals("InaccessibleFile"))
-           {
-               sendToast("File Inaccessible");
-               Log.d(TAG, "File Inaccessible ");
-           }
-           else if (values[0].equals("UnAuthorizedAccess"))
-           {
-               sendToast("Access Denied");
-               Log.d(TAG, "Access Denied");
-           }
-           else
-           {
-               View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
-
-               CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
-               layoutParams.setMargins(5, 10, 5, 10);
-               myLayout.setLayoutParams(layoutParams);
-
-               TextView directoryName = myLayout.findViewById(R.id.directory_name);
-               directoryName.setText(values[0]);
-
-               myLayout.setOnClickListener((View v)->{
-                   SubDirectoryProcessor subDirectoryProcessor=new SubDirectoryProcessor(v,values[0]);
-                   subDirectoryProcessor.execute();
-               });
-
-               runOnUiThread(() -> {
-                   LinearLayout layout = v.findViewById(R.id.show_directory);
-                   layout.addView(myLayout);
-               });
-
-           }
-       }
-
-        private void getDirectory(String path)
-        {
+        private void getDirectory(String path) {
             sendRequest("subDirectories");
             sendRequest(path);
 
@@ -361,7 +310,7 @@ public class drive_navigation extends AppCompatActivity {
                 String data;
 
                 while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
-                    Log.d(TAG, "SubDirectory is " + data);
+                    //Log.d(TAG, "SubDirectory is " + data);
                     onProgressUpdate(data);
                 }
                 Log.d(TAG, "Socket data ended " + data);
@@ -387,7 +336,8 @@ public class drive_navigation extends AppCompatActivity {
                 Log.d(TAG, "Exception in sendRequest() " + e);
             }
         }
-        private void sendToast(String message){
+
+        private void sendToast(String message) {
             runOnUiThread(() -> {
                 Toast.makeText(drive_navigation.this, message, Toast.LENGTH_SHORT).show();
             });
@@ -398,9 +348,9 @@ public class drive_navigation extends AppCompatActivity {
         View v;
         String path;
 
-        public SubDirectoryProcessor(View v,String path) {
+        public SubDirectoryProcessor(View v, String path) {
             this.v = v;
-            this.path=path;
+            this.path = path;
         }
 
         @Override
@@ -410,42 +360,42 @@ public class drive_navigation extends AppCompatActivity {
         }
 
         @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            Log.d(TAG, "SubDirectoryProcessor -> onPostExecute");
+
+        }
+
+        @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
 
-            if(values[0].equals("File"))
-            {
+            if (values[0].equals("File")) {
                 sendToast("File");
                 runOnUiThread(() -> {
 
-                    AlertDialog.Builder confirmationMessage=new AlertDialog.Builder(drive_navigation.this);
+                    AlertDialog.Builder confirmationMessage = new AlertDialog.Builder(drive_navigation.this);
                     confirmationMessage.setTitle("Download File");
                     confirmationMessage.setMessage("Do you want to download?");
                     confirmationMessage.setPositiveButton("Yes", (dialog, which) -> {
-                        ReceiveFile receiveFile=new ReceiveFile(path);
+                        ReceiveFile receiveFile = new ReceiveFile(path);
                         receiveFile.execute();
+
                     });
                     confirmationMessage.setNegativeButton("No", (dialog, which) -> {
                     });
 
                     confirmationMessage.setCancelable(false);
                     confirmationMessage.show();
-                    Log.d(TAG, "onProgressUpdate: Confirmation message dispalyed");
                 });
 
-            }
-            else if(values[0].equals("InaccessibleFile"))
-            {
+            } else if (values[0].equals("InaccessibleFile")) {
                 sendToast("File Inaccessible");
                 Log.d(TAG, "File Inaccessible ");
-            }
-            else if (values[0].equals("UnAuthorizedAccess"))
-            {
+            } else if (values[0].equals("UnAuthorizedAccess")) {
                 sendToast("Access Denied");
                 Log.d(TAG, "Access Denied");
-            }
-            else
-            {
+            } else {
                 View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
 
                 CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
@@ -455,8 +405,8 @@ public class drive_navigation extends AppCompatActivity {
                 TextView directoryName = myLayout.findViewById(R.id.directory_name);
                 directoryName.setText(values[0]);
 
-                myLayout.setOnClickListener((View v)->{
-                    SubDirectoryProcessor subDirectoryProcessor=new SubDirectoryProcessor(v,values[0]);
+                myLayout.setOnClickListener((View v) -> {
+                    SubDirectoryProcessor subDirectoryProcessor = new SubDirectoryProcessor(v, values[0]);
                     subDirectoryProcessor.execute();
                 });
 
@@ -468,6 +418,7 @@ public class drive_navigation extends AppCompatActivity {
             }
         }
 
+
         void sendRequest(String request) {
             try {
 
@@ -485,8 +436,7 @@ public class drive_navigation extends AppCompatActivity {
             }
         }
 
-        private void getDirectory(String path)
-        {
+        private void getDirectory(String path) {
             sendRequest("subDirectories");
             sendRequest(path);
 
@@ -496,7 +446,7 @@ public class drive_navigation extends AppCompatActivity {
                 String data;
 
                 while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
-                    Log.d(TAG, "SubDirectory is " + data);
+                    // Log.d(TAG, "SubDirectory is " + data);
                     onProgressUpdate(data);
                 }
                 Log.d(TAG, "Socket data ended " + data);
@@ -506,7 +456,8 @@ public class drive_navigation extends AppCompatActivity {
             }
 
         }
-        private void sendToast(String message){
+
+        private void sendToast(String message) {
             runOnUiThread(() -> {
                 Toast.makeText(drive_navigation.this, message, Toast.LENGTH_SHORT).show();
             });
@@ -515,56 +466,159 @@ public class drive_navigation extends AppCompatActivity {
 
     class ReceiveFile extends AsyncTask<Void, String, Void> {
         String FilePath;
+        ProgressDialog progressDialog;
+        int fileSize = 0;
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         public ReceiveFile(String filePath) {
             FilePath = filePath;
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(drive_navigation.this);
 
+            progressDialog.setTitle("Downloading");
+            progressDialog.setMessage("Your File is being downloaded in background. You can use any other app.");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            /*progressDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });*/
+            progressDialog.setProgress(0);
+
+            progressDialog.show();
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
             sendRequest("downloadFile");
             sendRequest(FilePath);
 
-            DataInputStream dIn ;
+            DataInputStream dIn;
             try {
                 Log.d(TAG, "Receiving File");
 
-               //To receive the file name
+                //To receive the file name
                 InputStream inputStream = socket.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                String fileName=bufferedReader.readLine();
-                Log.d(TAG, "Received File Name is "+fileName);
+                String fileName = bufferedReader.readLine();
+                // Log.d(TAG, "Received File Name is "+fileName);
 
                 //For buffer size
-                String fileSize=bufferedReader.readLine();
-                Log.d(TAG, "Received File size is "+fileSize);
+                String FileSize = bufferedReader.readLine();
+                fileSize = Integer.parseInt(FileSize);
+                progressDialog.setMax((int) fileSize / 1000000);
+
+                //Log.d(TAG, "Received File size is "+(float)fileSize/100000 +"MB ("+fileSize+"byes)");
 
                 //For getting File data from server
                 dIn = new DataInputStream(socket.getInputStream());
-                byte [] b = new byte[Integer.parseInt(fileSize)];
-                Log.d(TAG, "reading");
-                dIn.read(b,0,b.length);
 
                 //For saving in File
-                DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(getFilePath(fileName))));
-                dataOutputStream.write(b);
-                dataOutputStream.flush();
-                dataOutputStream.close();
+                FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
 
+                int bytesRead = 0;
+                int bufferSize = 2048;
+
+                byte[] data = new byte[bufferSize];
+                int size;
+
+                int counter=0;
+
+                while (bytesRead < fileSize) {
+                    if(bufferSize>(fileSize-bytesRead))
+                    {
+                        Log.d(TAG, "Adjusting buffer size from " +bufferSize);
+                        bufferSize=fileSize-bytesRead;
+                        Log.d(TAG, "to " +bufferSize);
+                    }
+                    data=new byte[bufferSize];
+
+                    while (dIn.available() <=0) {
+                        if(counter==3)
+                        {
+                            Log.d(TAG, "Breaking if else ");
+                            counter=0;
+                            break;
+                        }
+                        Log.d(TAG, "Sleeping thread for 2 sec ");
+                        Thread.sleep(2000);
+                        counter++;
+                    }
+
+                    Log.d(TAG, "bytes read " + bytesRead + " fileSize" + fileSize);
+
+                    size = dIn.read(data, 0, bufferSize);
+                    Log.d(TAG, "Readed");
+
+                    fos.write(data, 0, size);
+
+                    bytesRead += size;
+                    //Log.d(TAG, "Total data read "+bytesRead/1000000+" MB's ("+bytesRead+" bytes)");
+
+                    publishProgress(String.valueOf(bytesRead));
+                }
+
+
+                Log.d(TAG, "Sleeping thread for 5 second");
+                Thread.sleep(5000);
+                while (dIn.available() > 0) {
+                    //bufferSize=dIn.available();
+                    Log.d(TAG, "data is available");
+                    size = dIn.read(data, 0, bufferSize);
+                    fos.write(data, 0, size);
+                }
+
+                Log.d(TAG, "file Closed ");
+                fos.flush();
+                fos.close();
                 Log.d(TAG, "doInBackground: File Received");
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.d(TAG, "doInBackground: Exception>> "+e);
+                Log.d(TAG, "doInBackground: Exception>> " + e);
 
             }
 
             return null;
         }
 
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            float bytesRead = Float.parseFloat(values[0]) / 1000000;
+
+            try {
+                progressDialog.incrementProgressBy((int) bytesRead / (fileSize / 1000000));
+                progressDialog.setProgress((int) bytesRead);
+
+
+            } catch (Exception e) {
+                progressDialog.incrementProgressBy(progressDialog.getMax());
+                progressDialog.setProgress(progressDialog.getMax());
+
+                //Log.d(TAG, "Exception >> onProgressUpdate: Receive file : Download Dialog " + e);
+            }
+           // Log.d(TAG, decimalFormat.format(bytesRead) + "/" + fileSize / 1000000 + "MB Completed");
+
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+            progressDialog.dismiss();
+        }
+
+
         private String getFilePath(String Name) {
-            Log.d(TAG, "Creating File ");
+            // Log.d(TAG, "Creating File ");
 
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
             File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
@@ -572,13 +626,14 @@ public class drive_navigation extends AppCompatActivity {
             if (file.exists()) {
                 Log.d(TAG, "File Already exists:");
             } else {
-                Log.d(TAG, "New file creted ");
+                Log.d(TAG, "New file created ");
             }
             String path = file.getPath();
             Log.d(TAG, "File path is:" + path);
 
             return path;
         }
+
         void sendRequest(String request) {
             try {
                 Log.d(TAG, "Sending Request to Server i.e >>  " + request);
