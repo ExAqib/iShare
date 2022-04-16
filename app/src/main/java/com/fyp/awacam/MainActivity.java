@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        createServerSocket(PORT_NUM);
+        //createServerSocket(PORT_NUM);
         //createClientSocket(IP_ADDRESS,PORT_NUM);
 
         binding.startRecording.setOnClickListener(new View.OnClickListener() {
@@ -139,14 +139,16 @@ public class MainActivity extends AppCompatActivity {
                                     //Stop The recording (audioPlaying flag would be set to false when clicked on stop button)
 
                                     recorder.stop();
+                                    Log.d(TAG, "recorder Stopeded");
+
 
                                     //Send data via socket
-                                    outputStream.flush();
-                                    outputStream.close();
+                                    //outputStream.flush();
+                                    //outputStream.close();
 
 
-                                    socket.close();
-                                    Log.d(TAG, "Socket closed");
+                                    //socket.close();
+                                    //Log.d(TAG, "Socket closed");
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -169,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         binding.stopRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "Stop Button Clicked");
                 audioPlaying = false;
                 /*try {
                     //Stop The recording (audioPlaying flag would be set to false when clicked on stop button)
@@ -201,13 +204,17 @@ public class MainActivity extends AppCompatActivity {
         binding.closeSocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                audioPlaying = false;
+                //audioPlaying = false;
                 try {
-                    socket.close();
-                    Log.d(TAG, "Socket closed");
                     if (socket != null) {
-                        // socket.close();
-                        // Log.d(TAG, "Socket closed");
+                        if (outputStream != null) {
+                            outputStream.flush();
+                            outputStream.close();
+                            Log.d(TAG, "outputStream closed");
+                        }
+                        socket.close();
+                        //serverSocket.close();
+                        Log.d(TAG, "Socket closed");
                     }
 
                 } catch (Exception e) {
