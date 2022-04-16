@@ -38,7 +38,7 @@ public class Networking {
     LinearLayout linearLayout;
     Socket socket;
     Activity driveNavigationActivity;
-    static Context APPLICATION_CONTEXT;
+    Context APPLICATION_CONTEXT;
 
     public Networking(Activity activity, Context APPLICATION_CONTEXT, Context context, Socket s, LinearLayout linearLayout) {
         this.context = context;
