@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -338,6 +340,7 @@ public class Networking {
         String FilePath;
         ProgressDialog progressDialog;
         int fileSize = 0;
+        boolean continueDownload=true;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         @Override
@@ -350,12 +353,13 @@ public class Networking {
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            /*progressDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            progressDialog.setButton(ProgressDialog.BUTTON_NEUTRAL, "Cancel Download", (dialog, which) -> {
+                sendToast("Download Cancelled");
+                Log.d(TAG, "onPreExecute: ReceiveFile >>  Download Cancelled");
+                continueDownload=false;
+                progressDialog.setMessage(" Cancelling Download");
 
-                }
-            });*/
+            });
             progressDialog.setProgress(0);
 
             progressDialog.show();
@@ -398,47 +402,54 @@ public class Networking {
 
                 int counter = 0;
 
-                while (bytesRead < fileSize) {
-                    if (bufferSize > (fileSize - bytesRead)) {
+                while (bytesRead < fileSize  && continueDownload) {
+                 /*   if (bufferSize > (fileSize - bytesRead)) {
                         Log.d(TAG, "Adjusting buffer size from " + bufferSize);
                         bufferSize = fileSize - bytesRead;
                         Log.d(TAG, "to " + bufferSize);
                     }
                     data = new byte[bufferSize];
 
-                    while (dIn.available() <= 0) {
-                        if (counter == 3) {
-                            Log.d(TAG, "Breaking if else ");
-                            counter = 0;
-                            break;
-                        }
-                        Log.d(TAG, "Sleeping thread for 2 sec ");
-                        Thread.sleep(2000);
-                        counter++;
-                    }
 
+*/
                     Log.d(TAG, "bytes read " + bytesRead + " fileSize" + fileSize);
 
-                    size = dIn.read(data, 0, bufferSize);
-                    Log.d(TAG, "Readed");
+                    while (dIn.available() <= 0) {
+
+                        Log.d(TAG, "Sleeping thread for 2 sec ");
+                        Thread.sleep(2000);
+                    }
+                    size = dIn.read(data, 0, data.length);
+                    Log.d(TAG, "Readed "+ size +" bytes");
 
                     fos.write(data, 0, size);
 
                     bytesRead += size;
                     //Log.d(TAG, "Total data read "+bytesRead/1000000+" MB's ("+bytesRead+" bytes)");
+                    Log.d(TAG, "bytes read " + bytesRead );
 
                     publishProgress(String.valueOf(bytesRead));
                 }
 
-                Log.d(TAG, "Sleeping thread for 5 second");
-                Thread.sleep(5000);
+                if(continueDownload)
+                {
+                    Log.d(TAG, "Download Was Not Cancelled");
+                    sendRequest("NOT_CANCEL");
+                }
+                else{
+                    Log.d(TAG, "Download Was Cancelled");
+                    sendRequest("CANCEL");
 
-                int availableBytes = dIn.available();
-                while (availableBytes > 0) {
-                    Log.d(TAG, "data is available");
-                    size = dIn.read(data, 0, availableBytes);
-                    fos.write(data, 0, size);
-                    availableBytes = dIn.available();
+                    Log.d(TAG, "Sleeping thread for 5 second");
+                    Thread.sleep(5000);
+
+                    int availableBytes = dIn.available();
+                    while (availableBytes > 0) {
+                        Log.d(TAG, "data is available");
+                        size = dIn.read(data, 0, data.length);
+                        fos.write(data, 0, size);
+                        availableBytes = dIn.available();
+                    }
                 }
 
                 Log.d(TAG, "file Closed ");
@@ -485,6 +496,8 @@ public class Networking {
 
             ContextWrapper contextWrapper = new ContextWrapper(APPLICATION_CONTEXT);
             File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+            //File musicDirectory = contextWrapper.getExternalFilesDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+
             File file = new File(musicDirectory, Name);
             if (file.exists()) {
                 Log.d(TAG, "File Already exists:");
