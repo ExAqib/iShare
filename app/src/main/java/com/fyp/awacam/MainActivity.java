@@ -212,8 +212,8 @@ public class MainActivity extends AppCompatActivity {
                             outputStream.close();
                             Log.d(TAG, "outputStream closed");
                         }
-                        socket.close();
-                        //serverSocket.close();
+                        //socket.close();
+                        serverSocket.close();
                         Log.d(TAG, "Socket closed");
                     }
 
