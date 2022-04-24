@@ -197,6 +197,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createServerSocket(PORT_NUM);
+                binding.openSocket.setClickable(false);
+                Toast.makeText(getApplicationContext(),"Socket opened",Toast.LENGTH_SHORT).show();
+
             }
 
         });
@@ -204,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
         binding.closeSocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //audioPlaying = false;
                 try {
                     if (socket != null) {
                         if (outputStream != null) {
@@ -213,9 +215,11 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, "outputStream closed");
                         }
                         //socket.close();
+                    }
                         serverSocket.close();
                         Log.d(TAG, "Socket closed");
-                    }
+                        Toast.makeText(getApplicationContext(),"Socket closed",Toast.LENGTH_SHORT).show();
+                        binding.openSocket.setClickable(true);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(this, "Message received form server ", Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {
-                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 
                 e.printStackTrace();
             }
