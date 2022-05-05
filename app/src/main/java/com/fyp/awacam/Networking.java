@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,17 +30,18 @@ import java.text.DecimalFormat;
 
 public class Networking {
 
+    private final Activity driveNavigationActivity;
+    private final Context APPLICATION_CONTEXT;
     private final Context context;
-    final String TAG = "tag";
-    LayoutInflater layoutInflater;
-    LinearLayout linearLayout;
-    Socket socket;
-    Activity driveNavigationActivity;
-    Context APPLICATION_CONTEXT;
+    private final Socket socket;
 
-    public Networking(Activity activity, Context APPLICATION_CONTEXT, Context context, Socket s, LinearLayout linearLayout) {
+    private final String TAG = "tag";
+    private final LayoutInflater layoutInflater;
+    private final LinearLayout linearLayout;
+
+    public Networking(Activity activity, Context APPLICATION_CONTEXT, Context context, Socket socket, LinearLayout linearLayout) {
         this.context = context;
-        this.socket = s;
+        this.socket = socket;
         this.driveNavigationActivity = activity;
         this.APPLICATION_CONTEXT = APPLICATION_CONTEXT;
         this.linearLayout = linearLayout;
@@ -54,10 +53,14 @@ public class Networking {
         connect.execute();
     }
 
-    class Connect extends AsyncTask<Void, Bundle, Bundle> {
+//    Params, the type of the parameters sent to the task upon execution.
+//    Progress, the type of the progress units published during the background computation.
+//    Result, the type of the result of the background computation.
+
+    class Connect extends AsyncTask<Void, Bundle, Void> {
 
         @Override
-        protected Bundle doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids) {
             setDriveNames();
             return null;
         }
@@ -66,7 +69,6 @@ public class Networking {
         protected void onProgressUpdate(Bundle... values) {
             super.onProgressUpdate(values);
 
-            // View myLayout = getLayoutInflater().inflate(R.layout.drive_info, null, false);
             View myLayout = layoutInflater.inflate(R.layout.drive_info, null, false);
 
             CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
@@ -99,24 +101,19 @@ public class Networking {
             type.append(values[0].getString("type"));
             format.append(values[0].getString("format"));
 
-
             linearLayout.addView(myLayout);
 
-            myLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onClick: ");
-                    DirectoryProcessor directoryProcessor = new DirectoryProcessor();
-                    directoryProcessor.execute(new Parameter(v, values[0].getString("name")));
-                }
-
+            myLayout.setOnClickListener(v -> {
+                Log.d(TAG, "onClick: ");
+                DirectoryProcessor directoryProcessor = new DirectoryProcessor();
+                directoryProcessor.execute(new Parameter(v, values[0].getString("name")));
             });
         }
 
         private void setDriveNames() {
             try {
                 sendRequest("driveNames");
-                Log.d(TAG, "Receiving Data from client");
+                Log.d(TAG, "Sending driveNames Request");
 
                 InputStream inputStream = socket.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -357,8 +354,8 @@ public class Networking {
                 sendToast("Download Cancelled");
                 Log.d(TAG, "onPreExecute: ReceiveFile >>  Download Cancelled");
                 continueDownload=false;
-                progressDialog.setMessage(" Cancelling Download");
-
+                progressDialog.setMessage("Cancelling");
+                progressDialog.setMessage(" Cancelling Download...");
             });
             progressDialog.setProgress(0);
 
@@ -373,7 +370,6 @@ public class Networking {
 
             DataInputStream dIn;
             try {
-                Log.d(TAG, "Receiving File");
 
                 //To receive the file name
                 InputStream inputStream = socket.getInputStream();
@@ -381,7 +377,6 @@ public class Networking {
                 String fileName = bufferedReader.readLine();
                 // Log.d(TAG, "Received File Name is "+fileName);
 
-                //For buffer size
                 String FileSize = bufferedReader.readLine();
                 fileSize = Integer.parseInt(FileSize);
                 progressDialog.setMax((int) fileSize / 1000000);
@@ -395,56 +390,54 @@ public class Networking {
                 FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
 
                 int bytesRead = 0;
-                int bufferSize = 2048;
+                int bufferSize = 1024*4;
 
-                byte[] data = new byte[bufferSize];
+                byte[] data=new byte[bufferSize];
                 int size;
 
                 int counter = 0;
 
                 while (bytesRead < fileSize  && continueDownload) {
-                 /*   if (bufferSize > (fileSize - bytesRead)) {
-                        Log.d(TAG, "Adjusting buffer size from " + bufferSize);
-                        bufferSize = fileSize - bytesRead;
-                        Log.d(TAG, "to " + bufferSize);
-                    }
-                    data = new byte[bufferSize];
 
-
-*/
                     Log.d(TAG, "bytes read " + bytesRead + " fileSize" + fileSize);
 
                     while (dIn.available() <= 0) {
-
-                        Log.d(TAG, "Sleeping thread for 2 sec ");
-                        Thread.sleep(2000);
+                        Log.d(TAG, "Sleeping thread for 3 sec ");
+                        Thread.sleep(3000);
+                        counter++;
+                        if(counter==3)
+                        {
+                            Log.d(TAG, "Breaking Inner While Loop ");
+                            break;
+                        }
                     }
+                    counter=0;
+
                     size = dIn.read(data, 0, data.length);
                     Log.d(TAG, "Readed "+ size +" bytes");
 
                     fos.write(data, 0, size);
 
                     bytesRead += size;
-                    //Log.d(TAG, "Total data read "+bytesRead/1000000+" MB's ("+bytesRead+" bytes)");
-                    Log.d(TAG, "bytes read " + bytesRead );
+                    Log.d(TAG, "Total data read "+bytesRead/1000000+" MB's ("+bytesRead+" bytes)");
 
                     publishProgress(String.valueOf(bytesRead));
                 }
 
                 if(continueDownload)
-                {
-                    Log.d(TAG, "Download Was Not Cancelled");
+                {   Log.d(TAG, "Download Was Not Cancelled");
                     sendRequest("NOT_CANCEL");
                 }
                 else{
                     Log.d(TAG, "Download Was Cancelled");
                     sendRequest("CANCEL");
 
-                    Log.d(TAG, "Sleeping thread for 5 second");
-                    Thread.sleep(5000);
+                    Log.d(TAG, "Sleeping thread for 7 second");
+                    Thread.sleep(7000);
 
                     int availableBytes = dIn.available();
                     while (availableBytes > 0) {
+                        data = new byte[bufferSize];
                         Log.d(TAG, "data is available");
                         size = dIn.read(data, 0, data.length);
                         fos.write(data, 0, size);
@@ -460,9 +453,7 @@ public class Networking {
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "doInBackground: Exception>> " + e);
-
             }
-
             return null;
         }
 
@@ -495,10 +486,14 @@ public class Networking {
             // Log.d(TAG, "Creating File ");
 
             ContextWrapper contextWrapper = new ContextWrapper(APPLICATION_CONTEXT);
-            File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-            //File musicDirectory = contextWrapper.getExternalFilesDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
 
-            File file = new File(musicDirectory, Name);
+            //File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+            //File musicDirectory = contextWrapper.getExternalFilesDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+            //File file = new File(musicDirectory, Name);
+
+            String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+            File file = new File(filePath, Name);
+
             if (file.exists()) {
                 Log.d(TAG, "File Already exists:");
             } else {
