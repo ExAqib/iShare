@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "Client Connected");
                 CLIENT_CONNECTED = true;
+                //Toast.makeText(getApplicationContext(),"Socket closed",Toast.LENGTH_SHORT).show();
 
 //                InputStreamReader in= new InputStreamReader(socket.getInputStream());
 //                BufferedReader br= new BufferedReader(in);
