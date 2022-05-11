@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+
 import com.fyp.awacam.databinding.ActivityDriveNavigationBinding;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -18,7 +20,7 @@ public class drive_navigation extends AppCompatActivity {
     static final String TAG = "tag";
 
     static final int PORT_NUM = 9999;
-    static final String IP_ADDRESS = "192.168.0.113";
+    static final String IP_ADDRESS = "192.168.10.99";
 
     Socket socket;
     static Handler handler;
@@ -33,8 +35,8 @@ public class drive_navigation extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        final Context Application_Context=getApplicationContext();
-        final Context context=this;
+        final Context Application_Context = getApplicationContext();
+        final Context context = this;
 
         progressBar = new ProgressBar(this);
         progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
@@ -74,7 +76,7 @@ public class drive_navigation extends AppCompatActivity {
         Thread t1 = new Thread(() -> {
             try {
                 socket = new Socket(IP_ADDRESS, PORT_NUM);
-                Networking networking= new Networking(drive_navigation.this,Application_Context,context,socket,binding.parentConstraint);
+                Networking networking = new Networking(drive_navigation.this, Application_Context, context, socket, binding.parentConstraint);
                 networking.start();
 //              ConnectClient client = new ConnectClient(socket, PORT_NUM, handler);
 //              client.start();

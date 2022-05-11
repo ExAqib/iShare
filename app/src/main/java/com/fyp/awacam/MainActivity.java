@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     ServerSocket serverSocket;
     Socket socket;
     static final int PORT_NUM = 9999;
-    static final String IP_ADDRESS = "192.168.0.112";
+    static final String IP_ADDRESS = "192.168.10.99";
     static boolean CLIENT_CONNECTED = false;
 
     public static DatagramSocket s_socket;
@@ -145,10 +145,10 @@ public class MainActivity extends AppCompatActivity {
                                     //Saving file
                                     try {
                                         //converting buffer(short) to bytes
-                                        byte socketBuffer[]=new byte[buffer.length*2];
+                                        byte socketBuffer[] = new byte[buffer.length * 2];
                                         ByteBuffer.wrap(socketBuffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(buffer);
 
-                                         outputStream.write(socketBuffer, 0, socketBuffer.length);
+                                        outputStream.write(socketBuffer, 0, socketBuffer.length);
 //
 //                                        for (int i = 0; i < bufferReadResult; i++) {
 //                                            //For socket (NOt Working perfectly)

@@ -337,7 +337,7 @@ public class Networking {
         String FilePath;
         ProgressDialog progressDialog;
         int fileSize = 0;
-        boolean continueDownload=true;
+        boolean continueDownload = true;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         @Override
@@ -353,7 +353,7 @@ public class Networking {
             progressDialog.setButton(ProgressDialog.BUTTON_NEUTRAL, "Cancel Download", (dialog, which) -> {
                 sendToast("Download Cancelled");
                 Log.d(TAG, "onPreExecute: ReceiveFile >>  Download Cancelled");
-                continueDownload=false;
+                continueDownload = false;
                 progressDialog.setMessage("Cancelling");
                 progressDialog.setMessage(" Cancelling Download...");
             });
@@ -390,14 +390,14 @@ public class Networking {
                 FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
 
                 int bytesRead = 0;
-                int bufferSize = 1024*4;
+                int bufferSize = 1024 * 4;
 
-                byte[] data=new byte[bufferSize];
+                byte[] data = new byte[bufferSize];
                 int size;
 
                 int counter = 0;
 
-                while (bytesRead < fileSize  && continueDownload) {
+                while (bytesRead < fileSize && continueDownload) {
 
                     Log.d(TAG, "bytes read " + bytesRead + " fileSize" + fileSize);
 
@@ -405,30 +405,28 @@ public class Networking {
                         Log.d(TAG, "Sleeping thread for 3 sec ");
                         Thread.sleep(3000);
                         counter++;
-                        if(counter==3)
-                        {
+                        if (counter == 3) {
                             Log.d(TAG, "Breaking Inner While Loop ");
                             break;
                         }
                     }
-                    counter=0;
+                    counter = 0;
 
                     size = dIn.read(data, 0, data.length);
-                    Log.d(TAG, "Readed "+ size +" bytes");
+                    Log.d(TAG, "Readed " + size + " bytes");
 
                     fos.write(data, 0, size);
 
                     bytesRead += size;
-                    Log.d(TAG, "Total data read "+bytesRead/1000000+" MB's ("+bytesRead+" bytes)");
+                    Log.d(TAG, "Total data read " + bytesRead / 1000000 + " MB's (" + bytesRead + " bytes)");
 
                     publishProgress(String.valueOf(bytesRead));
                 }
 
-                if(continueDownload)
-                {   Log.d(TAG, "Download Was Not Cancelled");
+                if (continueDownload) {
+                    Log.d(TAG, "Download Was Not Cancelled");
                     sendRequest("NOT_CANCEL");
-                }
-                else{
+                } else {
                     Log.d(TAG, "Download Was Cancelled");
                     sendRequest("CANCEL");
 
