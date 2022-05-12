@@ -196,9 +196,10 @@ public class MainActivity extends AppCompatActivity {
         binding.openSocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createServerSocket(PORT_NUM);
+                createClientSocket(IP_ADDRESS, PORT_NUM);
+                //createServerSocket(PORT_NUM);
                 binding.openSocket.setClickable(false);
-                Toast.makeText(getApplicationContext(),"Socket opened",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Socket opened", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -216,10 +217,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                         //socket.close();
                     }
-                        serverSocket.close();
-                        Log.d(TAG, "Socket closed");
-                        Toast.makeText(getApplicationContext(),"Socket closed",Toast.LENGTH_SHORT).show();
-                        binding.openSocket.setClickable(true);
+                    serverSocket.close();
+                    Log.d(TAG, "Socket closed");
+                    Toast.makeText(getApplicationContext(), "Socket closed", Toast.LENGTH_SHORT).show();
+                    binding.openSocket.setClickable(true);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -270,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
                 Socket client = new Socket(IP_ADDRESS, portNum);
                 Log.d(TAG, "Connected");
 
-                InputStreamReader inputStreamReader = new InputStreamReader(client.getInputStream());
+                /*InputStreamReader inputStreamReader = new InputStreamReader(client.getInputStream());
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 String text = bufferedReader.readLine();
@@ -279,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
                 PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
                 printWriter.println("ABC");
-                printWriter.flush();
+                printWriter.flush();*/
 
             } catch (IOException e) {
                 Log.d(TAG, "Exception>>" + e.toString());
