@@ -367,7 +367,6 @@ public class Networking {
             FilePath = strings[0];
             sendRequest(FilePath);
 
-            DataInputStream dIn;
             try {
                 Log.d(TAG, "Receiving File");
 
@@ -377,79 +376,17 @@ public class Networking {
                 String fileName = bufferedReader.readLine();
                 // Log.d(TAG, "Received File Name is "+fileName);
 
-                //For buffer size
+                //For File size
                 String FileSize = bufferedReader.readLine();
                 fileSize = Integer.parseInt(FileSize);
                 progressDialog.setMax((int) fileSize / 1000000);
 
-                //Log.d(TAG, "Received File size is "+(float)fileSize/100000 +"MB ("+fileSize+"byes)");
+                startDownloading(inputStream,fileName);
 
-                //For getting File data from server
-                dIn = new DataInputStream(socket.getInputStream());
-
-                //For saving in File
-                FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
-
-                int bytesRead = 0;
-                int bufferSize = 2048;
-
-                byte[] data = new byte[bufferSize];
-                int size;
-
-                int counter = 0;
-
-                while (bytesRead < fileSize) {
-                    if (bufferSize > (fileSize - bytesRead)) {
-                        Log.d(TAG, "Adjusting buffer size from " + bufferSize);
-                        bufferSize = fileSize - bytesRead;
-                        Log.d(TAG, "to " + bufferSize);
-                    }
-                    data = new byte[bufferSize];
-
-                    while (dIn.available() <= 0) {
-                        if (counter == 3) {
-                            Log.d(TAG, "Breaking if else ");
-                            counter = 0;
-                            break;
-                        }
-                        Log.d(TAG, "Sleeping thread for 2 sec ");
-                        Thread.sleep(2000);
-                        counter++;
-                    }
-
-                    Log.d(TAG, "bytes read " + bytesRead + " fileSize" + fileSize);
-
-                    size = dIn.read(data, 0, bufferSize);
-                    Log.d(TAG, "Readed");
-
-                    fos.write(data, 0, size);
-
-                    bytesRead += size;
-                    //Log.d(TAG, "Total data read "+bytesRead/1000000+" MB's ("+bytesRead+" bytes)");
-
-                    publishProgress(String.valueOf(bytesRead));
-                }
-
-                Log.d(TAG, "Sleeping thread for 5 second");
-                Thread.sleep(5000);
-
-                int availableBytes = dIn.available();
-                while (availableBytes > 0) {
-                    Log.d(TAG, "data is available");
-                    size = dIn.read(data, 0, availableBytes);
-                    fos.write(data, 0, size);
-                    availableBytes = dIn.available();
-                }
-
-                Log.d(TAG, "file Closed ");
-                fos.flush();
-                fos.close();
-                Log.d(TAG, "doInBackground: File Received");
 
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "doInBackground: Exception>> " + e);
-
             }
 
             return null;
@@ -495,6 +432,106 @@ public class Networking {
             Log.d(TAG, "File path is:" + path);
 
             return path;
+        }
+
+        private void startDownloading(InputStream inputStream,String fileName) {
+            try{
+                Log.d(TAG, "Received File size is "+(float)fileSize/100000 +"MB ("+fileSize+"byes)");
+
+                //For getting File data from server
+                DataInputStream dIn = new DataInputStream(inputStream);
+
+                //For saving in File
+                FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
+
+                byte[] data ;
+                int bufferSize = 2048;
+                int totalBytesRead = 0;
+                int bytesReadPerCycle;
+                int sleepThread = 0;
+                boolean killDownloadingThread=false;
+
+                while (totalBytesRead < fileSize) {
+
+                    //checking if the buffer size exceeds, the size of file or remaining data of file
+                    if (bufferSize > (fileSize - totalBytesRead)) {
+                        Log.d(TAG, "Adjusting buffer size from " + bufferSize);
+                        bufferSize = fileSize - totalBytesRead;
+                        Log.d(TAG, "to " + bufferSize);
+                    }
+                    data = new byte[bufferSize];
+
+                    while (dIn.available() <= 0) {
+
+                        //If the data has not Arrived yet, wait for it by sleeping the thread
+
+                        Log.d(TAG, "Sleeping thread for 3 sec ");
+                        Thread.sleep(3000);
+                        sleepThread++;
+
+                        if (sleepThread == 3) {
+                            // Data has not arrived even after waiting
+                            Log.d(TAG, " Unknown Error (killing Downloading Thread");
+                            killDownloadingThread=true;
+                            break;
+                        }
+                    }
+                    sleepThread = 0;
+
+                    if (killDownloadingThread)
+                    {
+                        sendToast("Unknown Error");
+                        break;
+                    }
+                    else{
+
+                        Log.d(TAG, "Trying to Read");
+                        bytesReadPerCycle = dIn.read(data, 0, bufferSize);
+                        Log.d(TAG, "Read " + totalBytesRead + " of " + fileSize+" bytes");
+
+                        fos.write(data, 0, bytesReadPerCycle);
+                        totalBytesRead += bytesReadPerCycle;
+                        //Log.d(TAG, "Total data read "+totalBytesRead/1000000+" MB's ("+totalBytesRead+" bytes)");
+
+                        publishProgress(String.valueOf(totalBytesRead));
+                    }
+
+                }
+
+                if(totalBytesRead == fileSize)
+                {
+                    Log.d(TAG, " Download Completed Successfully ");
+                }
+                else if (!killDownloadingThread)
+                {
+                    Log.d(TAG, "Sleeping thread for 5 second");
+                    Thread.sleep(5000);
+
+                    int availableBytes = dIn.available();
+                    while (availableBytes > 0) {
+                        Log.d(TAG, "data is available");
+                        data = new byte[availableBytes];
+                        bytesReadPerCycle = dIn.read(data, 0, availableBytes);
+                        fos.write(data, 0, bytesReadPerCycle);
+                        availableBytes = dIn.available();
+                    }
+
+                    Log.d(TAG, "File Data in Socket Ended");
+
+                }
+
+                fos.flush();
+                fos.close();
+                Log.d(TAG, "file Closed ");
+
+                Log.d(TAG, "doInBackground for Receive File is returning  ");
+
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.d(TAG, " Exception>> " + e);
+            }
         }
     }
 
