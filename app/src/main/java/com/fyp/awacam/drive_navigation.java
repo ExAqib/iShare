@@ -18,7 +18,7 @@ public class drive_navigation extends AppCompatActivity {
     static final String TAG = "tag";
 
     static final int PORT_NUM = 9999;
-    static final String IP_ADDRESS = "192.168.0.113";
+    static final String IP_ADDRESS = "192.168.0.106";
 
     Socket socket;
     static Handler handler;

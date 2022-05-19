@@ -387,7 +387,6 @@ public class Networking {
 
                 startDownloading(fileName);
 
-
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "doInBackground: Exception>> " + e);
@@ -464,7 +463,7 @@ public class Networking {
 
                     if (!dataAvailable(dIn)) {
                         killDownloadingThread = true;
-                        sendToast("Unknown Error");
+                        //sendToast("Unknown Error");
                         break;
                     }
                     else {
@@ -486,49 +485,7 @@ public class Networking {
                     sendRequest("DONE");
                 }
                 else if (CancelDownload) {
-                    Log.d(TAG, " Download cancelled ");
-
-                    sendRequest("CANCEL");
-//                    progressDialog.setTitle("Canceling Download");
-//                    progressDialog.setMessage("Please Wait...");
-
-                    //Getting some data that has arrived after cancelling.
-
-                    Log.d(TAG, "Sleeping thread for 5 second");
-                    Thread.sleep(5000);
-
-                    String cancelledData=bufferedReader.readLine();
-                    Log.d(TAG, "Cancelled DAta is "+cancelledData);
-
-                    fos.write(cancelledData.getBytes());
-                    fos.flush();
-
-                    while(!cancelledData.equals("DATA_ENDED"))
-                    {
-                        Log.d(TAG, "Cancelled Data is ");
-                        cancelledData=bufferedReader.readLine();
-
-                        fos.write(cancelledData.getBytes());
-                        fos.flush();
-
-                        Log.d(TAG, cancelledData);
-                    }
-
-                    Log.d(TAG, "Last  Data after Cancellation is  "+cancelledData);
-
-                    int availableBytes = dIn.available();
-                    Log.d(TAG, "startDownloading: Checking for Available data after cancel operation called "+ availableBytes);
-
-                    while (availableBytes > 0) {
-                        Log.d(TAG, "startDownloading: Received "+ availableBytes+" bytes");
-
-                        data = new byte[availableBytes];
-                        bytesReadPerCycle = dIn.read(data, 0, availableBytes);
-                        fos.write(data, 0, bytesReadPerCycle);
-                        availableBytes = dIn.available();
-                    }
-                    Log.d(TAG, "startDownloading: Socket data Ended");
-                    sendToast("Cancelled");
+                   cancelDownload(fos);
                 }
                 else if (killDownloadingThread) {
                     sendRequest("KillThread");
@@ -546,14 +503,14 @@ public class Networking {
                         Log.d(TAG, "Cancelled Data is ");
                         cancelledData=bufferedReader.readLine();
 
-
                         fos.write(cancelledData.getBytes());
                         fos.flush();
+
                         Log.d(TAG, cancelledData);
                     }
 
                     Log.d(TAG, "Last  Data after Cancellation is  "+cancelledData);
-
+/*
                     Log.d(TAG, "Checking for any available data");
                     int availableBytes = dIn.available();
                     while (availableBytes > 0) {
@@ -563,7 +520,7 @@ public class Networking {
                         bytesReadPerCycle = dIn.read(data, 0, availableBytes);
                         fos.write(data, 0, bytesReadPerCycle);
                         availableBytes = dIn.available();
-                    }
+                    }*/
                     Log.d(TAG, "Data Ended");
                 }
 
@@ -599,6 +556,48 @@ public class Networking {
                 return false;
             }
             return true;
+        }
+
+        private void cancelDownload(FileOutputStream fos)
+        {
+            try{
+                Log.d(TAG, " Download cancelled ");
+
+                sendRequest("CANCEL");
+                progressDialog.setTitle("Canceling Download");
+                progressDialog.setMessage("Please Wait...");
+
+                //Getting some data that has arrived after cancelling.
+
+                Log.d(TAG, "Sleeping thread for 5 second");
+                Thread.sleep(3000);
+
+                String cancelledData=bufferedReader.readLine();
+                Log.d(TAG, "Cancelled DAta is "+cancelledData);
+
+                fos.write(cancelledData.getBytes());
+                fos.flush();
+
+                while(!cancelledData.equals("DATA_ENDED"))
+                {
+                    Log.d(TAG, "Cancelled Data is ");
+                    cancelledData=bufferedReader.readLine();
+
+                    fos.write(cancelledData.getBytes());
+                    fos.flush();
+
+                    Log.d(TAG, cancelledData);
+                }
+
+                Log.d(TAG, "Last  Data after Cancellation is  "+cancelledData);
+
+                sendToast("Cancelled");
+            }
+            catch (Exception e )
+            {
+                e.printStackTrace();
+                Log.d(TAG, " Exception>> " + e);
+            }
         }
 
     }
