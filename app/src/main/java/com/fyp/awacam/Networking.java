@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -38,6 +40,10 @@ public class Networking {
     Activity driveNavigationActivity;
     Context APPLICATION_CONTEXT;
 
+    PrintWriter printWriter;
+    BufferedReader bufferedReader;
+    InputStream inputStream;
+
     public Networking(Activity activity, Context APPLICATION_CONTEXT, Context context, Socket s, LinearLayout linearLayout) {
         this.context = context;
         this.socket = s;
@@ -48,8 +54,18 @@ public class Networking {
     }
 
     void start() {
-        Connect connect = new Connect();
-        connect.execute();
+        try {
+            printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            inputStream = socket.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            Connect connect = new Connect();
+            connect.execute();
+
+        } catch (IOException e) {
+            Log.d(TAG, "start: Exception" + e);
+            e.printStackTrace();
+        }
     }
 
     class Connect extends AsyncTask<Void, Bundle, Bundle> {
@@ -100,14 +116,10 @@ public class Networking {
 
             linearLayout.addView(myLayout);
 
-            myLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onClick: ");
-                    DirectoryProcessor directoryProcessor = new DirectoryProcessor();
-                    directoryProcessor.execute(new Parameter(v, values[0].getString("name")));
-                }
-
+            myLayout.setOnClickListener(v -> {
+                Log.d(TAG, "onClick: ");
+                DirectoryProcessor directoryProcessor = new DirectoryProcessor();
+                directoryProcessor.execute(new Parameter(v, values[0].getString("name")));
             });
         }
 
@@ -115,9 +127,6 @@ public class Networking {
             try {
                 sendRequest("driveNames");
                 Log.d(TAG, "Receiving Data from client");
-
-                InputStream inputStream = socket.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String data;
                 Bundle bundle = new Bundle();
@@ -221,12 +230,10 @@ public class Networking {
             sendRequest(path);
 
             try {
-                InputStream inputStream = socket.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 String data;
 
                 while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
-                    //Log.d(TAG, "SubDirectory is " + data);
+                    Log.d(TAG, "SubDirectory is " + data);
                     onProgressUpdate(data);
                 }
                 Log.d(TAG, "Socket data ended " + data);
@@ -281,14 +288,16 @@ public class Networking {
                     confirmationMessage.setCancelable(false);
                     confirmationMessage.show();
                 });
-
-            } else if (values[0].equals("InaccessibleFile")) {
+            }
+            else if (values[0].equals("InaccessibleFile")) {
                 sendToast("File Inaccessible");
                 Log.d(TAG, "File Inaccessible ");
-            } else if (values[0].equals("UnAuthorizedAccess")) {
+            }
+            else if (values[0].equals("UnAuthorizedAccess")) {
                 sendToast("Access Denied");
                 Log.d(TAG, "Access Denied");
-            } else {
+            }
+            else {
                 View myLayout = layoutInflater.inflate(R.layout.directory, null, false);
 
                 CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
@@ -316,12 +325,9 @@ public class Networking {
             sendRequest(path);
 
             try {
-                InputStream inputStream = socket.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 String data;
-
                 while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
-                    // Log.d(TAG, "SubDirectory is " + data);
+                    Log.d(TAG, "SubDirectory is " + data);
                     onProgressUpdate(data);
                 }
                 Log.d(TAG, "Socket data ended " + data);
@@ -339,6 +345,7 @@ public class Networking {
         ProgressDialog progressDialog;
         int fileSize = 0;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        boolean CancelDownload = false;
 
         @Override
         protected void onPreExecute() {
@@ -350,12 +357,10 @@ public class Networking {
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            /*progressDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });*/
+            progressDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Cancel", (dialog, which) -> {
+                Log.d(TAG, "Download Cancelled");
+                CancelDownload = true;
+            });
             progressDialog.setProgress(0);
 
             progressDialog.show();
@@ -371,17 +376,16 @@ public class Networking {
                 Log.d(TAG, "Receiving File");
 
                 //To receive the file name
-                InputStream inputStream = socket.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
                 String fileName = bufferedReader.readLine();
                 // Log.d(TAG, "Received File Name is "+fileName);
 
                 //For File size
                 String FileSize = bufferedReader.readLine();
                 fileSize = Integer.parseInt(FileSize);
-                progressDialog.setMax((int) fileSize / 1000000);
+                progressDialog.setMax(fileSize / 1000000);
 
-                startDownloading(inputStream,fileName);
+                startDownloading(fileName);
 
 
             } catch (Exception e) {
@@ -414,6 +418,7 @@ public class Networking {
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
+            Log.d(TAG, "onPostExecute: called for receive file");
             progressDialog.dismiss();
         }
 
@@ -434,24 +439,20 @@ public class Networking {
             return path;
         }
 
-        private void startDownloading(InputStream inputStream,String fileName) {
-            try{
-                Log.d(TAG, "Received File size is "+(float)fileSize/100000 +"MB ("+fileSize+"byes)");
+        private void startDownloading(String fileName) {
+            try {
+                Log.d(TAG, "Received File size is " + (float) fileSize / 100000 + "MB (" + fileSize + "byes)");
 
-                //For getting File data from server
                 DataInputStream dIn = new DataInputStream(inputStream);
-
-                //For saving in File
                 FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
 
-                byte[] data ;
-                int bufferSize = 2048;
+                byte[] data;
+                int bufferSize = 2048*4;
                 int totalBytesRead = 0;
                 int bytesReadPerCycle;
-                int sleepThread = 0;
-                boolean killDownloadingThread=false;
+                boolean killDownloadingThread = false;
 
-                while (totalBytesRead < fileSize) {
+                while (totalBytesRead < fileSize && !CancelDownload) {
 
                     //checking if the buffer size exceeds, the size of file or remaining data of file
                     if (bufferSize > (fileSize - totalBytesRead)) {
@@ -461,78 +462,145 @@ public class Networking {
                     }
                     data = new byte[bufferSize];
 
-                    while (dIn.available() <= 0) {
-
-                        //If the data has not Arrived yet, wait for it by sleeping the thread
-
-                        Log.d(TAG, "Sleeping thread for 3 sec ");
-                        Thread.sleep(3000);
-                        sleepThread++;
-
-                        if (sleepThread == 3) {
-                            // Data has not arrived even after waiting
-                            Log.d(TAG, " Unknown Error (killing Downloading Thread");
-                            killDownloadingThread=true;
-                            break;
-                        }
-                    }
-                    sleepThread = 0;
-
-                    if (killDownloadingThread)
-                    {
+                    if (!dataAvailable(dIn)) {
+                        killDownloadingThread = true;
                         sendToast("Unknown Error");
                         break;
                     }
-                    else{
-
+                    else {
                         Log.d(TAG, "Trying to Read");
                         bytesReadPerCycle = dIn.read(data, 0, bufferSize);
-                        Log.d(TAG, "Read " + totalBytesRead + " of " + fileSize+" bytes");
+                        Log.d(TAG, "Read " + totalBytesRead + " of " + fileSize + " bytes");
 
                         fos.write(data, 0, bytesReadPerCycle);
                         totalBytesRead += bytesReadPerCycle;
-                        //Log.d(TAG, "Total data read "+totalBytesRead/1000000+" MB's ("+totalBytesRead+" bytes)");
+                        Log.d(TAG, "Total data read "+totalBytesRead/1000000+" MB's ("+totalBytesRead+" bytes)");
 
                         publishProgress(String.valueOf(totalBytesRead));
                     }
 
                 }
 
-                if(totalBytesRead == fileSize)
-                {
+                if (totalBytesRead == fileSize) {
                     Log.d(TAG, " Download Completed Successfully ");
+                    sendRequest("DONE");
                 }
-                else if (!killDownloadingThread)
-                {
+                else if (CancelDownload) {
+                    Log.d(TAG, " Download cancelled ");
+
+                    sendRequest("CANCEL");
+//                    progressDialog.setTitle("Canceling Download");
+//                    progressDialog.setMessage("Please Wait...");
+
+                    //Getting some data that has arrived after cancelling.
+
                     Log.d(TAG, "Sleeping thread for 5 second");
                     Thread.sleep(5000);
 
+                    String cancelledData=bufferedReader.readLine();
+                    Log.d(TAG, "Cancelled DAta is "+cancelledData);
+
+                    fos.write(cancelledData.getBytes());
+                    fos.flush();
+
+                    while(!cancelledData.equals("DATA_ENDED"))
+                    {
+                        Log.d(TAG, "Cancelled Data is ");
+                        cancelledData=bufferedReader.readLine();
+
+                        fos.write(cancelledData.getBytes());
+                        fos.flush();
+
+                        Log.d(TAG, cancelledData);
+                    }
+
+                    Log.d(TAG, "Last  Data after Cancellation is  "+cancelledData);
+
                     int availableBytes = dIn.available();
+                    Log.d(TAG, "startDownloading: Checking for Available data after cancel operation called "+ availableBytes);
+
                     while (availableBytes > 0) {
-                        Log.d(TAG, "data is available");
+                        Log.d(TAG, "startDownloading: Received "+ availableBytes+" bytes");
+
                         data = new byte[availableBytes];
                         bytesReadPerCycle = dIn.read(data, 0, availableBytes);
                         fos.write(data, 0, bytesReadPerCycle);
                         availableBytes = dIn.available();
                     }
-
-                    Log.d(TAG, "File Data in Socket Ended");
-
+                    Log.d(TAG, "startDownloading: Socket data Ended");
+                    sendToast("Cancelled");
                 }
+                else if (killDownloadingThread) {
+                    sendRequest("KillThread");
+                    Log.d(TAG, "Sleeping thread for 2 second");
+                    Thread.sleep(2000);
 
-                fos.flush();
-                fos.close();
-                Log.d(TAG, "file Closed ");
+                    String cancelledData=bufferedReader.readLine();
+                    Log.d(TAG, "Cancelled DAta is "+cancelledData);
+
+                    fos.write(cancelledData.getBytes());
+                    fos.flush();
+
+                    while(!cancelledData.equals("DATA_ENDED"))
+                    {
+                        Log.d(TAG, "Cancelled Data is ");
+                        cancelledData=bufferedReader.readLine();
+
+
+                        fos.write(cancelledData.getBytes());
+                        fos.flush();
+                        Log.d(TAG, cancelledData);
+                    }
+
+                    Log.d(TAG, "Last  Data after Cancellation is  "+cancelledData);
+
+                    Log.d(TAG, "Checking for any available data");
+                    int availableBytes = dIn.available();
+                    while (availableBytes > 0) {
+                        Log.d(TAG, "Found "+availableBytes+" bytes");
+
+                        data = new byte[availableBytes];
+                        bytesReadPerCycle = dIn.read(data, 0, availableBytes);
+                        fos.write(data, 0, bytesReadPerCycle);
+                        availableBytes = dIn.available();
+                    }
+                    Log.d(TAG, "Data Ended");
+                }
 
                 Log.d(TAG, "doInBackground for Receive File is returning  ");
 
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, " Exception>> " + e);
             }
         }
+
+        private boolean dataAvailable(DataInputStream dIn) {
+            int sleepThread = 0;
+            try {
+                while (dIn.available() <= 0) {
+
+                    //If the data has not Arrived yet, wait for it by sleeping the thread
+
+                    Log.d(TAG, "Sleeping thread for 3 sec ");
+                    Thread.sleep(3000);
+                    sleepThread++;
+
+                    if (sleepThread == 3) {
+                        // Data has not arrived even after waiting
+                        Log.d(TAG, " Unknown Error (killing Downloading Thread)");
+                        return false;
+                    }
+                }
+
+            } catch (IOException | InterruptedException e) {
+                Log.d(TAG, "dataAvailable: Exception" + e);
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
     }
 
     static class Parameter {
@@ -557,7 +625,7 @@ public class Networking {
         try {
 
             Log.d(TAG, "Sending Request to Server i.e >>  " + request);
-            PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+//           PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             printWriter.println(request);
             printWriter.flush();
 
