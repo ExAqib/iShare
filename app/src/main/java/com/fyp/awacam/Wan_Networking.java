@@ -32,7 +32,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.DecimalFormat;
 
-public class Networking {
+public class Wan_Networking {
 
     private final Context context;
     final String TAG = "tag";
@@ -46,7 +46,7 @@ public class Networking {
     BufferedReader bufferedReader;
     InputStream inputStream;
 
-    public Networking(Activity activity, Context APPLICATION_CONTEXT, Context context, Socket s, LinearLayout linearLayout) {
+    public Wan_Networking(Activity activity, Context APPLICATION_CONTEXT, Context context, Socket s, LinearLayout linearLayout) {
         this.context = context;
         this.socket = s;
         this.driveNavigationActivity = activity;
@@ -177,7 +177,6 @@ public class Networking {
             }
 
         }
-
 
 
     }

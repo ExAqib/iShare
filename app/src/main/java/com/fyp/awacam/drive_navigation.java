@@ -8,8 +8,15 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.fyp.awacam.databinding.ActivityDriveNavigationBinding;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class drive_navigation extends AppCompatActivity {
@@ -17,13 +24,15 @@ public class drive_navigation extends AppCompatActivity {
     private ActivityDriveNavigationBinding binding;
     static final String TAG = "tag";
 
-    static final int PORT_NUM = 9999;
-    static final String IP_ADDRESS = "192.168.0.106";
+    static int PORT_NUM = 9999;
+    static String SERVERS_IP_ADDRESS = "192.168.0.106";
 
-    Socket socket;
     static Handler handler;
 
-    ProgressBar progressBar;
+    Socket socket;
+
+    Context Application_Context;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +42,13 @@ public class drive_navigation extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        final Context Application_Context=getApplicationContext();
-        final Context context=this;
+        SERVERS_IP_ADDRESS = getIntent().getStringExtra("IP_ADDRESS");
+        PORT_NUM = getIntent().getIntExtra("PORT_NUM", 9999);
 
-        progressBar = new ProgressBar(this);
-        progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.setIndeterminate(false);
-        progressBar.setProgress(20);
+        Toast.makeText(this, "IP :" + SERVERS_IP_ADDRESS + "  Port : " + PORT_NUM, Toast.LENGTH_SHORT).show();
 
+        Application_Context = getApplicationContext();
+        context = this;
 
         Log.d(TAG, "onCreate: Program started");
 
@@ -73,17 +80,31 @@ public class drive_navigation extends AppCompatActivity {
 
         Thread t1 = new Thread(() -> {
             try {
-                socket = new Socket(IP_ADDRESS, PORT_NUM);
-                Networking networking= new Networking(drive_navigation.this,Application_Context,context,socket,binding.parentConstraint);
-                networking.start();
-//              ConnectClient client = new ConnectClient(socket, PORT_NUM, handler);
-//              client.start();
+                socket = new Socket(SERVERS_IP_ADDRESS, PORT_NUM);
 
-            } catch (IOException e) {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                int data = Integer.parseInt(bufferedReader.readLine());
+                Log.d(TAG, "Received port num is " + data);
+                socket.close();
+                Log.d(TAG, "Prev. Socket Closed");
+                socket = new Socket(SERVERS_IP_ADDRESS, data);
+                Networking networking = new Networking(drive_navigation.this, Application_Context, context, socket, binding.parentConstraint);
+                networking.start();
+
+
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.d(TAG, "Exception in drive_navigation  " + e);
+                Log.d(TAG, "Exception in getDriveNames()>> " + e);
             }
         });
         t1.start();
+
+    }
+
+
+    private void sendToast(String message) {
+        this.runOnUiThread(() -> {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        });
     }
 }
