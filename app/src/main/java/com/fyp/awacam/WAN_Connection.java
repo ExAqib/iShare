@@ -1,6 +1,7 @@
 package com.fyp.awacam;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -44,6 +45,8 @@ public class WAN_Connection extends AppCompatActivity {
 
         Application_Context = getApplicationContext();
         context = this;
+
+
 
         Log.d(TAG, "onCreate: Program started");
         Thread t1 = new Thread(() -> {

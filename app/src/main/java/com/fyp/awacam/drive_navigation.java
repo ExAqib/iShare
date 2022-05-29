@@ -1,6 +1,9 @@
 package com.fyp.awacam;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -52,6 +55,12 @@ public class drive_navigation extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: Program started");
 
+        displayData displayDataFragment =   displayData.newInstance(SERVERS_IP_ADDRESS,PORT_NUM);
+
+        Log.d(TAG, "loading fragment");
+        loadFragment(displayDataFragment);
+
+
         /*handler = new Handler(getApplicationContext().getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
@@ -78,7 +87,7 @@ public class drive_navigation extends AppCompatActivity {
             }
         };*/
 
-        Thread t1 = new Thread(() -> {
+       /* Thread t1 = new Thread(() -> {
             try {
                 socket = new Socket(SERVERS_IP_ADDRESS, PORT_NUM);
 
@@ -88,6 +97,7 @@ public class drive_navigation extends AppCompatActivity {
                 socket.close();
                 Log.d(TAG, "Prev. Socket Closed");
                 socket = new Socket(SERVERS_IP_ADDRESS, data);
+
                 Networking networking = new Networking(drive_navigation.this, Application_Context, context, socket, binding.parentConstraint);
                 networking.start();
 
@@ -98,7 +108,7 @@ public class drive_navigation extends AppCompatActivity {
             }
         });
         t1.start();
-
+*/
     }
 
 
@@ -106,5 +116,14 @@ public class drive_navigation extends AppCompatActivity {
         this.runOnUiThread(() -> {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         });
+    }
+
+    private void loadFragment(Fragment fragment) {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction=manager.beginTransaction();
+
+        transaction.replace(R.id.myFrameLayout,fragment);
+        transaction.commit();
+        Log.d(TAG, "loadFragment: Transaction committed");
     }
 }
