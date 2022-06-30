@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -119,6 +120,18 @@ public class Wan_Networking {
             linearLayout.addView(myLayout);
 
             myLayout.setOnClickListener(v -> {
+
+                Log.d(TAG, "going to next fragment in WAN Connection");
+/*
+
+                driveNavigationActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(((ViewGroup)getView().getParent()).getId();, nextFrag, "findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+*/
+
+               // directories directoryProcessorFragment = directories.newInstance();
+
                 Log.d(TAG, "onClick: ");
                 DirectoryProcessor directoryProcessor = new DirectoryProcessor();
                 directoryProcessor.execute(new Parameter(v, values[0].getString("name")));
@@ -223,6 +236,8 @@ public class Wan_Networking {
                 driveNavigationActivity.runOnUiThread(() -> {
                     LinearLayout layout = view.findViewById(R.id.show_directory);
                     layout.addView(myLayout);
+
+
                 });
 
             }
@@ -510,9 +525,11 @@ public class Wan_Networking {
                     Log.d(TAG, " Download Completed Successfully ");
                     sendRequest("DONE");
                     driveNavigationActivity.startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
-                } else if (CancelDownload) {
+                }
+                else if (CancelDownload) {
                     cancelDownload(fos);
-                } else if (killDownloadingThread) {
+                }
+                else if (killDownloadingThread) {
                     sendRequest("KillThread");
                     Log.d(TAG, "Sleeping thread for 2 second");
                     Thread.sleep(2000);
@@ -587,7 +604,8 @@ public class Wan_Networking {
         }
 
         private boolean dataAvailable(DataInputStream dIn) {
-            int sleepThread = 0;
+            return false;
+           /* int sleepThread = 0;
             try {
                 while (dIn.available() <= 0) {
 
@@ -597,7 +615,7 @@ public class Wan_Networking {
                     Thread.sleep(3000);
                     sleepThread++;
 
-                    if (sleepThread == 3) {
+                    if (sleepThread == 2) {
                         // Data has not arrived even after waiting
                         Log.d(TAG, " Unknown Error (killing Downloading Thread)");
                         return true;
@@ -609,7 +627,7 @@ public class Wan_Networking {
                 e.printStackTrace();
                 return true;
             }
-            return false;
+            return false;*/
         }
 
         private void cancelDownload(FileOutputStream fos) {

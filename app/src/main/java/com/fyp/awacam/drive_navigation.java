@@ -55,10 +55,10 @@ public class drive_navigation extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: Program started");
 
-        displayData displayDataFragment =   displayData.newInstance(SERVERS_IP_ADDRESS,PORT_NUM);
+         //displayData displayDataFragment =   displayData.newInstance(SERVERS_IP_ADDRESS,PORT_NUM);
 
-        Log.d(TAG, "loading fragment");
-        loadFragment(displayDataFragment);
+       // Log.d(TAG, "loading fragment");
+        //loadFragment(displayDataFragment);
 
 
         /*handler = new Handler(getApplicationContext().getMainLooper()) {
@@ -117,6 +117,7 @@ public class drive_navigation extends AppCompatActivity {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         });
     }
+
 
     private void loadFragment(Fragment fragment) {
         FragmentManager manager = getSupportFragmentManager();

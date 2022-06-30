@@ -7,10 +7,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:padding="3dp"
+    android:padding="5dp"
     android:layout_margin="3dp"
     >
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/myFrameLayoutWan"
+        android:background="@color/purple_200"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        />
+  <!--  <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -22,7 +29,7 @@
         android:id="@+id/parentConstraint"
         tools:context=".drive_navigation">
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 </ScrollView>
 

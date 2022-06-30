@@ -14,11 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AwaCam">
         <activity
-            android:name=".WAN_Connection"
-            android:exported="false" />
-        <activity
-            android:name=".Connect"
-            android:exported="true">
+            android:name=".Internal_Storage"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,13 +23,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".drive_navigation"
+            android:name=".WAN_Connection"
+            android:exported="false" />
+        <activity
+            android:name=".Connect"
             android:exported="true">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".drive_navigation"
+            android:exported="true">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
         </activity>
         <activity android:name=".MainActivity" />
     </application>
