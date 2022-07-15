@@ -3,7 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/activity_connect.xml" value="0.22" />
+        <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/activity_connect.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/activity_drive_navigation.xml" value="0.1125" />
         <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/activity_internal_storage.xml" value="0.1796875" />
         <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/activity_main.xml" value="0.15" />
@@ -17,6 +17,7 @@
         <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/fragment_sub_directories.xml" value="0.1" />
         <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/recycler_item.xml" value="0.1" />
         <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/layout/rive_exception.xml" value="0.1" />
+        <entry key="..\:/Users/aqibn/AndroidStudioProjects/AwaCam/app/src/main/res/menu/send_file.xml" value="0.16666666666666666" />
       </map>
     </option>
   </component>

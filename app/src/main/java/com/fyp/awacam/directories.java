@@ -32,11 +32,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link directories#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class directories extends Fragment {
 
     private static final String TAG = "tag";

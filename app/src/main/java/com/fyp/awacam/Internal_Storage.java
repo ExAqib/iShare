@@ -33,7 +33,6 @@ import com.fyp.awacam.databinding.ActivityInternalStorageBinding;
 import java.io.File;
 import java.io.FilenameFilter;
 
-@RequiresApi(api = Build.VERSION_CODES.R)
 public class Internal_Storage extends AppCompatActivity {
 
     ActivityInternalStorageBinding binding;
@@ -78,9 +77,6 @@ public class Internal_Storage extends AppCompatActivity {
         File[] filesAndFolders = root.listFiles();
 //        File[] filesAndFolders = root.listFiles(filter);
 
-        Log.d("tag", "root.getAbsolutePath() "+root.getAbsolutePath());
-
-
 
         if(filesAndFolders==null || filesAndFolders.length==0)
         {
@@ -116,9 +112,10 @@ public class Internal_Storage extends AppCompatActivity {
     ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-
-                if(!Environment.isExternalStorageManager()){
-                    Toast.makeText(Internal_Storage.this, "Please Allow permission for storage access!", Toast.LENGTH_LONG).show();
+                if(Build.VERSION.SDK_INT>Build.VERSION_CODES.R){
+                    if(!Environment.isExternalStorageManager()){
+                        Toast.makeText(Internal_Storage.this, "Please Allow permission for storage access!", Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }
