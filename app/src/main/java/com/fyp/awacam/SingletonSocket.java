@@ -2,19 +2,37 @@ package com.fyp.awacam;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import androidx.fragment.app.FragmentManager;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SingletonSocket {
 
     private static final String TAG = "tag";
     private static Socket socket;
-    private static PrintWriter printWriter;
 
+    public static List<String> getNavigationPath() {
+        return NavigationPath;
+    }
+
+    public static void setNavigationPath() {
+        NavigationPath= new ArrayList<>();
+    }
+
+    private static List<String> NavigationPath ;
+
+    public static FragmentManager getFragmentManger() {
+        return fragmentManger;
+    }
+
+    public static void setFragmentManger(FragmentManager fragmentManger) {
+        SingletonSocket.fragmentManger = fragmentManger;
+    }
+
+    private static  FragmentManager fragmentManger;
 
     private SingletonSocket(){};
 

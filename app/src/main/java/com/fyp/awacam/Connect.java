@@ -50,8 +50,6 @@ public class Connect extends AppCompatActivity {
 
             Thread t1 = new Thread(() -> {
                 try {
-                    /*Wan_Networking networking = new Wan_Networking(WAN_Connection.this, Application_Context, context, socket, binding.parentConstraint);
-                            networking.start();*/
                     if (socket == null) {
                         socket = new Socket(IP_Address, Port_Num);
 
@@ -81,6 +79,10 @@ public class Connect extends AppCompatActivity {
         });
 
         binding.btnServer.setOnClickListener(v -> createServerSocket(9999));
+
+        binding.btnSwitchToLan.setOnClickListener(v -> {
+            startActivity(new Intent(Connect.this,lan_connect.class));
+        });
     }
 
     private void goToNextActivity() {

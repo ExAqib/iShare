@@ -26,7 +26,7 @@
             android:verticalScrollbarPosition="right"
             android:scrollbars="vertical"
             android:id="@+id/fragmentLinear"
-            tools:context=".drive_navigation">
+            >
 
         </LinearLayout>
 

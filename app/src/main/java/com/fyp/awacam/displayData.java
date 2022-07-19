@@ -1,6 +1,5 @@
 package com.fyp.awacam;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -9,15 +8,12 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 public class displayData extends Fragment {
 
@@ -107,7 +104,6 @@ public class displayData extends Fragment {
         protected void onProgressUpdate(Bundle... values) {
             super.onProgressUpdate(values);
 
-            // View myLayout = getLayoutInflater().inflate(R.layout.drive_info, null, false);
             View myLayout = getLayoutInflater().inflate(R.layout.drive_info, null, false);
 
             CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
@@ -145,27 +141,22 @@ public class displayData extends Fragment {
 
             myLayout.setOnClickListener(v -> {
 
+                SingletonSocket.setNavigationPath();
                 Log.d(TAG, "going to next fragment");
                 Parameters parameters=new Parameters(v,values[0].getString("name"),bufferedReader,printWriter);
 
-               // SingletonSocket.setSocket(socket);
-
-                getActivity().getSupportFragmentManager().beginTransaction()
+               SingletonSocket.getFragmentManger().beginTransaction()
                         .replace(((ViewGroup)getView().getParent()).getId(), directories.newInstance(null,null,parameters), "findThisFragment")
                         .addToBackStack(null)
                         .commit();
 
-                // directories directoryProcessorFragment = directories.newInstance();
 
-                Log.d(TAG, "onClick: ");
-//                Wan_Networking.DirectoryProcessor directoryProcessor = new Wan_Networking.DirectoryProcessor();
-//                directoryProcessor.execute(new Wan_Networking.Parameter(v, values[0].getString("name")));
             });
         }
 
         private void setDriveNames() {
             try {
-                sendRequest("driveNames");
+                sendRequest();
                 Log.d(TAG, "Receiving Data from client");
 
                 String data;
@@ -216,11 +207,11 @@ public class displayData extends Fragment {
 
         }
 
-        void sendRequest(String request) {
+        void sendRequest() {
             try {
 
-                Log.d(TAG, "Sending Request to Server i.e >>  " + request);
-                printWriter.println(request);
+                Log.d(TAG, "Sending Request to Server i.e >>  " + "driveNames");
+                printWriter.println("driveNames");
                 printWriter.flush();
 
             } catch (Exception e) {

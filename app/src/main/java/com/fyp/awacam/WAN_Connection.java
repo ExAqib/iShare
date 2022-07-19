@@ -1,13 +1,11 @@
 package com.fyp.awacam;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,9 +24,10 @@ public class WAN_Connection extends AppCompatActivity {
         ActivityWanConnectionBinding binding = ActivityWanConnectionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-         displayData displayDataFragment =   displayData.newInstance(null);
+        displayData displayDataFragment =   displayData.newInstance(null);
 
         FragmentManager manager = getSupportFragmentManager();
+        SingletonSocket.setFragmentManger(manager);
         FragmentTransaction transaction=manager.beginTransaction();
 
         transaction.replace(R.id.myFrameLayoutWan,displayDataFragment);
