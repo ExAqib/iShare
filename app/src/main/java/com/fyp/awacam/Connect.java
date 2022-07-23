@@ -4,26 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.fyp.awacam.databinding.ActivityConnectBinding;
-import com.fyp.awacam.databinding.ActivityMainBinding;
+
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Connect extends AppCompatActivity {
 
@@ -36,6 +32,8 @@ public class Connect extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
+
+        ArrayList<String> a = new ArrayList<>();
 
         binding = ActivityConnectBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -78,7 +76,12 @@ public class Connect extends AppCompatActivity {
 
         });
 
-        binding.btnServer.setOnClickListener(v -> createServerSocket(9999));
+        binding.btnServer.setOnClickListener(v -> new Thread(()-> {
+
+            ArrayList<String> servers=new UDP_Connect().FindServer(binding.ipAddress.getText().toString().trim());
+            sendToast("Total connections "+servers.size() );
+
+        }).start());
 
         binding.btnSwitchToLan.setOnClickListener(v -> {
             startActivity(new Intent(Connect.this,lan_connect.class));
@@ -159,28 +162,7 @@ public class Connect extends AppCompatActivity {
         });
         t1.start();
     }
-    private void createTestFile()
-    {
-        String PdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
-        File file = new File(PdfPath, "myResult.pdf");
-        OutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(file);
-            String aqib="qeqweqwe";
-            byte [] data= aqib.getBytes();
-            outputStream.write(data);
-            outputStream.flush();
-            outputStream.close();
-        } catch (FileNotFoundException e) {
-            Toast.makeText(this, "FileNotFoundException "+e.toString(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            Toast.makeText(this, "IOException "+e.toString(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-    }
+
     private void sendToast(String message) {
         this.runOnUiThread(() -> {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
