@@ -1,4 +1,4 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import android.content.Context;
 

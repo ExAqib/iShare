@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fyp.awacam">
+    package="com.fyp.iShare">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -18,16 +18,16 @@
         android:theme="@style/Theme.AwaCam">
 
         <activity
-            android:name=".lan_connect"
+            android:name="com.fyp.iShare.lan_connect"
             android:exported="false" />
         <activity
-            android:name=".Internal_Storage"
+            android:name="com.fyp.iShare.Internal_Storage"
             android:exported="true" />
         <activity
-            android:name=".WAN_Connection"
+            android:name="com.fyp.iShare.WAN_Connection"
             android:exported="false" />
         <activity
-            android:name=".Connect"
+            android:name="com.fyp.iShare.Connect"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.fyp.iShare.MainActivity" />
     </application>
 
 </manifest>

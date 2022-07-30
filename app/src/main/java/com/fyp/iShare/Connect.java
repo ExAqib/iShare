@@ -1,4 +1,4 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fyp.awacam.databinding.ActivityConnectBinding;
+import com.fyp.iShare.databinding.ActivityConnectBinding;
 
 
 import java.io.BufferedReader;

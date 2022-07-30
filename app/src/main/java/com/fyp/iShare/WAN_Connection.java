@@ -1,4 +1,4 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.fyp.awacam.databinding.ActivityWanConnectionBinding;
+import com.fyp.iShare.databinding.ActivityWanConnectionBinding;
 
 public class WAN_Connection extends AppCompatActivity {
 

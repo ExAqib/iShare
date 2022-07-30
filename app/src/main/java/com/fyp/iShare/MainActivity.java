@@ -1,4 +1,4 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -17,14 +17,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fyp.awacam.databinding.ActivityMainBinding;
+import com.fyp.iShare.databinding.ActivityMainBinding;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;

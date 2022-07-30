@@ -1,4 +1,4 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,7 +22,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
 
 public class displayData extends Fragment {
 

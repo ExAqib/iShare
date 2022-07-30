@@ -1,4 +1,4 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,11 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fyp.awacam.databinding.ActivityConnectBinding;
-import com.fyp.awacam.databinding.ActivityLanConnectBinding;
+import com.fyp.iShare.databinding.ActivityConnectBinding;
+import com.fyp.iShare.databinding.ActivityLanConnectBinding;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class lan_connect extends AppCompatActivity {

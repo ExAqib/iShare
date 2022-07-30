@@ -1,12 +1,10 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 
 
 import android.Manifest;
 
 
-import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -18,17 +16,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.fyp.awacam.databinding.ActivityInternalStorageBinding;
+import com.fyp.iShare.databinding.ActivityInternalStorageBinding;
 
 import java.io.File;
 import java.io.FilenameFilter;

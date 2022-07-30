@@ -1,4 +1,4 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import android.app.ProgressDialog;
 import android.content.Context;

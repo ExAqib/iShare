@@ -1,10 +1,9 @@
-package com.fyp.awacam;
+package com.fyp.iShare;
 
 import android.view.View;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 
 public class Parameters {
 
