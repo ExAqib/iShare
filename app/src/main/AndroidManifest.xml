@@ -16,26 +16,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.iShare">
-
         <activity
-            android:name="com.fyp.iShare.lan_connect"
-            android:exported="false" />
-        <activity
-            android:name="com.fyp.iShare.Internal_Storage"
-            android:exported="true" />
-        <activity
-            android:name="com.fyp.iShare.WAN_Connection"
-            android:exported="false" />
-        <activity
-            android:name="com.fyp.iShare.Connect"
-            android:exported="true">
+            android:name=".MainActivity2"
+            android:exported="true"
+            android:label="@string/title_activity_main2" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.fyp.iShare.MainActivity" />
+        <activity
+            android:name=".lan_connect"
+            android:exported="false" />
+        <activity
+            android:name=".Internal_Storage"
+            android:exported="true" />
+        <activity
+            android:name=".WAN_Connection"
+            android:exported="false" />
+        <activity
+            android:name=".Connect"
+            android:exported="true">
+
+        </activity>
+        <activity android:name=".MainActivity"
+            android:exported="true">
+
+
+
+        </activity>
     </application>
 
 </manifest>
