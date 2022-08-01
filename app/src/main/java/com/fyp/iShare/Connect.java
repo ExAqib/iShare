@@ -78,8 +78,9 @@ public class Connect extends AppCompatActivity {
 
         binding.btnServer.setOnClickListener(v -> new Thread(()-> {
 
-            ArrayList<String> servers=new UDP_Connect().FindServer(binding.ipAddress.getText().toString().trim());
-            sendToast("Total connections "+servers.size() );
+            new UDP_Connect().JoinMultiCastNetwork();
+            //ArrayList<String> servers=new UDP_Connect().FindServer(binding.ipAddress.getText().toString().trim());
+            //sendToast("Total connections "+servers.size() );
 
         }).start());
 

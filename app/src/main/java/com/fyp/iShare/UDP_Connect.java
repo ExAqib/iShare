@@ -1,11 +1,13 @@
 package com.fyp.iShare;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
+import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -24,13 +26,35 @@ public class UDP_Connect {
 
     }
 
+    void JoinMultiCastNetwork (){
+        try{
+            int port = 11000;
+            InetAddress group = InetAddress.getByName("224.168.100.2");
+            MulticastSocket multicastSocket = new MulticastSocket();
+
+            //DatagramSocket multicastSocket= new DatagramSocket();
+
+            String Message = "Hello, I am Sender";
+
+            DatagramPacket datagramPacket= new DatagramPacket(Message.getBytes(),Message.getBytes().length,group,port);
+            multicastSocket.send(datagramPacket);
+            Log.d(TAG, "JoinMultiCastNetwork: Paket send ");
+            multicastSocket.close();
+
+        }
+        catch (Exception e)
+        {
+            Log.d(TAG, "JoinMultiCastNetwork: Exception "+e);
+        }
+    }
+
     ArrayList<String> FindServer(String ip){
         try {
-            //testUdpBroadCast(ip);
+              testUdpBroadCast(ip);
 
             listeners = new ArrayList<>();
             Log.d(TAG, "UDP Connect Called");
-            int SERVER_PORT = 9999;
+            int SERVER_PORT = 9779;
             String IP = "255.255.255.255"; //255.255.2552.255
 
             DatagramSocket socket = new DatagramSocket();
@@ -130,9 +154,9 @@ public class UDP_Connect {
     void testUdpBroadCast(String IP) throws Exception {
 
         if (IP == null) {
-            IP = "192.168.0.255";
+            IP = "192.168.10.255";
         }
-        int PORT = 9999;
+        int PORT = 9779;
         DatagramSocket myUDPSocket = new DatagramSocket();
         //myUDPSocket.setSoTimeout(3000);
         myUDPSocket.setBroadcast(true);
