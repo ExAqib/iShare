@@ -9,12 +9,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.iShare.databinding.FragmentDownloadsBinding;
+import com.fyp.iShare.ui.downloads.RecyclerAdapter;
 
-public class DownloadsFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFileListener {
 
     private FragmentDownloadsBinding binding;
+    private RecyclerView recyclerView;
+    private RecyclerAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -26,6 +34,18 @@ public class DownloadsFragment extends Fragment {
 
         final TextView textView = binding.textDownloads;
         downloadsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        List<String> devices = new ArrayList<String>();
+        devices.add("sup1");
+        devices.add("sup2");
+        devices.add("sup3");
+        recyclerView = binding.rvDownloads;
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        adapter = new RecyclerAdapter(devices, this);
+
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
         return root;
     }
 
@@ -33,5 +53,10 @@ public class DownloadsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onFileClick(int position) {
+
     }
 }

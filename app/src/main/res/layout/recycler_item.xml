@@ -25,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:id="@+id/tv_directory_name"
-
         tools:text="Document"
         app:layout_constraintStart_toEndOf="@+id/rcv_img"
         app:layout_constraintTop_toTopOf="parent" />

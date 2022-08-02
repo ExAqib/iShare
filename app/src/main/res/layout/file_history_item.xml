@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_downloads"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="16dp"
+    android:clickable="true"
+    android:foreground="?selectableItemBackground"
+    card_view:cardCornerRadius="5dp"
+    card_view:contentPadding="8dp">
+
+    <RelativeLayout
+        android:id="@+id/rlWebhook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvFileName"
+                android:layout_width="181dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="68dp"
+                android:text="File Name" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:gravity="end|center_vertical"
+                android:text="Status" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
+

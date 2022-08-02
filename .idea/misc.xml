@@ -27,12 +27,17 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/AwaCam/app/src/main/res/layout/fragment_directories.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/AwaCam/app/src/main/res/layout/fragment_display_data.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_connect.xml" value="0.25" />
-        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_main2.xml" value="0.25" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_main2.xml" value="0.33" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/devices_item.xml" value="0.25" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/directory.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/drive_info.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/file_history_item.xml" value="0.365625" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_dashboard.xml" value="0.3625" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_devices.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_downloads.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_notifications.xml" value="0.3625" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/recycler_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3625" />
       </map>
     </option>
