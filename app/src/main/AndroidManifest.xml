@@ -17,9 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.iShare">
         <activity
+            android:name=".ui.messages.chat"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity2"
             android:exported="true"
-            android:label="@string/title_activity_main2" >
+            android:label="@string/title_activity_main2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,15 +40,10 @@
             android:exported="false" />
         <activity
             android:name=".Connect"
-            android:exported="true">
-
-        </activity>
-        <activity android:name=".MainActivity"
-            android:exported="true">
-
-
-
-        </activity>
+            android:exported="true"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

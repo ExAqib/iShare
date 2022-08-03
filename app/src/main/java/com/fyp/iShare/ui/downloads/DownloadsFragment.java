@@ -36,9 +36,9 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
         downloadsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         List<String> devices = new ArrayList<String>();
-        devices.add("sup1");
-        devices.add("sup2");
-        devices.add("sup3");
+        devices.add("File1");
+        devices.add("File2");
+        devices.add("File3");
         recyclerView = binding.rvDownloads;
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
