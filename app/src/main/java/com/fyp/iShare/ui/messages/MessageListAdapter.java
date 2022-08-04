@@ -82,13 +82,15 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
-        TextView messageText, timeText;
+        TextView messageText, timeText, dateText;
 
         SentMessageHolder(View itemView) {
             super(itemView);
 
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            dateText = (TextView) itemView.findViewById(R.id.text_date_me);
+
         }
 
         void bind(UserMessage message) {
@@ -97,11 +99,14 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             // Format the stored timestamp into a readable String using method.
             //timeText.setText(message.getCreatedAt());
             timeText.setText("88");
+
+            dateText.setVisibility(View.GONE);
+
         }
     }
 
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
-        TextView messageText, timeText, nameText;
+        TextView messageText, timeText, nameText, dateText;
         ImageView profileImage;
 
         ReceivedMessageHolder(View itemView) {
@@ -110,6 +115,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             nameText = (TextView) itemView.findViewById(R.id.text_message_name);
+            dateText = (TextView) itemView.findViewById(R.id.text_date_other);
             profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
         }
 
@@ -121,6 +127,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText("1125");
 
             nameText.setText(message.getSender().getNickname());
+
+            dateText.setVisibility(View.GONE);
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);
