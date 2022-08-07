@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".ui.home.HomeFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-100dp"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="@font/pacifico"
+            android:text="iShare"
+            android:textColor="@color/primary"
+            android:textSize="60sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/ln_ID"
+                android:layout_width="350dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/main_id_box"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_deviceID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Your ID:"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_primary"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="2dp"
+                        android:src="@drawable/ic_baseline_devices_24"
+                        app:tint="@color/text_primary" />
+
+                    <TextView
+                        android:id="@+id/mobile_data_usage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_small"
+                        android:gravity="center"
+                        android:text="198521564165"
+                        android:textColor="@color/text_primary"
+
+                        android:textSize="@dimen/text_large" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <TextView
+                        android:id="@+id/mobile_data_sent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:gravity="center"
+                        android:text="1564656"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_extra_small" />
+
+                    <TextView
+                        android:id="@+id/mobile_data_received"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:gravity="center"
+                        android:text="7995"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/text_extra_small" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="350dp"
+                android:layout_height="200dp"
+                android:layout_below="@id/ln_ID"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/main_partner_connect_view"
+                android:clickable="true"
+                android:elevation="@dimen/elevation_default"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter Device ID to Connect "
+                    android:textColor="@color/text_primary" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Partner ID"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_primary"
+                    android:textColorLink="@color/text_primary" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:backgroundTint="@color/primary"
+                    android:text="File Transfer" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
