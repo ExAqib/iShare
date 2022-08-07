@@ -42,8 +42,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
-            Log.d("tag", "i not here: ");
-
             // If some other user sent the message
             return VIEW_TYPE_MESSAGE_RECEIVED;
         }

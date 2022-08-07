@@ -20,7 +20,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter(List<String> files, OnFileListener onFileListener) {
         this.files = files;
         this.onFileListener = onFileListener;
-
     }
 
     @Override
@@ -52,9 +51,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public RelativeLayout relativeLayout;
         public TextView name;
         public TextView status;
-       // public TextView domain;
-       // public TextView requestMethod;
-       // public TextView contentType;
 
         OnFileListener onFileListener;
 
