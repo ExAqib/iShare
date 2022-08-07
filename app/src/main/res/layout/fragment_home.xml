@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,39 +13,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:orientation="vertical">
 
 
             <LinearLayout
-                android:id="@+id/data_usage_mobile_today"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_mid_large"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_small"
+                android:id="@+id/ln_ID"
+                android:layout_width="350dp"
+                android:layout_height="150dp"
                 android:layout_weight="1"
                 android:background="@color/design_default_color_background"
-                android:clickable="true"
-                android:elevation="@dimen/elevation_default"
-                android:focusable="true"
+                android:backgroundTint="@color/light_primary"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_medium">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/text_deviceID"
@@ -57,6 +40,7 @@
                     android:layout_marginBottom="8dp"
                     android:text="Your ID:"
                     android:textAlignment="center"
+                    android:textColor="@color/text_primary"
                     android:textSize="20sp" />
 
                 <LinearLayout
@@ -75,7 +59,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginEnd="2dp"
-                        android:src="@drawable/ic_baseline_devices_24" />
+                        android:src="@drawable/ic_baseline_devices_24"
+                        app:tint="@color/white" />
 
                     <TextView
                         android:id="@+id/mobile_data_usage"
@@ -84,6 +69,8 @@
                         android:layout_marginStart="@dimen/margin_extra_small"
                         android:gravity="center"
                         android:text="198521564165"
+                        android:textColor="@color/text_primary"
+
                         android:textSize="@dimen/text_large" />
 
                 </LinearLayout>
@@ -104,6 +91,7 @@
                         android:layout_marginEnd="@dimen/margin_small"
                         android:gravity="center"
                         android:text="1564656"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_extra_small" />
 
                     <TextView
@@ -113,49 +101,59 @@
                         android:layout_marginStart="@dimen/margin_small"
                         android:gravity="center"
                         android:text="7995"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/text_extra_small" />
 
 
                 </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_mid_large"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_weight="1"
-            android:background="@color/design_default_color_background"
-            android:clickable="true"
-            android:elevation="@dimen/elevation_default"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="@dimen/margin_medium">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Enter Device ID to Connect " />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="350dp"
+                android:layout_height="200dp"
+                android:layout_below="@id/ln_ID"
+                android:layout_marginStart="@dimen/margin_mid_large"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_weight="1"
+                android:background="@color/design_default_color_background"
+                android:backgroundTint="@color/light_primary"
+                android:clickable="true"
+                android:elevation="@dimen/elevation_default"
+                android:focusable="true"
                 android:gravity="center"
-                android:hint="Partner ID"
-                android:numeric="integer" />
+                android:orientation="vertical"
+                android:padding="@dimen/margin_medium">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="6dp"
-                android:text="File Transfer"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter Device ID to Connect "
+                    android:textColor="@color/text_primary" />
 
-        </LinearLayout>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Partner ID"
+                    android:numeric="integer"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_primary"
+                    android:textColorLink="@color/text_primary" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:backgroundTint="@color/primary"
+                    android:text="File Transfer" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
