@@ -3,45 +3,88 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_downloads"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
     android:layout_marginTop="12dp"
     android:layout_marginRight="16dp"
     android:clickable="true"
+    android:focusable="true"
     android:foreground="?selectableItemBackground"
+    android:backgroundTint="@color/surface"
     card_view:cardCornerRadius="5dp"
     card_view:contentPadding="8dp">
 
     <RelativeLayout
-        android:id="@+id/rlWebhook"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="-5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvFileName"
-                android:layout_width="181dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="68dp"
-                android:text="File Name" />
+        <TextView
+            android:id="@+id/tv_fileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/cardViewOfUser"
+            android:text="File Name"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="6dp"
-                android:gravity="end|center_vertical"
-                android:text="Status" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_fileSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_fileName"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@id/cardViewOfUser"
+            android:text="2.5MB"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/tv_fileName"
+            android:text="100%"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewOfUser"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="20dp">
+
+
+            <ImageView
+                android:id="@+id/imgFileType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="File Type"
+                android:scaleType="centerCrop"
+                android:src="@color/primary">
+
+            </ImageView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
+
 
 </androidx.cardview.widget.CardView>
 

@@ -32,9 +32,6 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
         binding = FragmentDownloadsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDownloads;
-        downloadsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
         List<String> devices = new ArrayList<String>();
         devices.add("File1");
         devices.add("File2");

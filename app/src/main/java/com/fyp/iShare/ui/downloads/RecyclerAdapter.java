@@ -57,8 +57,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public ViewHolder(View itemView, OnFileListener onFileListener) {
             super(itemView);
             relativeLayout= (RelativeLayout) itemView.findViewById(R.id.rl_downloads);
-            this.name = itemView.findViewById(R.id.tvFileName);
-            this.status = itemView.findViewById(R.id.tvStatus);
+            this.name = itemView.findViewById(R.id.tv_fileName);
+            this.status = itemView.findViewById(R.id.tv_status);
 
             // allows clicks events to be caught
             this.onFileListener = onFileListener;
