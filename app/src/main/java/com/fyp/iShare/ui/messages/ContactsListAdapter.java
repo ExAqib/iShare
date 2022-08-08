@@ -24,22 +24,20 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
     public ContactsListAdapter(List<User> contacts, OnContactListener onContactListener) {
         this.contacts = contacts;
         this.onContactListener = onContactListener;
+
     }
 
     @Override
     public ContactsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.contact_item, parent, false);
-      ViewHolder viewHolder = new ViewHolder(listItem, onContactListener);
+        ViewHolder viewHolder = new ViewHolder(listItem, onContactListener);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(contacts.get(position).nickname);
-        /*holder.itemView.setOnClickListener{
-            onContactListener.onWebhookClick(files.get(position).getWid());
-        }*/
     }
 
     @Override
@@ -61,16 +59,20 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
             this.name = itemView.findViewById(R.id.tv_userName);
             this.lastMessage = itemView.findViewById(R.id.tv_lastMessage);
 
+
             // allows clicks events to be caught
             this.onContactListener = onContactListener;
+            Log.d("tag", onContactListener.toString());
+            Log.d("tag", this.onContactListener.toString());
             itemView.setOnClickListener(this);
-
         }
 
 
         @Override
         public void onClick(View v) {
             onContactListener.onContactClick(getAdapterPosition());
+            Log.d("tag", Integer.toString(getAdapterPosition()));
+
         }
     }
 

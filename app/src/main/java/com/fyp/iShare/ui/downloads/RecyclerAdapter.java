@@ -1,5 +1,6 @@
 package com.fyp.iShare.ui.downloads;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter(List<String> files, OnFileListener onFileListener) {
         this.files = files;
         this.onFileListener = onFileListener;
+
     }
 
     @Override
@@ -33,11 +35,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(files.get(position));
-
-        /*holder.itemView.setOnClickListener{
-            onFileListener.onWebhookClick(files.get(position).getWid());
-        }*/
-
     }
 
 
@@ -56,7 +53,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         public ViewHolder(View itemView, OnFileListener onFileListener) {
             super(itemView);
-            relativeLayout= (RelativeLayout) itemView.findViewById(R.id.rl_downloads);
+            relativeLayout = (RelativeLayout) itemView.findViewById(R.id.rl_downloads);
             this.name = itemView.findViewById(R.id.tv_fileName);
             this.status = itemView.findViewById(R.id.tv_status);
 

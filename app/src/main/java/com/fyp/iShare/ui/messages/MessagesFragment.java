@@ -28,8 +28,6 @@ public class MessagesFragment extends Fragment implements ContactsListAdapter.On
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        MessagesViewModel messagesViewModel =
-                new ViewModelProvider(this).get(MessagesViewModel.class);
 
         binding = FragmentMessagesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -50,13 +48,6 @@ public class MessagesFragment extends Fragment implements ContactsListAdapter.On
         adapter = new ContactsListAdapter(messageList, this);
         recyclerView.setAdapter(adapter);
 
-        /*textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), chat.class);
-                startActivity(intent);
-            }
-        });*/
         return root;
     }
 

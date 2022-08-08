@@ -29,14 +29,18 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/contact_ripple.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/device_layout_shape.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/deviced_headers.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/download_ripple.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_baseline_arrow_downward_24.xml" value="0.3675" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_ID_view.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_id_box.xml" value="0.275" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_id_view.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_partner_connect_view.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/font/pacifico.xml" value="0.3958333333333333" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.23560910307898258" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout-w936dp/activity_login.xml" value="0.275" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_chat.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_connect.xml" value="0.25" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_main2.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/channels_item.xml" value="0.36666666666666664" />
@@ -45,7 +49,7 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/devices_item.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/directory.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/drive_info.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/file_history_item.xml" value="0.6463223787167449" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/file_history_item.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_dashboard.xml" value="0.3625" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_devices.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_downloads.xml" value="0.18802083333333333" />
@@ -60,7 +64,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
