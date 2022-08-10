@@ -25,8 +25,8 @@ public class Connect extends AppCompatActivity {
 
     private ActivityConnectBinding binding;
     static final String TAG = "tag";
-    boolean NewConnection=true;
-    Socket socket=null;
+    boolean NewConnection = true;
+    Socket socket = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class Connect extends AppCompatActivity {
         binding = ActivityConnectBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        binding.btnConnect.setOnClickListener(v -> {
+        binding.btnConnectOld.setOnClickListener(v -> {
 
             String IP_Address = binding.ipAddress.getText().toString().trim();
             int Port_Num = Integer.parseInt(binding.portNumber.getText().toString().trim());
@@ -76,7 +76,7 @@ public class Connect extends AppCompatActivity {
 
         });
 
-        binding.btnServer.setOnClickListener(v -> new Thread(()-> {
+        binding.btnServer.setOnClickListener(v -> new Thread(() -> {
 
             new UDP_Connect().JoinMultiCastNetwork();
             //ArrayList<String> servers=new UDP_Connect().FindServer(binding.ipAddress.getText().toString().trim());
@@ -85,26 +85,26 @@ public class Connect extends AppCompatActivity {
         }).start());
 
         binding.btnSwitchToLan.setOnClickListener(v -> {
-            startActivity(new Intent(Connect.this,lan_connect.class));
+            startActivity(new Intent(Connect.this, lan_connect.class));
         });
     }
 
     private void goToNextActivity() {
         this.runOnUiThread(() -> {
-            startActivity(new Intent(Connect.this,WAN_Connection.class));
+            startActivity(new Intent(Connect.this, WAN_Connection.class));
         });
 
     }
 
     private boolean sendIdPassword(String id, String password) {
-        try{
+        try {
             PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            if(NewConnection){
+            if (NewConnection) {
                 printWriter.println("MOBILE");
                 printWriter.flush();
-                NewConnection=false;
+                NewConnection = false;
             }
             printWriter.println(id);
             printWriter.flush();
@@ -114,7 +114,7 @@ public class Connect extends AppCompatActivity {
             Log.d(TAG, "ID " + id + " and Password " + password + " send ");
 
             String data = bufferedReader.readLine();
-            Log.d(TAG, "Received response  "+data);
+            Log.d(TAG, "Received response  " + data);
 
             if (data.equals("ERROR")) {
                 Log.d(TAG, " PC not found. (Wrong ID\\Password)");
@@ -126,21 +126,20 @@ public class Connect extends AppCompatActivity {
                 Log.d(TAG, "Invalid response from server");
                 sendToast("Invalid response from server");
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "Exception  "+e);
+            Log.d(TAG, "Exception  " + e);
         }
 
         return false;
     }
+
     public void createServerSocket(int portNum) {
         Thread t1 = new Thread(() ->
         {
             try {
                 ServerSocket serverSocket = new ServerSocket(0);
-                sendToast("Waiting for client at "+serverSocket.getLocalPort());
+                sendToast("Waiting for client at " + serverSocket.getLocalPort());
 
                 Log.d(TAG, "Server is waiting at port num: " + serverSocket.getLocalPort());
                 Socket socket = serverSocket.accept();
@@ -156,7 +155,7 @@ public class Connect extends AppCompatActivity {
 //                Toast.makeText(this, "Message received form server ", Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {
-                Log.d(TAG, "createServerSocket: "+e.toString());
+                Log.d(TAG, "createServerSocket: " + e.toString());
                 e.printStackTrace();
             }
 

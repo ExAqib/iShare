@@ -24,13 +24,13 @@ public class WAN_Connection extends AppCompatActivity {
         ActivityWanConnectionBinding binding = ActivityWanConnectionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        displayData displayDataFragment =   displayData.newInstance(null);
+        displayData displayDataFragment = displayData.newInstance(null);
 
         FragmentManager manager = getSupportFragmentManager();
         SingletonSocket.setFragmentManger(manager);
-        FragmentTransaction transaction=manager.beginTransaction();
+        FragmentTransaction transaction = manager.beginTransaction();
 
-        transaction.replace(R.id.myFrameLayoutWan,displayDataFragment);
+        transaction.replace(R.id.myFrameLayoutWan, displayDataFragment);
         transaction.commit();
         Log.d(TAG, "loadFragment: Transaction committed");
 
@@ -39,19 +39,19 @@ public class WAN_Connection extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.send_file,menu);
+        menuInflater.inflate(R.menu.send_file, menu);
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int ID=item.getItemId();
-        if(ID==R.id.send_file_menu){
-            new Thread(()->SingletonSocket.sendRequest("$RECEIVE_FILE$")).start();
-            startActivity(new Intent(WAN_Connection.this,Internal_Storage.class));
+        int ID = item.getItemId();
+        if (ID == R.id.send_file_menu) {
+            new Thread(() -> SingletonSocket.sendRequest("$RECEIVE_FILE$")).start();
+            startActivity(new Intent(WAN_Connection.this, Internal_Storage.class));
             return true;
-        }else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }

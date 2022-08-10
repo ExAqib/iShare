@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_extra_small"
                         android:gravity="center"
-                        android:text="198521564165"
+                        android:text="19852198"
                         android:textColor="@color/text_primary"
 
                         android:textSize="@dimen/text_large" />
@@ -123,24 +123,24 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <TextView
-                        android:id="@+id/mobile_data_sent"
+                        android:id="@+id/PASSWORD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_small"
                         android:gravity="center"
-                        android:text="1564656"
+                        android:text="Password"
                         android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_extra_small" />
+                        android:textSize="@dimen/text_mid_large" />
 
                     <TextView
-                        android:id="@+id/mobile_data_received"
+                        android:id="@+id/tv_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_small"
                         android:gravity="center"
                         android:text="7995"
                         android:textColor="@color/text_primary"
-                        android:textSize="@dimen/text_extra_small" />
+                        android:textSize="@dimen/text_mid_large" />
 
 
                 </LinearLayout>
@@ -169,6 +169,7 @@
                     android:textSize="18sp" />
 
                 <EditText
+                    android:id="@+id/edt_ID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -179,6 +180,7 @@
                     android:textColorLink="@color/text_primary" />
 
                 <Button
+                    android:id="@+id/btn_fileTransfer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"

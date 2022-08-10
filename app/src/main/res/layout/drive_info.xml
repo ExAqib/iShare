@@ -1,94 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="3dp"
-    android:layout_marginTop="3dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    android:elevation="5dp"
-    app:cardCornerRadius="4dp"
-    >
-
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/li_drivesItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:padding="3dp">
+        android:layout_margin="1dp"
+        android:background="@drawable/drive_layout_shape"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/img_drive"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:contentDescription="Drive Icon"
+            android:src="@drawable/hard_disk"
+            app:tint="@color/text_primary" />
 
-        <TextView
-            android:id="@+id/tv_drive_name"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginBottom="3dp"
-            android:padding="3dp"
-            android:text="Drive Name" />
+            android:layout_gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tv_drive_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:text="Drive name"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_drive_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/tv_drive_name"
+                android:padding="2dp"
+                android:text="Drive label"
+                android:textColor="@color/text_secondary"
+                android:textSize="16sp" />
 
 
-        <TextView
-            android:id="@+id/tv_drive_label"
-            android:layout_width="wrap_content"
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_drive_format"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Format"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:textSize="10sp"
+        android:textColor="@color/primary"/>
 
 
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@+id/tv_drive_name"
-            android:padding="3dp"
-            android:text="Drive label" />
-
-        <TextView
-            android:id="@+id/tv_drive_type"
-
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_drive_name"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-
-            android:layout_marginBottom="5dp"
-            android:padding="3dp"
-            android:text="Type: "
-            />
-
-        <TextView
-            android:id="@+id/tv_drive_format"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_drive_label"
-            android:layout_margin="5dp"
-
-            android:layout_marginTop="3dp"
-            android:layout_toRightOf="@+id/tv_drive_type"
-            android:padding="3dp"
-
-            android:text="Format: " />
-
-        <LinearLayout
-            android:id="@+id/show_directory"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_drive_format"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="vertical"
-            android:padding="3dp" />
-
-    </RelativeLayout>
-
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

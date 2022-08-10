@@ -45,12 +45,12 @@ public class displayData extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate called for fragment" );
+        Log.d(TAG, "onCreate called for fragment");
     }
 
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart called for fragment" );
+        Log.d(TAG, "onStart called for fragment");
 
         super.onStart();
 
@@ -67,17 +67,17 @@ public class displayData extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.d(TAG, "onViewCreated called for fragment" );
+        Log.d(TAG, "onViewCreated called for fragment");
 
         linearLayout = getView().findViewById(R.id.fragmentLinear);
-        Log.d(TAG, "calling start " );
+        Log.d(TAG, "calling start ");
 
         start();
     }
 
     void start() {
         try {
-            socket=SingletonSocket.getSocket();
+            socket = SingletonSocket.getSocket();
             printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             inputStream = socket.getInputStream();
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -122,7 +122,7 @@ public class displayData extends Fragment {
 
             TextView name = myLayout.findViewById(R.id.tv_drive_name);
             TextView label = myLayout.findViewById(R.id.tv_drive_label);
-            TextView type = myLayout.findViewById(R.id.tv_drive_type);
+            //TextView type = myLayout.findViewById(R.id.tv_drive_type);
             TextView format = myLayout.findViewById(R.id.tv_drive_format);
 
             name.setText(values[0].getString("name"));
@@ -132,8 +132,8 @@ public class displayData extends Fragment {
             } else {
                 label.setText(values[0].getString("label"));
             }
-            type.append(values[0].getString("type"));
-            format.append(values[0].getString("format"));
+            //type.append(values[0].getString("type"));
+            format.setText(values[0].getString("format"));
 
 
             linearLayout.addView(myLayout);
@@ -142,10 +142,10 @@ public class displayData extends Fragment {
 
                 SingletonSocket.setNavigationPath();
                 Log.d(TAG, "going to next fragment");
-                Parameters parameters=new Parameters(v,values[0].getString("name"),bufferedReader,printWriter);
+                Parameters parameters = new Parameters(v, values[0].getString("name"), bufferedReader, printWriter);
 
-               SingletonSocket.getFragmentManger().beginTransaction()
-                        .replace(((ViewGroup)getView().getParent()).getId(), directories.newInstance(null,null,parameters), "findThisFragment")
+                SingletonSocket.getFragmentManger().beginTransaction()
+                        .replace(((ViewGroup) getView().getParent()).getId(), directories.newInstance(null, null, parameters), "findThisFragment")
                         .addToBackStack(null)
                         .commit();
 
