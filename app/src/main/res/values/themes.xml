@@ -3,12 +3,13 @@
     <!--
         <style name="Theme.iShare" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
     -->
-    <style name="Theme.iShare" parent="Theme.AppCompat.Light">
+    <style name="Theme.iShare" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary</item>
         <item name="colorOnPrimary">@color/surface</item>
         <item name="colorControlNormal">@color/text_secondary</item>
+        <item name="android:colorBackground">@color/background</item>
 
 
         <!-- Secondary brand color. -->
