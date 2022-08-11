@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.fyp.iShare.SettingsActivity;
 import com.fyp.iShare.SingletonSocket;
 import com.fyp.iShare.WAN_Connection;
 import com.fyp.iShare.databinding.FragmentHomeBinding;
 import com.fyp.iShare.ui.login.LoginActivity;
-import com.fyp.iShare.ui.messages.chat;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
         });
 
         binding.btnSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), chat.class);
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
             startActivity(intent);
         });
 
