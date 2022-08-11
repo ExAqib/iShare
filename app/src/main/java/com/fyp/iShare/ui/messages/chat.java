@@ -1,13 +1,12 @@
 package com.fyp.iShare.ui.messages;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-
 import com.fyp.iShare.R;
-import com.fyp.iShare.ui.messages.MessageListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ public class chat extends AppCompatActivity {
         messageList.add(testobj3);
         messageList.add(testobj4);
 
-        mMessageRecycler = (RecyclerView) findViewById(R.id.recycler_chat);
+        mMessageRecycler = findViewById(R.id.recycler_chat);
         mMessageAdapter = new MessageListAdapter(this, messageList);
         mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         mMessageRecycler.setAdapter(mMessageAdapter);

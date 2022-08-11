@@ -1,6 +1,5 @@
 package com.fyp.iShare.ui.downloads;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,8 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private List<String> files;
-    private OnFileListener onFileListener;
+    private final List<String> files;
+    private final OnFileListener onFileListener;
 
     public RecyclerAdapter(List<String> files, OnFileListener onFileListener) {
         this.files = files;
@@ -43,29 +42,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return files.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public RelativeLayout relativeLayout;
-        public TextView name;
-        public TextView status;
-
-        OnFileListener onFileListener;
-
-        public ViewHolder(View itemView, OnFileListener onFileListener) {
-            super(itemView);
-            relativeLayout = (RelativeLayout) itemView.findViewById(R.id.rl_downloads);
-            this.name = itemView.findViewById(R.id.tv_fileName);
-            this.status = itemView.findViewById(R.id.tv_status);
-
-            // allows clicks events to be caught
-            this.onFileListener = onFileListener;
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            onFileListener.onFileClick(getAdapterPosition());
-        }
+    public interface OnFileListener {
+        void onFileClick(int position);
     }
 
     // convenience method for getting data at click position
@@ -79,7 +57,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.onFileListener = onFileListener;
     }*/
 
-    public interface OnFileListener {
-        void onFileClick(int position);
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public RelativeLayout relativeLayout;
+        public TextView name;
+        public TextView status;
+
+        OnFileListener onFileListener;
+
+        public ViewHolder(View itemView, OnFileListener onFileListener) {
+            super(itemView);
+            relativeLayout = itemView.findViewById(R.id.rl_downloads);
+            this.name = itemView.findViewById(R.id.tv_fileName);
+            this.status = itemView.findViewById(R.id.tv_status);
+
+            // allows clicks events to be caught
+            this.onFileListener = onFileListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onFileListener.onFileClick(getAdapterPosition());
+        }
     }
 }

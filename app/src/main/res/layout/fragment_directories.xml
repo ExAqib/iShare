@@ -9,7 +9,6 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-
     <LinearLayout
         android:id="@+id/show_directory_linear_layout"
 

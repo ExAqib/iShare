@@ -2,18 +2,17 @@ package com.fyp.iShare;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,13 +24,11 @@ import java.net.Socket;
 
 public class displayData extends Fragment {
 
+    private static final String TAG = "tag";
     PrintWriter printWriter;
     InputStream inputStream;
     BufferedReader bufferedReader;
     LinearLayout linearLayout;
-
-    private static final String TAG = "tag";
-
     Socket socket;
 
     public displayData() {

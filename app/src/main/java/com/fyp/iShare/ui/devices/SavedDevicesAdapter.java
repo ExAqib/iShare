@@ -14,8 +14,8 @@ import java.util.List;
 
 public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapter.ViewHolder> {
 
-    private List<String> devices;
-    private OnDeviceListener onDeviceListener;
+    private final List<String> devices;
+    private final OnDeviceListener onDeviceListener;
 
     public SavedDevicesAdapter(List<String> devices, OnDeviceListener onDeviceListener) {
         this.devices = devices;
@@ -45,27 +45,8 @@ public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapte
         return devices.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public LinearLayout linearLayout;
-        public TextView name;
-
-        OnDeviceListener onDeviceListener;
-
-        public ViewHolder(View itemView, OnDeviceListener onDeviceListener) {
-            super(itemView);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.li_deviceItems);
-            this.name = itemView.findViewById(R.id.tv_deviceName);
-
-            // allows clicks events to be caught
-            this.onDeviceListener = onDeviceListener;
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            onDeviceListener.onDeviceClick(getAdapterPosition());
-        }
+    public interface OnDeviceListener {
+        void onDeviceClick(int position);
     }
 
     // convenience method for getting data at click position
@@ -79,7 +60,26 @@ public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapte
         this.onDeviceListener = onDeviceListener;
     }*/
 
-    public interface OnDeviceListener {
-        void onDeviceClick(int position);
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public LinearLayout linearLayout;
+        public TextView name;
+
+        OnDeviceListener onDeviceListener;
+
+        public ViewHolder(View itemView, OnDeviceListener onDeviceListener) {
+            super(itemView);
+            linearLayout = itemView.findViewById(R.id.li_deviceItems);
+            this.name = itemView.findViewById(R.id.tv_deviceName);
+
+            // allows clicks events to be caught
+            this.onDeviceListener = onDeviceListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onDeviceListener.onDeviceClick(getAdapterPosition());
+        }
     }
 }

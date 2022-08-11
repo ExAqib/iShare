@@ -7,28 +7,14 @@ import java.io.PrintWriter;
 
 public class Parameters {
 
-        View view;
-        String path;
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
+    View view;
+    String path;
     BufferedReader bufferedReader;
-        PrintWriter printWriter;
-
-    public BufferedReader getBufferedReader() {
-        return bufferedReader;
-    }
-
+    PrintWriter printWriter;
     public Parameters(String path, BufferedReader bufferedReader, PrintWriter printWriter) {
         this.path = path;
         this.bufferedReader = bufferedReader;
         this.printWriter = printWriter;
-    }
-
-    public PrintWriter getPrintWriter() {
-        return printWriter;
     }
 
     public Parameters(View view, String path, BufferedReader bufferedReader, PrintWriter printWriter) {
@@ -38,12 +24,24 @@ public class Parameters {
         this.printWriter = printWriter;
     }
 
-        public View getView() {
-            return view;
-        }
+    public BufferedReader getBufferedReader() {
+        return bufferedReader;
+    }
 
-        public String getPath() {
-            return path;
-        }
+    public PrintWriter getPrintWriter() {
+        return printWriter;
+    }
+
+    public View getView() {
+        return view;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
 }

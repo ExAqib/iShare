@@ -1,6 +1,16 @@
 package com.fyp.iShare.ui.messages;
 
 class UserMessage {
+    String message;
+    User sender;
+    int createdAt;
+
+    public UserMessage(String message, User sender, int createdAt) {
+        this.message = message;
+        this.sender = sender;
+        this.createdAt = createdAt;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -24,19 +34,17 @@ class UserMessage {
     public void setCreatedAt(int createdAt) {
         this.createdAt = createdAt;
     }
-
-    public UserMessage(String message, User sender, int createdAt) {
-        this.message = message;
-        this.sender = sender;
-        this.createdAt = createdAt;
-    }
-
-    String message;
-    User sender;
-    int createdAt;
 }
 
 class User {
+    String nickname;
+    String profileUrl;
+
+    public User(String nickname, String profileUrl) {
+        this.nickname = nickname;
+        this.profileUrl = profileUrl;
+    }
+
     public String getNickname() {
         return nickname;
     }
@@ -52,12 +60,4 @@ class User {
     public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
     }
-
-    public User(String nickname, String profileUrl) {
-        this.nickname = nickname;
-        this.profileUrl = profileUrl;
-    }
-
-    String nickname;
-    String profileUrl;
 }

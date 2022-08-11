@@ -1,25 +1,22 @@
 package com.fyp.iShare.ui.messages;
 
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fyp.iShare.MainActivity;
 import com.fyp.iShare.R;
 
 import java.util.List;
 
 public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapter.ViewHolder> {
 
-    private List<User> contacts;
-    private OnContactListener onContactListener;
+    private final List<User> contacts;
+    private final OnContactListener onContactListener;
 
     public ContactsListAdapter(List<User> contacts, OnContactListener onContactListener) {
         this.contacts = contacts;
@@ -45,6 +42,21 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
         return contacts.size();
     }
 
+    public interface OnContactListener {
+        void onContactClick(int position);
+    }
+
+    // convenience method for getting data at click position
+    /*int getId(int position) {
+        return files.get(position).getID();
+    }*/
+
+
+    // allows clicks events to be caught
+    /*void setClickListener(OnContactListener onContactListener) {
+        this.onContactListener = onContactListener;
+    }*/
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public RelativeLayout relativeLayout;
@@ -55,7 +67,7 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
 
         public ViewHolder(View itemView, OnContactListener onContactListener) {
             super(itemView);
-            relativeLayout = (RelativeLayout) itemView.findViewById(R.id.rl_contacts);
+            relativeLayout = itemView.findViewById(R.id.rl_contacts);
             this.name = itemView.findViewById(R.id.tv_userName);
             this.lastMessage = itemView.findViewById(R.id.tv_lastMessage);
 
@@ -74,20 +86,5 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
             Log.d("tag", Integer.toString(getAdapterPosition()));
 
         }
-    }
-
-    // convenience method for getting data at click position
-    /*int getId(int position) {
-        return files.get(position).getID();
-    }*/
-
-
-    // allows clicks events to be caught
-    /*void setClickListener(OnContactListener onContactListener) {
-        this.onContactListener = onContactListener;
-    }*/
-
-    public interface OnContactListener {
-        void onContactClick(int position);
     }
 }

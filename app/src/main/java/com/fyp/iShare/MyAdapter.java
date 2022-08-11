@@ -34,6 +34,27 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         this.filesAndFolders = filesAndFolders;
     }
 
+    public static byte[] convertFileToByteArray(File f, DataOutputStream dataOutputStream) {
+        byte[] byteArray = null;
+        try {
+            InputStream inputStream = new FileInputStream(f);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024 * 8];
+            int bytesRead;
+
+
+            while ((bytesRead = inputStream.read(b)) != -1) {
+                bos.write(b, 0, bytesRead);
+                //  dataOutputStream.write(b, 0, bytesRead);
+            }
+
+            byteArray = bos.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return byteArray;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -66,7 +87,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     context.startActivity(intent);
                 } else {
 
-                    Thread t1= new Thread(()-> sendFile(selectedFile));
+                    Thread t1 = new Thread(() -> sendFile(selectedFile));
                     t1.start();
 
                    /* try{
@@ -92,19 +113,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return filesAndFolders.length;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView textView;
-        ImageView imageView;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            textView = itemView.findViewById(R.id.tv_directory_name);
-            imageView = itemView.findViewById(R.id.rcv_img);
-        }
     }
 
     private String getFilePath(String Name) {
@@ -153,7 +161,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
             //DataOutputStream dataOutputStream = new DataOutputStream(SingletonSocket.getSocket().getOutputStream());
             //convertFileToByteArray(selectedFile,dataOutputStream);
-            sendByteArray(convertFileToByteArray(selectedFile,null));
+            sendByteArray(convertFileToByteArray(selectedFile, null));
 
            /* OutputStream dataOutputStream = new DataOutputStream(SingletonSocket.getSocket().getOutputStream());
 
@@ -165,9 +173,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 */
 
 
-
-
-           // dataOutputStream.close();
+            // dataOutputStream.close();
 
 
            /* OutputStream OutputStream = new DataOutputStream(SingletonSocket.getSocket().getOutputStream());
@@ -201,44 +207,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             fos.close();
             dataOutputStream.close();*/
             Log.d(TAG, "File and data stream closed");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d("tag", e.toString());
         }
     }
 
-    public static byte[] convertFileToByteArray(File f,DataOutputStream dataOutputStream) {
-        byte[] byteArray = null;
-        try {
-            InputStream inputStream = new FileInputStream(f);
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            byte[] b = new byte[1024 * 8];
-            int bytesRead ;
-
-
-            while ((bytesRead = inputStream.read(b)) != -1) {
-              bos.write(b, 0, bytesRead);
-              //  dataOutputStream.write(b, 0, bytesRead);
-            }
-
-            byteArray = bos.toByteArray();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return byteArray;
-    }
-
     private void sendByteArray(byte[] convertFileToByteArray) throws IOException, InterruptedException {
-        int buffSize=1024*2;
-        int dataSent=0;
+        int buffSize = 1024 * 2;
+        int dataSent = 0;
 
-        int halfData=(int)convertFileToByteArray.length/2;
-        Log.d(TAG, " half data is  "+ halfData);
+        int halfData = convertFileToByteArray.length / 2;
+        Log.d(TAG, " half data is  " + halfData);
 
         SingletonSocket.sendRequest(String.valueOf(halfData));
 
 
-        OutputStream outputStream=SingletonSocket.getSocket().getOutputStream();
+        OutputStream outputStream = SingletonSocket.getSocket().getOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
        /* for (int i = 0; i <convertFileToByteArray.length ; i++) {
@@ -246,25 +230,38 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
 */
 
-       while (dataSent<convertFileToByteArray.length) {
+        while (dataSent < convertFileToByteArray.length) {
             Thread.sleep(500);
 
-            if(convertFileToByteArray.length-dataSent<buffSize){
-                buffSize=convertFileToByteArray.length-dataSent;
-                Log.d(TAG, "buffer size adjusted to "+buffSize);
+            if (convertFileToByteArray.length - dataSent < buffSize) {
+                buffSize = convertFileToByteArray.length - dataSent;
+                Log.d(TAG, "buffer size adjusted to " + buffSize);
 
 
             }
 
-           dataOutputStream.write(convertFileToByteArray,dataSent,buffSize);
-           Log.d(TAG, "dos size after sending "+dataOutputStream.size());
+            dataOutputStream.write(convertFileToByteArray, dataSent, buffSize);
+            Log.d(TAG, "dos size after sending " + dataOutputStream.size());
 
-           dataOutputStream.flush();
-            dataSent+=buffSize;
+            dataOutputStream.flush();
+            dataSent += buffSize;
         }
-        Log.d(TAG, "data Send is  "+dataSent);
+        Log.d(TAG, "data Send is  " + dataSent);
 
         //  dataOutputStream.close();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView textView;
+        ImageView imageView;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            textView = itemView.findViewById(R.id.tv_directory_name);
+            imageView = itemView.findViewById(R.id.rcv_img);
+        }
     }
 
 }

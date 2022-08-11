@@ -1,18 +1,16 @@
 package com.fyp.iShare;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.fyp.iShare.databinding.ActivityConnectBinding;
 
-
 import java.io.BufferedReader;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -23,10 +21,10 @@ import java.util.ArrayList;
 
 public class Connect extends AppCompatActivity {
 
-    private ActivityConnectBinding binding;
     static final String TAG = "tag";
     boolean NewConnection = true;
     Socket socket = null;
+    private ActivityConnectBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +153,7 @@ public class Connect extends AppCompatActivity {
 //                Toast.makeText(this, "Message received form server ", Toast.LENGTH_SHORT).show();
 
             } catch (IOException e) {
-                Log.d(TAG, "createServerSocket: " + e.toString());
+                Log.d(TAG, "createServerSocket: " + e);
                 e.printStackTrace();
             }
 

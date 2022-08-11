@@ -1,8 +1,5 @@
 package com.fyp.iShare;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.ContextWrapper;
 import android.content.pm.PackageManager;
@@ -16,6 +13,9 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.fyp.iShare.databinding.ActivityMainBinding;
 
@@ -38,39 +38,31 @@ import java.nio.ByteOrder;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
-    String[] Permissions = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE};
-    int RequestCode = 11;
-
     static final String TAG = "tag";
-    ServerSocket serverSocket;
-    Socket socket;
     static final int PORT_NUM = 9999;
     static final String IP_ADDRESS = "192.168.100";
-    static boolean CLIENT_CONNECTED = false;
-
     public static DatagramSocket s_socket;
     public static DatagramSocket r_socket;
+    static boolean CLIENT_CONNECTED = false;
+    String[] Permissions = new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE};
+    int RequestCode = 11;
+    ServerSocket serverSocket;
+    Socket socket;
     FileOutputStream fileOutputStream;
-
-
     AudioRecord recorder;
     AudioTrack audioTrack;
-
     short[] buffer;
     int sampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);//48000
     int channelConfig = AudioFormat.CHANNEL_IN_MONO;
     int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
     int bufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);//3840
-
     DataOutputStream dataOutputStream;
     OutputStream outputStream;
+    private ActivityMainBinding binding;
 
     //final File file = new File(Environment.getExternalStorageDirectory() + "/myAudio.mp3");
-
-
     private boolean audioPlaying = true;
-    private boolean r_status = true;
+    private final boolean r_status = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    Log.d(TAG, "Exception >>" + e.toString());
+                                    Log.d(TAG, "Exception >>" + e);
 
                                 }
 
@@ -143,10 +135,10 @@ public class MainActivity extends AppCompatActivity {
                                     //Saving file
                                     try {
                                         //converting buffer(short) to bytes
-                                        byte socketBuffer[]=new byte[buffer.length*2];
+                                        byte[] socketBuffer = new byte[buffer.length * 2];
                                         ByteBuffer.wrap(socketBuffer).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(buffer);
 
-                                         outputStream.write(socketBuffer, 0, socketBuffer.length);
+                                        outputStream.write(socketBuffer, 0, socketBuffer.length);
 //
 //                                        for (int i = 0; i < bufferReadResult; i++) {
 //                                            //For socket (NOt Working perfectly)
@@ -156,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 //                                        }
 
                                     } catch (Exception e) {
-                                        Log.d(TAG, "Exception>>" + e.toString());
+                                        Log.d(TAG, "Exception>>" + e);
                                         e.printStackTrace();
                                     }
                                 }
@@ -174,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                                     //Log.d(TAG,"File flushed and closed");
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    Log.d(TAG, ">>Exception>>" + e.toString());
+                                    Log.d(TAG, ">>Exception>>" + e);
 
                                 }
                             }).start();
@@ -184,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.d(TAG, "Exception>>" + e.toString());
+                        Log.d(TAG, "Exception>>" + e);
                     }
                 }
 
@@ -215,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "File Readed");
 
         } catch (Exception e) {
-            Log.d(TAG, "Exception>>:" + e.toString());
+            Log.d(TAG, "Exception>>:" + e);
             e.printStackTrace();
         }
 
@@ -296,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                 printWriter.flush();
 
             } catch (IOException e) {
-                Log.d(TAG, "Exception>>" + e.toString());
+                Log.d(TAG, "Exception>>" + e);
                 e.printStackTrace();
             }
         });
@@ -335,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d(TAG, "Exception" + e.toString());
+            Log.d(TAG, "Exception" + e);
         }
     }
 

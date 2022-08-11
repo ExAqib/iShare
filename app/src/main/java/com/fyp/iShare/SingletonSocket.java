@@ -3,6 +3,7 @@ package com.fyp.iShare;
 import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
+
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -13,16 +14,19 @@ public class SingletonSocket {
 
     private static final String TAG = "tag";
     private static Socket socket;
+    private static List<String> NavigationPath;
+    private static FragmentManager fragmentManger;
+
+    private SingletonSocket() {
+    }
 
     public static List<String> getNavigationPath() {
         return NavigationPath;
     }
 
     public static void setNavigationPath() {
-        NavigationPath= new ArrayList<>();
+        NavigationPath = new ArrayList<>();
     }
-
-    private static List<String> NavigationPath ;
 
     public static FragmentManager getFragmentManger() {
         return fragmentManger;
@@ -30,14 +34,6 @@ public class SingletonSocket {
 
     public static void setFragmentManger(FragmentManager fragmentManger) {
         SingletonSocket.fragmentManger = fragmentManger;
-    }
-
-    private static  FragmentManager fragmentManger;
-
-    private SingletonSocket(){};
-
-    public static void setSocket(Socket socket)  {
-        SingletonSocket.socket=socket;
     }
 
     public static void sendRequest(String request) {
@@ -53,8 +49,12 @@ public class SingletonSocket {
         }
     }
 
-    public static Socket getSocket(){
+    public static Socket getSocket() {
         return socket;
-   }
+    }
+
+    public static void setSocket(Socket socket) {
+        SingletonSocket.socket = socket;
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.fyp.iShare.ui.devices;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,8 @@ import java.util.List;
 
 public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevicesAdapter.ViewHolder> {
 
-    private List<String> devices;
-    private OnDeviceListener onDeviceListener;
+    private final List<String> devices;
+    private final OnDeviceListener onDeviceListener;
 
     public AvailableDevicesAdapter(List<String> devices, OnDeviceListener onDeviceListener) {
         this.devices = devices;
@@ -48,6 +47,21 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
         return devices.size();
     }
 
+    public interface OnDeviceListener {
+        void onDeviceClick(int position);
+    }
+
+    // convenience method for getting data at click position
+    /*int getId(int position) {
+        return devices.get(position).getID();
+    }*/
+
+
+    // allows clicks events to be caught
+    /*void setClickListener(OnDeviceListener onDeviceListener) {
+        this.onDeviceListener = onDeviceListener;
+    }*/
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public LinearLayout linearLayout;
@@ -57,7 +71,7 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
 
         public ViewHolder(View itemView, OnDeviceListener onDeviceListener) {
             super(itemView);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.li_deviceItems);
+            linearLayout = itemView.findViewById(R.id.li_deviceItems);
             this.name = itemView.findViewById(R.id.tv_deviceName);
 
             // allows clicks events to be caught
@@ -72,20 +86,5 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
             onDeviceListener.onDeviceClick(getAdapterPosition());
 
         }
-    }
-
-    // convenience method for getting data at click position
-    /*int getId(int position) {
-        return devices.get(position).getID();
-    }*/
-
-
-    // allows clicks events to be caught
-    /*void setClickListener(OnDeviceListener onDeviceListener) {
-        this.onDeviceListener = onDeviceListener;
-    }*/
-
-    public interface OnDeviceListener {
-        void onDeviceClick(int position);
     }
 }

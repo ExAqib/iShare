@@ -1,10 +1,7 @@
 package com.fyp.iShare;
 
 
-
 import android.Manifest;
-
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -29,35 +26,44 @@ import java.io.FilenameFilter;
 
 public class Internal_Storage extends AppCompatActivity {
 
-    ActivityInternalStorageBinding binding;
     static final String TAG = "tag";
-    int RequestCode=1122;
+    ActivityInternalStorageBinding binding;
+    int RequestCode = 1122;
 
-    String[] Permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] Permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+                    if (!Environment.isExternalStorageManager()) {
+                        Toast.makeText(Internal_Storage.this, "Please Allow permission for storage access!", Toast.LENGTH_LONG).show();
+                    }
+                }
 
+            }
+
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding =ActivityInternalStorageBinding.inflate(getLayoutInflater());
+        binding = ActivityInternalStorageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
 
         //RecyclerView
         //TextView noFilesTet
 
-        if(!permissionsGranted())
-        {
+        if (!permissionsGranted()) {
             grantPermissions();
         }
         String path;
-        try{
+        try {
             path = getIntent().getStringExtra("path");
+        } catch (Exception e) {
+            path = null;
         }
-        catch(Exception e){
-            path=null;
-        }
-        if(path==null || path.isEmpty()){
+        if (path == null || path.isEmpty()) {
             path = Environment.getExternalStorageDirectory().getPath();
             //path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
         }
@@ -72,15 +78,14 @@ public class Internal_Storage extends AppCompatActivity {
 //        File[] filesAndFolders = root.listFiles(filter);
 
 
-        if(filesAndFolders==null || filesAndFolders.length==0)
-        {
+        if (filesAndFolders == null || filesAndFolders.length == 0) {
             binding.noFilesTv.setVisibility(View.VISIBLE);
             return;
         }
         binding.noFilesTv.setVisibility(View.GONE);
 
         binding.directoriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.directoriesRecyclerView.setAdapter(new MyAdapter(getApplicationContext(),filesAndFolders));
+        binding.directoriesRecyclerView.setAdapter(new MyAdapter(getApplicationContext(), filesAndFolders));
 
     }
 
@@ -89,33 +94,19 @@ public class Internal_Storage extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, Permissions, RequestCode);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             try {
-                Log.d(TAG, "Opening settings for permission " );
+                Log.d(TAG, "Opening settings for permission ");
 
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                 intent.addCategory("android.intent.category.DEFAULT");
-                intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
+                intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
                 myActivityResultLauncher.launch(intent);
             } catch (Exception e) {
-                Log.d(TAG, "grantPermissions: Exception"+e);
-                Toast.makeText(Internal_Storage.this,""+ e, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "grantPermissions: Exception" + e);
+                Toast.makeText(Internal_Storage.this, "" + e, Toast.LENGTH_SHORT).show();
             }
         }
 
     }
-
-    ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if(Build.VERSION.SDK_INT>Build.VERSION_CODES.R){
-                    if(!Environment.isExternalStorageManager()){
-                        Toast.makeText(Internal_Storage.this, "Please Allow permission for storage access!", Toast.LENGTH_LONG).show();
-                    }
-                }
-
-            }
-
-    );
-
 
     private boolean permissionsGranted() {
         for (String permission : Permissions) {
@@ -132,8 +123,7 @@ public class Internal_Storage extends AppCompatActivity {
         return true;
     }
 
-    public class MyFileFilter implements FilenameFilter
-    {
+    public class MyFileFilter implements FilenameFilter {
 
         @Override
         public boolean accept(File directory, String fileName) {

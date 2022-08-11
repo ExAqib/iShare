@@ -15,15 +15,15 @@ import java.text.DecimalFormat;
 
 public class DownloadFile extends AsyncTask<String, String, Void> {
 
-    Context context;
     private static final String TAG = "tag";
+    Context context;
     String FilePath;
     ProgressDialog progressDialog;
     int fileSize = 0;
     DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-    DownloadFile(Context context){
-        this.context=context;
+    DownloadFile(Context context) {
+        this.context = context;
     }
 
 
@@ -50,12 +50,10 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
         StringBuilder path2 = new StringBuilder();
 
         int i = 0;
-        for (String s : SingletonSocket.getNavigationPath())
-        {
-            if(i<2){
+        for (String s : SingletonSocket.getNavigationPath()) {
+            if (i < 2) {
                 path2.append(s);
-            }
-            else{
+            } else {
                 path2.append("\\").append(s);
             }
             i++;
@@ -63,13 +61,13 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
 
         SingletonSocket.sendRequest(path2.toString());
 
-        SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size()-1);
+        SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size() - 1);
 
 
         try {
             Log.d(TAG, "Receiving File");
 
-            BufferedReader bufferedReader= new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
             String fileName = bufferedReader.readLine();
 
             String FileSize = bufferedReader.readLine();
@@ -169,7 +167,7 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
                 SingletonSocket.sendRequest("DONE");
                 //sendToast("File saved in Downloads folder ");
 
-               // context.requireActivity().startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                // context.requireActivity().startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
             }
             Log.d(TAG, "doInBackground for Receive File is returning  ");
 

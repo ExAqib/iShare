@@ -1,6 +1,5 @@
 package com.fyp.iShare;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.net.DatagramPacket;
@@ -15,9 +14,8 @@ import java.util.Enumeration;
 
 public class UDP_Connect {
 
-    int SOCKET_TIME_OUT=3000;
     private static final String TAG = "tag";
-
+    int SOCKET_TIME_OUT = 3000;
     String ServerResponseMessage = "iShare_Server_REQUEST_RESPONSE";
     byte[] sendData = "DISCOVER_iShare_Server_REQUEST".getBytes();
     ArrayList<String> listeners;
@@ -26,8 +24,8 @@ public class UDP_Connect {
 
     }
 
-    void JoinMultiCastNetwork (){
-        try{
+    void JoinMultiCastNetwork() {
+        try {
             int port = 11000;
             InetAddress group = InetAddress.getByName("224.168.100.2");
             MulticastSocket multicastSocket = new MulticastSocket();
@@ -36,21 +34,19 @@ public class UDP_Connect {
 
             String Message = "Hello, I am Sender";
 
-            DatagramPacket datagramPacket= new DatagramPacket(Message.getBytes(),Message.getBytes().length,group,port);
+            DatagramPacket datagramPacket = new DatagramPacket(Message.getBytes(), Message.getBytes().length, group, port);
             multicastSocket.send(datagramPacket);
             Log.d(TAG, "JoinMultiCastNetwork: Paket send ");
             multicastSocket.close();
 
-        }
-        catch (Exception e)
-        {
-            Log.d(TAG, "JoinMultiCastNetwork: Exception "+e);
+        } catch (Exception e) {
+            Log.d(TAG, "JoinMultiCastNetwork: Exception " + e);
         }
     }
 
-    ArrayList<String> FindServer(String ip){
+    ArrayList<String> FindServer(String ip) {
         try {
-              testUdpBroadCast(ip);
+            testUdpBroadCast(ip);
 
             listeners = new ArrayList<>();
             Log.d(TAG, "UDP Connect Called");
@@ -66,7 +62,7 @@ public class UDP_Connect {
                 Log.d(TAG, " Sending Packet at  " + IP + " for port " + SERVER_PORT);
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(IP), SERVER_PORT);
                 socket.send(sendPacket);
-                Log.d(TAG,   "Request packet sent to: " + IP);
+                Log.d(TAG, "Request packet sent to: " + IP);
 
             } catch (Exception e) {
                 Log.d(TAG, "Exception " + e);
@@ -76,7 +72,7 @@ public class UDP_Connect {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
             while (interfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = (NetworkInterface) interfaces.nextElement();
+                NetworkInterface networkInterface = interfaces.nextElement();
 
                 if (networkInterface.isLoopback() || !networkInterface.isUp()) {
                     continue; // Don't want to broadcast to the loopback interface
@@ -107,7 +103,7 @@ public class UDP_Connect {
             Response(socket);
             socket.close();
 
-            Log.d(TAG, "Found "+listeners.size()+" connections");
+            Log.d(TAG, "Found " + listeners.size() + " connections");
             return (listeners);
 
 
@@ -130,7 +126,7 @@ public class UDP_Connect {
                 String message = new String(receivePacket.getData()).trim();
 
                 String serverIP = receivePacket.getAddress().getHostAddress();
-                Log.d(TAG, "Received Response from server: " + serverIP +" i.e "+ message);
+                Log.d(TAG, "Received Response from server: " + serverIP + " i.e " + message);
 
                 //Check if the response is correct
                 if (message.equals(ServerResponseMessage) && !listeners.contains(serverIP)) {
@@ -170,7 +166,7 @@ public class UDP_Connect {
             Log.d(TAG, "Request packet sent to: " + IP);
 
             myUDPSocket.close();
-            Log.d(TAG, "Socket Closed " );
+            Log.d(TAG, "Socket Closed ");
 
 
         } catch (Exception e) {

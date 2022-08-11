@@ -2,14 +2,6 @@ package com.fyp.iShare;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +9,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -26,17 +25,15 @@ import java.util.ArrayList;
 public class directories extends Fragment {
 
     private static final String TAG = "tag";
-    LinearLayout linearlayout;
-    static Parameters parameters;
-    static PrintWriter printWriter;
-    static BufferedReader bufferedReader;
-
-    ArrayList<Bundle> PcData = new ArrayList<>();
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    static Parameters parameters;
+    static PrintWriter printWriter;
+    static BufferedReader bufferedReader;
+    LinearLayout linearlayout;
+    ArrayList<Bundle> PcData = new ArrayList<>();
 
 
     public directories() {
@@ -118,6 +115,79 @@ public class directories extends Fragment {
         directoryProcessor.execute(parameters.getPath());
 
 
+    }
+
+    void sendRequest(String request) {
+        try {
+            Log.d(TAG, "Sending Request to Server i.e >>  " + request);
+//           PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            printWriter.println(request);
+            printWriter.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            sendToast("Request Timeout");
+            Log.d(TAG, "Exception in sendRequest() " + e);
+        }
+    }
+
+    private void sendToast(String message) {
+        requireActivity().runOnUiThread(() -> {
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void restoreData() {
+
+        Bundle b = PcData.get(PcData.size() - 1);
+
+        PcData.remove(PcData.size() - 1);
+
+        requireActivity().runOnUiThread(() -> linearlayout.removeAllViews());
+
+
+        for (int i = 1; i <= b.getInt("SIZE"); i++) {
+
+            final String data = b.getString(String.valueOf(i));
+
+            View myLayout = inflateData(data);
+
+            myLayout.setOnClickListener((View v) -> {
+
+                PcData.add(b);
+
+                requireActivity().runOnUiThread(() -> {
+
+                    int totalChild = linearlayout.getChildCount();
+                    Log.d(TAG, "Total children in linearlayout are " + totalChild);
+
+                    if (totalChild > 0) {
+                        linearlayout.removeAllViews();
+                    }
+                });
+
+                DirectoryProcessor directoryProcessor = new DirectoryProcessor();
+                directoryProcessor.execute(data);
+            });
+
+            requireActivity().runOnUiThread(() -> {
+                linearlayout.addView(myLayout);
+            });
+
+        }
+
+    }
+
+    private View inflateData(String data) {
+        View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
+
+        CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(5, 10, 5, 10);
+        myLayout.setLayoutParams(layoutParams);
+
+        TextView directoryName = myLayout.findViewById(R.id.directory_name);
+        directoryName.setText(data);
+        return myLayout;
     }
 
     class DirectoryProcessor extends AsyncTask<String, String, Bundle> {
@@ -271,80 +341,6 @@ public class directories extends Fragment {
 
         }
 
-    }
-
-
-    void sendRequest(String request) {
-        try {
-            Log.d(TAG, "Sending Request to Server i.e >>  " + request);
-//           PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-            printWriter.println(request);
-            printWriter.flush();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendToast("Request Timeout");
-            Log.d(TAG, "Exception in sendRequest() " + e);
-        }
-    }
-
-    private void sendToast(String message) {
-        requireActivity().runOnUiThread(() -> {
-            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    private void restoreData() {
-
-        Bundle b = PcData.get(PcData.size() - 1);
-
-        PcData.remove(PcData.size() - 1);
-
-        requireActivity().runOnUiThread(() -> linearlayout.removeAllViews());
-
-
-        for (int i = 1; i <= b.getInt("SIZE"); i++) {
-
-            final String data = b.getString(String.valueOf(i));
-
-            View myLayout = inflateData(data);
-
-            myLayout.setOnClickListener((View v) -> {
-
-                PcData.add(b);
-
-                requireActivity().runOnUiThread(() -> {
-
-                    int totalChild = linearlayout.getChildCount();
-                    Log.d(TAG, "Total children in linearlayout are " + totalChild);
-
-                    if (totalChild > 0) {
-                        linearlayout.removeAllViews();
-                    }
-                });
-
-                DirectoryProcessor directoryProcessor = new DirectoryProcessor();
-                directoryProcessor.execute(data);
-            });
-
-            requireActivity().runOnUiThread(() -> {
-                linearlayout.addView(myLayout);
-            });
-
-        }
-
-    }
-
-    private View inflateData(String data) {
-        View myLayout = getLayoutInflater().inflate(R.layout.directory, null, false);
-
-        CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(5, 10, 5, 10);
-        myLayout.setLayoutParams(layoutParams);
-
-        TextView directoryName = myLayout.findViewById(R.id.directory_name);
-        directoryName.setText(data);
-        return myLayout;
     }
 
 }

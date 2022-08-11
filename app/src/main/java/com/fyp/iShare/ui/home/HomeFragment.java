@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.fyp.iShare.Connect;
 import com.fyp.iShare.SingletonSocket;
 import com.fyp.iShare.WAN_Connection;
 import com.fyp.iShare.databinding.FragmentHomeBinding;
@@ -25,11 +24,10 @@ import java.net.Socket;
 
 public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+    static final String TAG = "tag";
     boolean NewConnection = true;
     Socket socket = null;
-    static final String TAG = "tag";
-
+    private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
