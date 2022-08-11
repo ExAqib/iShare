@@ -6,30 +6,24 @@
     tools:context=".displayData">
 
     <androidx.core.widget.NestedScrollView
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:padding="3dp"
         android:layout_margin="3dp"
-        >
+        android:padding="3dp">
 
         <LinearLayout
+            android:id="@+id/fragmentLinear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_margin="3dp"
-            android:padding="3dp"
+            android:orientation="vertical"
 
-            android:verticalScrollbarPosition="right"
+            android:padding="3dp"
             android:scrollbars="vertical"
-            android:id="@+id/fragmentLinear"
-            >
+            android:verticalScrollbarPosition="right">
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
 </FrameLayout>
 
 

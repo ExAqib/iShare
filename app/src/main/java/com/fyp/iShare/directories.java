@@ -85,21 +85,23 @@ public class directories extends Fragment {
     public void onStart() {
         super.onStart();
 
-        OnBackPressedCallback callback = new OnBackPressedCallback(true ) {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 // Handle the back button event
                 if (PcData.isEmpty()) {
-                    try{ SingletonSocket.getNavigationPath().clear();}
-                    catch (Exception e){
-                        Log.d(TAG, "Exception "+e);
+                    try {
+                        SingletonSocket.getNavigationPath().clear();
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception " + e);
                     }
                     SingletonSocket.getFragmentManger().popBackStack();
 
                 } else {
-                    try{ SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size()-1);}
-                    catch (Exception e){
-                        Log.d(TAG, "Exception "+e);
+                    try {
+                        SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size() - 1);
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception " + e);
                     }
                     Log.d(TAG, "Restoring data ");
                     restoreData();
@@ -208,38 +210,38 @@ public class directories extends Fragment {
                         });
                         DirectoryProcessor directoryProcessor = new DirectoryProcessor();
                         directoryProcessor.execute(values[0]);
-
-
                     });
-
                     requireActivity().runOnUiThread(() -> {
                         linearlayout.addView(myLayout);
                     });
-
                     break;
             }
         }
 
         private void getDirectory(String path) {
             sendRequest("subDirectories");
-            SingletonSocket.getNavigationPath().add(path);
+            sendRequest(path);
+
+            // TODO: 8/12/2022 @Aqib, fix your stupid code, and name things with meaningful names
+
+            /*SingletonSocket.getNavigationPath().add(path);
 
             StringBuilder path2 = new StringBuilder();
 
             int i = 0;
-
-            for (String s : SingletonSocket.getNavigationPath())
-            {
-                if(i<2){
+            Log.d(TAG, "getDirectory: " + SingletonSocket.getNavigationPath());
+            for (String s : SingletonSocket.getNavigationPath()) {
+                if (i < 2) {
                     path2.append(s);
-                }
-                else{
+                } else {
                     path2.append("\\").append(s);
                 }
                 i++;
             }
-           sendRequest(path2.toString());
-
+            Log.d(TAG, "sending !:" + path2.toString());
+            sendRequest(path2.toString());
+            //sendRequest(path2.toString());
+*/
             try {
                 String data;
                 boolean emptyDirectory = true;
@@ -250,9 +252,10 @@ public class directories extends Fragment {
                     onProgressUpdate(data);
                 }
                 if (emptyDirectory) {
-                    try{ SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size()-1);}
-                    catch (Exception e){
-                        Log.d(TAG, "Exception "+e);
+                    try {
+                        SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size() - 1);
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception " + e);
                     }
                     Log.d(TAG, "Empty Folder");
 

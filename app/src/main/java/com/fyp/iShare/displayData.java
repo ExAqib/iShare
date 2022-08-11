@@ -51,9 +51,7 @@ public class displayData extends Fragment {
     @Override
     public void onStart() {
         Log.d(TAG, "onStart called for fragment");
-
         super.onStart();
-
     }
 
     @Override
@@ -103,7 +101,7 @@ public class displayData extends Fragment {
         protected void onProgressUpdate(Bundle... values) {
             super.onProgressUpdate(values);
 
-            View myLayout = getLayoutInflater().inflate(R.layout.drive_info, null, false);
+            View myLayout = getLayoutInflater().inflate(R.layout.drive_info_item, null, false);
 
             CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(5, 10, 5, 10);
@@ -134,8 +132,6 @@ public class displayData extends Fragment {
             }
             //type.append(values[0].getString("type"));
             format.setText(values[0].getString("format"));
-
-
             linearLayout.addView(myLayout);
 
             myLayout.setOnClickListener(v -> {
@@ -208,7 +204,6 @@ public class displayData extends Fragment {
 
         void sendRequest() {
             try {
-
                 Log.d(TAG, "Sending Request to Server i.e >>  " + "driveNames");
                 printWriter.println("driveNames");
                 printWriter.flush();

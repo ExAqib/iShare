@@ -36,7 +36,7 @@ public class chat extends AppCompatActivity {
         messageList.add(testobj3);
         messageList.add(testobj4);
 
-        mMessageRecycler = (RecyclerView) findViewById(R.id.recycler_gchat);
+        mMessageRecycler = (RecyclerView) findViewById(R.id.recycler_chat);
         mMessageAdapter = new MessageListAdapter(this, messageList);
         mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         mMessageRecycler.setAdapter(mMessageAdapter);

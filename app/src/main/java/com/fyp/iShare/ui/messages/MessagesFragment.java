@@ -59,9 +59,7 @@ public class MessagesFragment extends Fragment implements ContactsListAdapter.On
 
     @Override
     public void onContactClick(int position) {
-        Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
-        Log.d("tag", "Done");
-        //Intent intent = new Intent(getActivity(), chat.class);
-        //startActivity(intent);
+        Intent intent = new Intent(getActivity(), chat.class);
+        startActivity(intent);
     }
 }

@@ -15,6 +15,7 @@
     <color name="light_primary">#202020</color>
     <color name="home_layout_stroke">@color/white</color>
     <color name="bg_home">#D6FFDF</color>
+    <color name="contact">#E6E6E6</color>
 
 
     <color name="primary_variant">#002F66</color>

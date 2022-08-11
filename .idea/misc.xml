@@ -29,6 +29,7 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/contact_ripple.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/device_layout_shape.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/deviced_headers.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/directories_layout_shape.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/download_ripple.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/drive_layout_shape.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_baseline_arrow_downward_24.xml" value="0.3675" />
@@ -49,9 +50,10 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/chatviewlayout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/contact_item.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/devices_item.xml" value="0.33" />
-        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/directory.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/directory.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/drive_info.xml" value="0.33" />
-        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/exception_file.xml" value="0.30085470085470084" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/drive_info_item.xml" value="0.33" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/exception_file.xml" value="0.75" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/file_history_item.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_dashboard.xml" value="0.3625" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_devices.xml" value="0.33" />
@@ -66,6 +68,7 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/recycler_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/sent_message_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/menu/bottom_nav_menu.xml" value="0.3625" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/menu/send_file.xml" value="0.10341880341880341" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml" value="0.1" />
