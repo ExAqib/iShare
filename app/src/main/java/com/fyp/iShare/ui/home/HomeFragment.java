@@ -14,11 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.fyp.iShare.LoginActivity;
 import com.fyp.iShare.SettingsActivity;
 import com.fyp.iShare.SingletonSocket;
 import com.fyp.iShare.WAN_Connection;
 import com.fyp.iShare.databinding.FragmentHomeBinding;
-import com.fyp.iShare.ui.login.LoginActivity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
