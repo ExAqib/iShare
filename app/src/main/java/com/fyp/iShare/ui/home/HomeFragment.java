@@ -1,14 +1,17 @@
 package com.fyp.iShare.ui.home;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.fyp.iShare.SettingsActivity;
 import com.fyp.iShare.SingletonSocket;
@@ -45,49 +48,69 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        binding.btnFileTransfer.setOnClickListener(v -> {
 
-            //String IP_Address = binding.ipAddress.getText().toString().trim();
-            String IP_Address = "192.168.10.99";
-            //int Port_Num = Integer.parseInt(binding.portNumber.getText().toString().trim());
-            int Port_Num = 9999;
-
-            //String id = binding.ID.getText().toString().trim();
-            String id = binding.edtID.getText().toString().trim();
-            // String password = binding.PASSWORD.getText().toString().trim();
-            String password = "1";
-
-            Thread t1 = new Thread(() -> {
-                try {
-                    if (socket == null) {
-                        socket = new Socket(IP_Address, Port_Num);
-
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        int changedPort = Integer.parseInt(bufferedReader.readLine());
-                        Log.d(TAG, "Received port num is " + changedPort);
-                        socket.close();
-                        Log.d(TAG, "Prev. Socket Closed");
-
-                        socket = new Socket(IP_Address, changedPort);
-                    }
-                    if (sendIdPassword(id, password)) {
-                        SingletonSocket.setSocket(socket);
-
-                        Intent intent = new Intent(getActivity(), WAN_Connection.class);
-                        startActivity(intent);
-                    }
-                } catch (Exception e) {
-                    //sendToast(e.toString());
-                    e.printStackTrace();
-                    Log.d(TAG, "Exception  " + e);
-                }
-            });
-            t1.start();
-
-
-        });
+        fileTransferClickListener();
 
         return root;
+    }
+
+    private void fileTransferClickListener() {
+        binding.btnFileTransfer.setOnClickListener(v -> {
+
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean manualConnectionState = sharedPreferences.getBoolean("manual", false);
+
+            String IP_Address;
+            int Port_Num;
+            String id;
+            String password;
+
+            if (manualConnectionState) {
+                Log.d(TAG, "manualConnectionState: is On");
+                IP_Address = sharedPreferences.getString("IP", "");
+                Port_Num = Integer.parseInt(sharedPreferences.getString("port", ""));
+                id = sharedPreferences.getString("ID", "");
+                password = sharedPreferences.getString("password", "");
+            } else {
+                IP_Address = "192.168.10.99";
+                Port_Num = 9999;
+                id = binding.edtID.getText().toString().trim();
+                password = "1";
+            }
+            //if ID is not empty then he will try to connect
+            if (!id.equals("")) {
+                Thread t1 = new Thread(() -> {
+                    try {
+                        if (socket == null) {
+                            socket = new Socket(IP_Address, Port_Num);
+
+                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            int changedPort = Integer.parseInt(bufferedReader.readLine());
+                            Log.d(TAG, "Received port num is " + changedPort);
+                            socket.close();
+                            Log.d(TAG, "Prev. Socket Closed");
+
+                            socket = new Socket(IP_Address, changedPort);
+                        }
+                        if (sendIdPassword(id, password)) {
+                            SingletonSocket.setSocket(socket);
+
+                            Intent intent = new Intent(getActivity(), WAN_Connection.class);
+                            startActivity(intent);
+                        }
+                    } catch (Exception e) {
+                        //sendToast(e.toString());
+                        e.printStackTrace();
+                        Log.d(TAG, "Exception  " + e);
+                    }
+                });
+                t1.start();
+            } else {
+                Toast.makeText(getContext(), "ID is Empty", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
     @Override
