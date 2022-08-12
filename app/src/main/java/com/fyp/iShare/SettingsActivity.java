@@ -29,19 +29,21 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         listener = (sharedPreferences, key) -> {
-            switch (sharedPreferences.getString(key, "system")) {
-                case "dark":
-                    AppCompatDelegate.setDefaultNightMode(
-                            AppCompatDelegate.MODE_NIGHT_YES);
-                    break;
-                case "light":
-                    AppCompatDelegate.setDefaultNightMode(
-                            AppCompatDelegate.MODE_NIGHT_NO);
-                    break;
-                case "system":
-                    AppCompatDelegate.setDefaultNightMode(
-                            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                    break;
+            if (key.equals("theme")) {
+                switch (sharedPreferences.getString(key, "system")) {
+                    case "dark":
+                        AppCompatDelegate.setDefaultNightMode(
+                                AppCompatDelegate.MODE_NIGHT_YES);
+                        break;
+                    case "light":
+                        AppCompatDelegate.setDefaultNightMode(
+                                AppCompatDelegate.MODE_NIGHT_NO);
+                        break;
+                    case "system":
+                        AppCompatDelegate.setDefaultNightMode(
+                                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                        break;
+                }
             }
         };
     }
