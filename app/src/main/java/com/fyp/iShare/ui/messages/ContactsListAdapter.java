@@ -74,17 +74,12 @@ public class ContactsListAdapter extends RecyclerView.Adapter<ContactsListAdapte
 
             // allows clicks events to be caught
             this.onContactListener = onContactListener;
-            Log.d("tag", onContactListener.toString());
-            Log.d("tag", this.onContactListener.toString());
             itemView.setOnClickListener(this);
         }
-
 
         @Override
         public void onClick(View v) {
             onContactListener.onContactClick(getAdapterPosition());
-            Log.d("tag", Integer.toString(getAdapterPosition()));
-
         }
     }
 }
