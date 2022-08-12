@@ -1,5 +1,6 @@
 package com.fyp.iShare.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -48,17 +49,16 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-
-        fileTransferClickListener();
+        fileTransferClickListener(root.getContext());
 
         return root;
     }
 
-    private void fileTransferClickListener() {
+    private void fileTransferClickListener(Context context) {
         binding.btnFileTransfer.setOnClickListener(v -> {
 
             SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(getContext());
+                    PreferenceManager.getDefaultSharedPreferences(context);
             boolean manualConnectionState = sharedPreferences.getBoolean("manual", false);
 
             String IP_Address;
