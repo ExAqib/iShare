@@ -25,6 +25,8 @@
     <color name="on_surface">#001733</color>
     <color name="text_secondary">#6E7987</color>
     <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="bottom_sheet_handle">#AFBAC9</color>
+    <color name="bottom_sheet">@color/background</color>
 
 
 </resources>
