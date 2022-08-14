@@ -22,9 +22,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fyp.iShare.Users;
 import com.fyp.iShare.databinding.FragmentSignupBinding;
 
 import com.fyp.iShare.R;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class SignupFragment extends Fragment {
 
@@ -48,9 +57,10 @@ public class SignupFragment extends Fragment {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = binding.username;
+        final EditText userEmailEditText = binding.username;
+        final EditText userNameEditText = binding.name;
         final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.signup;
+        final Button signUpButton = binding.signup;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
@@ -59,9 +69,9 @@ public class SignupFragment extends Fragment {
                 if (loginFormState == null) {
                     return;
                 }
-                loginButton.setEnabled(loginFormState.isDataValid());
+                signUpButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                    userEmailEditText.setError(getString(loginFormState.getUsernameError()));
                 }
                 if (loginFormState.getPasswordError() != null) {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
@@ -98,30 +108,63 @@ public class SignupFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+                loginViewModel.loginDataChanged(userEmailEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
+        userEmailEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
+                    loginViewModel.login(userEmailEditText.getText().toString(),
                             passwordEditText.getText().toString());
                 }
                 return false;
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+
+                String name = userNameEditText.getText().toString().trim();
+                String mail = userEmailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+
+                String TAG="tag";
+
+                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference databaseReference1 = firebaseDatabase.getReference("Clients");
+
+                databaseReference1.orderByChild("email").equalTo(mail).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
+                                    userEmailEditText.setError("This email already exists");
+                                    Toast.makeText(requireContext(), "Email Already Registered", Toast.LENGTH_SHORT).show();
+                                    loadingProgressBar.setVisibility(View.INVISIBLE);
+                                }
+                                else {
+                                    DatabaseReference ref = firebaseDatabase.getReference();
+
+                                    Users user = new Users(name,mail,password);
+                                    ref.child("Clients").push().setValue(user);
+                                    loginViewModel.login(userEmailEditText.getText().toString(),
+                                            passwordEditText.getText().toString());
+                                    Toast.makeText(requireContext(), "Account Created", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(requireContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onDataChange: Error "+error);
+                            }
+                });
             }
         });
     }
