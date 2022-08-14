@@ -23,5 +23,9 @@
     <color name="on_surface">#001733</color>
     <color name="text_primary">#E5F1FF</color>
     <color name="text_secondary">#788491</color>
+    <color name="bottom_tool_top">#AFBAC9</color>
+    <color name="bottom_sheet">#22252A</color>
+    <color name="bottom_sheet_handle">#6E7987</color>
+
 
 </resources>

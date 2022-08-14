@@ -73,7 +73,7 @@
 
 
             <ImageView
-                android:id="@+id/imgFileType"
+                android:id="@+id/img_FileType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="File Type"

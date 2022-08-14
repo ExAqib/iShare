@@ -62,8 +62,10 @@
                 android:layout_width="350dp"
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/main_id_box"
+                android:background="@drawable/id_box_shape"
                 android:clickable="true"
+                android:elevation="@dimen/elevation_default"
+
                 android:focusable="true"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -153,7 +155,7 @@
                 android:layout_below="@id/ln_ID"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/main_partner_connect_view"
+                android:background="@drawable/partner_connect_shape"
                 android:clickable="true"
                 android:elevation="@dimen/elevation_default"
                 android:focusable="true"

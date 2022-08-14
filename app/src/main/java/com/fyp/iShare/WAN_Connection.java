@@ -3,16 +3,25 @@ package com.fyp.iShare;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.fyp.iShare.databinding.ActivityWanConnectionBinding;
+import com.fyp.iShare.ui.messages.chat;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class WAN_Connection extends AppCompatActivity {
 
@@ -34,13 +43,63 @@ public class WAN_Connection extends AppCompatActivity {
         transaction.commit();
         Log.d(TAG, "loadFragment: Transaction committed");
 
+        LinearLayout mBottomToolView = findViewById(R.id.li_toolBar);
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) mBottomToolView.getLayoutParams();
+        layoutParams.setBehavior(new BottomToolBarBehavior());
+
+        binding.btnClose.setOnClickListener(v -> {
+            this.finish();
+        });
+        binding.btnMessage.setOnClickListener(v -> {
+            Intent intent = new Intent(this, chat.class);
+            startActivity(intent);
+        });
+        binding.btnPower.setOnClickListener(v -> {
+            BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheet);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_power_control, null);
+
+            Button powerOff = dialogView.findViewById(R.id.btn_off);
+            Button restart = dialogView.findViewById(R.id.btn_restart);
+            Button sleep = dialogView.findViewById(R.id.btn_sleep);
+
+            powerOff.setOnClickListener(v1 -> {
+                // TODO: 8/14/2022 send command
+            });
+
+            restart.setOnClickListener(v1 -> {
+                // TODO: 8/14/2022 send command
+            });
+
+            sleep.setOnClickListener(v1 -> {
+                // TODO: 8/14/2022 send command
+            });
+
+            ConstraintLayout footer = dialogView.findViewById(R.id.footer);
+            TextView cancel = footer.findViewById(R.id.cancel);
+            TextView setTimer = footer.findViewById(R.id.ok);
+
+            cancel.setOnClickListener(v12 -> dialog.dismiss());
+
+            setTimer.setOnClickListener(v1 -> {
+                // TODO: 8/14/2022 extra Timer feature
+            });
+
+            dialog.setContentView(dialogView);
+            dialog.setOnShowListener(dialog1 -> {
+               /* BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog1;
+                FrameLayout bottomSheet = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+                BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);*/
+            });
+            dialog.show();
+
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.send_file, menu);
-
         return true;
     }
 

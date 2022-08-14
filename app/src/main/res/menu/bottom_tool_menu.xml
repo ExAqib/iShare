@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Close"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/navigation_messages"
+        android:icon="@drawable/ic_baseline_message_24"
+        android:iconTint="@color/white"
+        android:title="@string/title_messages"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/search"
+        android:contentDescription="control partner power control"
+        android:icon="@drawable/ic_baseline_power_settings_new_24"
+        android:title="Power Control"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/navigation_downloads"
+        android:icon="@drawable/ic_baseline_arrow_downward_24"
+        android:title="Power"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/pddd"
+        android:icon="@drawable/ic_baseline_arrow_downward_24"
+        android:title="Power"
+        app:showAsAction="always" />
+
+</menu>
