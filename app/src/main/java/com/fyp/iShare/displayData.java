@@ -15,6 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class displayData extends Fragment {
 
@@ -91,6 +95,7 @@ public class displayData extends Fragment {
 
         @Override
         protected Bundle doInBackground(Void... voids) {
+            getPcInfo();
             setDriveNames();
             return null;
         }
@@ -157,9 +162,29 @@ public class displayData extends Fragment {
             });
         }
 
+        private void getPcInfo()  {
+            try {
+                if(LoginDetails.LoggedIn){
+                    sendRequest("_PC_INFO_");
+                    String ID= bufferedReader.readLine();
+                    String PcName = bufferedReader.readLine();
+
+                    HashMap<String,String> map = new HashMap<>();
+                    map.put("ID",ID);
+                    map.put("Name",PcName);
+                    DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("Clients");
+                    databaseReference.child(LoginDetails.userKey).child("devices").child(ID).setValue(map);
+                }
+
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "Exception in getDriveNames()>> " + e);
+            }
+        }
         private void setDriveNames() {
             try {
-                sendRequest();
+                sendRequest("driveNames");
                 Log.d(TAG, "Receiving Data from client");
 
                 String data;
@@ -210,10 +235,10 @@ public class displayData extends Fragment {
 
         }
 
-        void sendRequest() {
+        void sendRequest(String request) {
             try {
-                Log.d(TAG, "Sending Request to Server i.e >>  " + "driveNames");
-                printWriter.println("driveNames");
+                Log.d(TAG, "Sending Request to Server i.e >>  " + request);
+                printWriter.println(request);
                 printWriter.flush();
 
             } catch (Exception e) {

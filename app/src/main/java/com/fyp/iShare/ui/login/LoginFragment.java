@@ -24,6 +24,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.fyp.iShare.LinkedDevices;
+import com.fyp.iShare.LoginDetails;
 import com.fyp.iShare.R;
 import com.fyp.iShare.databinding.FragmentLoginBinding;
 import com.google.firebase.FirebaseApp;
@@ -163,13 +164,12 @@ public class LoginFragment extends Fragment {
                                 if(enteredPassword.equals(password)){
                                     //ToDo:Success Login
                                     Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show();
-                                    //ToDo:Remove it
-                                    HashMap<String,String> map = new HashMap<>();
-                                    map.put("ID","3760");
-                                    map.put("Name","Aqib");
-                                    databaseReference1.child(key).child("devices").child("3760").setValue(map);
 
-                                    //Start
+                                    //Start (Get all logged devices)
+                                    LoginDetails.LoggedIn=true;
+                                    LoginDetails.userEmail=mail;
+                                    LoginDetails.userPassword=password;
+                                    LoginDetails.userKey=key;
 
                                     DatabaseReference databaseReference = firebaseDatabase.getReference("Clients/"+key+"/devices");
                                     databaseReference.addValueEventListener(new ValueEventListener() {
