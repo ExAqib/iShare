@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fyp.iShare.LinkedDevices;
 import com.fyp.iShare.R;
 import com.fyp.iShare.databinding.FragmentDevicesBinding;
 
@@ -41,7 +42,10 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
         savedRecyclerView = binding.rvSavedDevices;
         savedRecyclerView.setHasFixedSize(true);
         savedRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        adapter = new SavedDevicesAdapter(devices, this);
+
+        //Getting value from Linked Devices class
+        //adapter = new SavedDevicesAdapter(devices, this);
+        adapter = new SavedDevicesAdapter(LinkedDevices.GetAllDeviceNames(), this);
         //adapter.setClickListener(this);
         savedRecyclerView.setAdapter(adapter);
 

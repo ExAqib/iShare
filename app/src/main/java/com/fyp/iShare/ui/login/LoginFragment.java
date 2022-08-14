@@ -3,6 +3,7 @@ package com.fyp.iShare.ui.login;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +23,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.fyp.iShare.LinkedDevices;
 import com.fyp.iShare.R;
 import com.fyp.iShare.databinding.FragmentLoginBinding;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 public class LoginFragment extends Fragment {
 
+    private static final String TAG = "tag";
     private LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
 
@@ -128,8 +140,86 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                String enteredMail = usernameEditText.getText().toString().trim();
+                String enteredPassword = passwordEditText.getText().toString().trim();
+
+               FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+               DatabaseReference databaseReference1 = firebaseDatabase.getReference("Clients");
+               databaseReference1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        boolean AccountNotFound=true;
+
+                        for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+                            String mail = dataSnapshot1.child("email").getValue(String.class);
+                            String password = dataSnapshot1.child("password").getValue(String.class);
+                            String key =dataSnapshot1.getKey();
+
+
+                            if(enteredMail.equals(mail) ){
+                                AccountNotFound=false;
+                                if(enteredPassword.equals(password)){
+                                    //ToDo:Success Login
+                                    Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                                    //ToDo:Remove it
+                                    HashMap<String,String> map = new HashMap<>();
+                                    map.put("ID","3760");
+                                    map.put("Name","Aqib");
+                                    databaseReference1.child(key).child("devices").child("3760").setValue(map);
+
+                                    //Start
+
+                                    DatabaseReference databaseReference = firebaseDatabase.getReference("Clients/"+key+"/devices");
+                                    databaseReference.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                            for(DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
+
+                                                String deviceID = dataSnapshot2.getKey();
+                                                String deviceName = dataSnapshot2.child("Name").getValue(String.class);
+                                                LinkedDevices.AddDevice(deviceName,deviceID);
+
+                                                Log.d(TAG,"device ID "+deviceID+ " device name "+deviceName);
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            Log.d(TAG, " Cancelled:"+databaseError );
+                                        }
+
+                                    });
+
+                                    //End
+
+                                    loadingProgressBar.setVisibility(View.INVISIBLE);
+
+                                    loginViewModel.login(usernameEditText.getText().toString(),
+                                            passwordEditText.getText().toString());
+                                }
+                                else{
+                                    passwordEditText.setError("Incorrect Password");
+                                    loadingProgressBar.setVisibility(View.INVISIBLE);
+                                }
+                                break;
+                            }
+                        }
+
+                        if(AccountNotFound){
+                            Toast.makeText(requireContext(), "Account Not Found", Toast.LENGTH_SHORT).show();
+                            loadingProgressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.d(TAG, " Cancelled:"+databaseError );
+                    }
+
+               });
+
             }
         });
     }
