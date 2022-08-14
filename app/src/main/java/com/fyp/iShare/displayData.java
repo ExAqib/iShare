@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -98,16 +99,16 @@ public class displayData extends Fragment {
         protected void onProgressUpdate(Bundle... values) {
             super.onProgressUpdate(values);
 
-            View myLayout = getLayoutInflater().inflate(R.layout.drive_info_item, null, false);
+            View driveLayout = getLayoutInflater().inflate(R.layout.drive_info_item, null, false);
 
             CardView.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(5, 10, 5, 10);
-            myLayout.setLayoutParams(layoutParams);
+            driveLayout.setLayoutParams(layoutParams);
 
             if (values[0].getString("name").trim().equals("Exception")) {
 
                 View exceptionLayout = getLayoutInflater().inflate(R.layout.exception_file, null, false);
-                myLayout.setLayoutParams(layoutParams);
+                driveLayout.setLayoutParams(layoutParams);
                 TextView message = exceptionLayout.findViewById(R.id.exception_message);
                 message.setText(values[0].getString("Exception").trim());
 
@@ -115,10 +116,13 @@ public class displayData extends Fragment {
                 return;
             }
 
-            TextView name = myLayout.findViewById(R.id.tv_drive_name);
-            TextView label = myLayout.findViewById(R.id.tv_drive_label);
-            //TextView type = myLayout.findViewById(R.id.tv_drive_type);
-            TextView format = myLayout.findViewById(R.id.tv_drive_format);
+            TextView name = driveLayout.findViewById(R.id.tv_drive_name);
+            TextView label = driveLayout.findViewById(R.id.tv_drive_label);
+            TextView format = driveLayout.findViewById(R.id.tv_drive_format);
+            ProgressBar bar = driveLayout.findViewById(R.id.capacityBar);
+            TextView totalStore = driveLayout.findViewById(R.id.tv_totalStorage);
+            TextView availableStore = driveLayout.findViewById(R.id.tv_availableStorage);
+
 
             name.setText(values[0].getString("name"));
 
@@ -127,11 +131,18 @@ public class displayData extends Fragment {
             } else {
                 label.setText(values[0].getString("label"));
             }
-            //type.append(values[0].getString("type"));
-            format.setText(values[0].getString("format"));
-            linearLayout.addView(myLayout);
 
-            myLayout.setOnClickListener(v -> {
+            format.setText(values[0].getString("format"));
+
+            // TODO: 8/15/2022 bind capacity data
+           /* totalStore.setText(values[0].getString("total"));
+            availableStore.setText(Integer.parseInt(values[0].getString("total")) - Integer.parseInt(values[0].getString("used")));
+            bar.setProgress(Integer.parseInt(values[0].getString("used"));
+            */
+
+            linearLayout.addView(driveLayout);
+
+            driveLayout.setOnClickListener(v -> {
 
                 SingletonSocket.setNavigationPath();
                 Log.d(TAG, "going to next fragment");

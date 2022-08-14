@@ -3,6 +3,7 @@ package com.fyp.iShare.ui.downloads;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(files.get(position));
+        // TODO: 8/15/2022 bind other file info 
     }
 
 
@@ -61,15 +63,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         public RelativeLayout relativeLayout;
         public TextView name;
+        public TextView size;
         public TextView status;
-
+        public ImageView type;
+        
         OnFileListener onFileListener;
 
         public ViewHolder(View itemView, OnFileListener onFileListener) {
             super(itemView);
             relativeLayout = itemView.findViewById(R.id.rl_downloads);
             this.name = itemView.findViewById(R.id.tv_fileName);
+            this.size = itemView.findViewById(R.id.tv_fileSize);
             this.status = itemView.findViewById(R.id.tv_status);
+            this.type = itemView.findViewById(R.id.img_FileType);
 
             // allows clicks events to be caught
             this.onFileListener = onFileListener;
