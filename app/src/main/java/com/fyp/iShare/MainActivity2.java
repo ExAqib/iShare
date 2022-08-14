@@ -1,17 +1,21 @@
 package com.fyp.iShare;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.fyp.iShare.databinding.ActivityMain2Binding;
+import com.fyp.iShare.ui.downloads.DownloadsFragment;
+import com.fyp.iShare.ui.home.HomeFragment;
+import com.fyp.iShare.ui.messages.MessagesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -27,36 +31,44 @@ public class MainActivity2 extends AppCompatActivity {
 
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_devices, R.id.navigation_messages, R.id.navigation_downloads)
-                .build();
+        final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main2);
+        final NavController navController = navHostFragment.getNavController();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main2);
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-       /* navView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_devices) {
+
+        navView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_home) {
+                item.setChecked(true);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main2, HomeFragment.class, null)
+                        .commit();
+            } else if (item.getItemId() == R.id.navigation_devices) {
+                // TODO: 8/15/2022 if logged in then go to devices 
+                item.setChecked(true);
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 //navView.setSelectedItemId(R.id.navigation_downloads);
-            } else {
-                // Create new fragment and transaction
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment_activity_main2, DownloadsFragment.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack("name")
+            } else if (item.getItemId() == R.id.navigation_messages) {
+                item.setChecked(true);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main2, MessagesFragment.class, null)
                         .commit();
-                Log.d("tag", "onNavigationItemSelected: devices clicked");
+
+            } else if (item.getItemId() == R.id.navigation_downloads) {
+                item.setChecked(true);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main2, DownloadsFragment.class, null)
+                        .commit();
+
             }
             return false;
-        });*/
+        });
 
     }
 
