@@ -1,6 +1,7 @@
 package com.fyp.iShare.ui.devices;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +40,14 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
         devices.add("Device A");
         devices.add("Device B");
         devices.add("Device C");
+
         savedRecyclerView = binding.rvSavedDevices;
         savedRecyclerView.setHasFixedSize(true);
         savedRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         //Getting value from Linked Devices class
-        //adapter = new SavedDevicesAdapter(devices, this);
-        adapter = new SavedDevicesAdapter(LinkedDevices.GetAllDeviceNames(), this);
+        adapter = new SavedDevicesAdapter(devices, this);
+        //adapter = new SavedDevicesAdapter(LinkedDevices.GetAllDeviceNames(), this);
         //adapter.setClickListener(this);
         savedRecyclerView.setAdapter(adapter);
 
@@ -59,33 +61,27 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
         availableDevices = binding.tvAvailableDevices;
         savedDevices = binding.tvSavedDevices;
 
-        availableDevices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.cnsAvailableRv.getVisibility() == View.VISIBLE) {
-                    binding.cnsAvailableRv.setVisibility(getView().GONE);
-                    binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
-                } else {
-                    binding.cnsAvailableRv.setVisibility(getView().VISIBLE);
-                    binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
+        availableDevices.setOnClickListener(v -> {
+            if (binding.cnsAvailableRv.getVisibility() == View.VISIBLE) {
+                binding.cnsAvailableRv.setVisibility(getView().GONE);
+                binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
+            } else {
+                binding.cnsAvailableRv.setVisibility(getView().VISIBLE);
+                binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
 
-                }
             }
         });
 
-        savedDevices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        savedDevices.setOnClickListener(v -> {
 
-                if (binding.cnsSavedRv.getVisibility() == View.VISIBLE) {
-                    binding.cnsSavedRv.setVisibility(getView().GONE);
-                    binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
+            if (binding.cnsSavedRv.getVisibility() == View.VISIBLE) {
+                binding.cnsSavedRv.setVisibility(getView().GONE);
+                binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
 
-                } else {
-                    binding.cnsSavedRv.setVisibility(getView().VISIBLE);
-                    binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
+            } else {
+                binding.cnsSavedRv.setVisibility(getView().VISIBLE);
+                binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
 
-                }
             }
         });
         return root;
@@ -99,7 +95,8 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
 
     @Override
     public void onDeviceClick(int position) {
-        Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+        // TODO: 8/15/2022 connect to a device on click
+        Toast.makeText(getContext(), "clicked"+ position, Toast.LENGTH_SHORT).show();
 
 
     }

@@ -1,6 +1,5 @@
 package com.fyp.iShare;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -8,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.fyp.iShare.databinding.ActivityMain2Binding;
+import com.fyp.iShare.ui.devices.DevicesFragment;
 import com.fyp.iShare.ui.downloads.DownloadsFragment;
 import com.fyp.iShare.ui.home.HomeFragment;
 import com.fyp.iShare.ui.messages.MessagesFragment;
@@ -49,9 +48,18 @@ public class MainActivity2 extends AppCompatActivity {
             } else if (item.getItemId() == R.id.navigation_devices) {
                 // TODO: 8/15/2022 if logged in then go to devices 
                 item.setChecked(true);
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                //navView.setSelectedItemId(R.id.navigation_downloads);
+                if (true) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.nav_host_fragment_activity_main2, DevicesFragment.class, null)
+                            .commit();
+                } else {
+                    //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    //startActivity(intent);
+                    //navView.setSelectedItemId(R.id.navigation_downloads);
+                }
+
+
             } else if (item.getItemId() == R.id.navigation_messages) {
                 item.setChecked(true);
                 getSupportFragmentManager()
