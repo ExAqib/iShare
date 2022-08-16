@@ -1,6 +1,8 @@
 package com.fyp.iShare.ui.devices;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +15,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fyp.iShare.Connect;
 import com.fyp.iShare.LinkedDevices;
 import com.fyp.iShare.R;
+import com.fyp.iShare.SingletonSocket;
+import com.fyp.iShare.WAN_Connection;
 import com.fyp.iShare.databinding.FragmentDevicesBinding;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +36,8 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
     private RecyclerView savedRecyclerView, availableRecyclerView;
     private SavedDevicesAdapter adapter;
     private LinearLayout availableDevices, savedDevices;
+    Socket socket;
+    PrintWriter printWriter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,30 +48,30 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
         View root = binding.getRoot();
 
         List<String> devices = new ArrayList<String>();
-        devices.add("Device A");
-        devices.add("Device B");
-        devices.add("Device C");
+        devices.add("No Devices");
         savedRecyclerView = binding.rvSavedDevices;
         savedRecyclerView.setHasFixedSize(true);
         savedRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
-        //Getting value from Linked Devices class
+        //Getting value from LinkedDevices class
         //adapter = new SavedDevicesAdapter(devices, this);
         adapter = new SavedDevicesAdapter(LinkedDevices.GetAllDeviceNames(), this);
         //adapter.setClickListener(this);
         savedRecyclerView.setAdapter(adapter);
 
-        availableRecyclerView = binding.rvAvailableDevices;
+       /* availableRecyclerView = binding.rvAvailableDevices;
         availableRecyclerView.setHasFixedSize(true);
         availableRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
         adapter = new SavedDevicesAdapter(devices, this);
         //adapter.setClickListener(this);
-        availableRecyclerView.setAdapter(adapter);
+        availableRecyclerView.setAdapter(adapter);*/
 
+/*
         availableDevices = binding.tvAvailableDevices;
+*/
         savedDevices = binding.tvSavedDevices;
 
-        availableDevices.setOnClickListener(new View.OnClickListener() {
+     /*   availableDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (binding.cnsAvailableRv.getVisibility() == View.VISIBLE) {
@@ -71,7 +83,7 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
 
                 }
             }
-        });
+        });*/
 
         savedDevices.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,9 +110,109 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
     }
 
     @Override
-    public void onDeviceClick(int position) {
-        Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+    public void onDeviceClick(int position,String DeviceName,String RecyclerView) {
+        String DeviceID = LinkedDevices.GetDeviceID(DeviceName);
 
+        if(DeviceName.equals("No Saved Device Available"))
+            return;
 
+        Toast.makeText(getContext(), " connecting "+DeviceName +" "+DeviceID, Toast.LENGTH_SHORT).show();
+
+        String ServerIP="192.168.10.99";
+        int ServerPort= 9999;
+        Runtime runtime = Runtime.getRuntime();
+        Thread t1 = new Thread(() -> {
+
+            try {
+                /*
+                //for pinging server
+                Process  mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 192.168.10.99");
+                int mExitValue = mIpAddrProcess.waitFor();
+                Log.d("tag", " mExitValue "+mExitValue);
+                if(mExitValue==0){
+                    sendToast("Server Offline");
+                }
+                if(RecyclerView.equals("SavedDevicesRecyclerView")){
+
+                }else {
+
+                }*/
+
+                if((socket=SingletonSocket.getSocket())==null){
+                    socket= new Socket(ServerIP, ServerPort);
+                    SingletonSocket.setSocket(socket);
+                    printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+                    SendRequest("MOBILE");
+                }
+                printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+                if(ConnectPC(DeviceID)){
+                    goToNextActivity();
+                }
+
+            } catch (Exception e) {
+                sendToast(e.toString());
+                Log.d("tag", "Exception  " + e);
+            }
+        });
+        t1.start();
+
+    }
+
+    private void goToNextActivity() {
+        requireActivity().runOnUiThread(() -> {
+            startActivity(new Intent(requireActivity(), WAN_Connection.class));
+        });
+
+    }
+    private void sendToast(String message) {
+        requireActivity().runOnUiThread(() -> {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+        });
+    }
+
+    private boolean ConnectPC(String id) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            SendRequest("_find_by_id_");
+            SendRequest(id);
+            Log.d("tag", "ID " + id + " send ");
+
+            String data = bufferedReader.readLine();
+            Log.d("tag", "Received response  " + data);
+
+            if (data.equals("ERROR")) {
+                Log.d("tag", " PC not found.");
+                sendToast("PC not found.");
+            } else if (data.equals("SUCCESS")) {
+                Log.d("tag", "PC found. ");
+                return true;
+            } else {
+                Log.d("tag", "Invalid response from server"+data);
+                sendToast("Invalid response from server");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("tag", "Exception  " + e);
+            sendToast(e.getMessage());
+
+        }
+
+        return false;
+    }
+
+    void SendRequest(String request){
+        try {
+            Log.d("tag", "Sending Request>>" + request);
+
+            printWriter.println(request);
+            printWriter.flush();
+
+        } catch (Exception e) {
+            Log.d("tag", "Exception  " + e);
+            sendToast(e.getMessage());
+        }
     }
 }

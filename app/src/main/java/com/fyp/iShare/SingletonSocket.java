@@ -13,7 +13,7 @@ import java.util.List;
 public class SingletonSocket {
 
     private static final String TAG = "tag";
-    private static Socket socket;
+    private static Socket socket = null;
     private static List<String> NavigationPath;
     private static FragmentManager fragmentManger;
 

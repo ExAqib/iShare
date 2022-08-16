@@ -24,7 +24,6 @@ public   class LinkedDevices {
     }
 
     static public String GetDeviceID(String name){
-
         try {
             if(deviceDetails.containsKey(name)){
                 return deviceDetails.get(name);
@@ -40,6 +39,11 @@ public   class LinkedDevices {
     }
 
     static public List<String> GetAllDeviceNames(){
+        if(devices.size()==0){
+            List<String> emptyDevices = new ArrayList<>();
+            emptyDevices.add("No Saved Device Available");
+            return emptyDevices;
+        }
         return devices;
     }
 

@@ -1,5 +1,6 @@
 package com.fyp.iShare.ui.devices;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapte
         /*holder.itemView.setOnClickListener{
             onDeviceListener.onWebhookClick(devices.get(position).getWid());
         }*/
+
     }
 
     @Override
@@ -46,7 +48,7 @@ public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapte
     }
 
     public interface OnDeviceListener {
-        void onDeviceClick(int position);
+        void onDeviceClick(int position,String deviceName,String RecyclerView);
     }
 
     // convenience method for getting data at click position
@@ -79,7 +81,17 @@ public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapte
 
         @Override
         public void onClick(View view) {
-            onDeviceListener.onDeviceClick(getAdapterPosition());
+
+            TextView deviceName=view.findViewById(R.id.tv_deviceName);
+            onDeviceListener.onDeviceClick(getAdapterPosition(),deviceName.getText().toString(),"SavedDevicesRecyclerView");
+
+            /*if(RecycleView.equals(AvailableDevicesRecyclerView)){
+                onDeviceListener.onDeviceClick(getAdapterPosition(),deviceName.getText().toString(),"SavedDevicesRecyclerView");
+
+            }else if (RecycleView.equals(SavedDevicesRecyclerView)){
+                onDeviceListener.onDeviceClick(getAdapterPosition(),deviceName.getText().toString(),"SavedDevicesRecyclerView");
+            }*/
+
         }
     }
 }

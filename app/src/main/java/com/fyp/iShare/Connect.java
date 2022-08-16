@@ -31,8 +31,6 @@ public class Connect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
 
-        ArrayList<String> a = new ArrayList<>();
-
         binding = ActivityConnectBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -49,13 +47,6 @@ public class Connect extends AppCompatActivity {
                     if (socket == null) {
                         socket = new Socket(IP_Address, Port_Num);
 
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        int changedPort = Integer.parseInt(bufferedReader.readLine());
-                        Log.d(TAG, "Received port num is " + changedPort);
-                        socket.close();
-                        Log.d(TAG, "Prev. Socket Closed");
-
-                        socket = new Socket(IP_Address, changedPort);
                     }
                     if (sendIdPassword(id, password)) {
                         SingletonSocket.setSocket(socket);

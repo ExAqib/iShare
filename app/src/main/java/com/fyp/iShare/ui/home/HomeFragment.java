@@ -84,14 +84,6 @@ public class HomeFragment extends Fragment {
                     try {
                         if (socket == null) {
                             socket = new Socket(IP_Address, Port_Num);
-
-                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                            int changedPort = Integer.parseInt(bufferedReader.readLine());
-                            Log.d(TAG, "Received port num is " + changedPort);
-                            socket.close();
-                            Log.d(TAG, "Prev. Socket Closed");
-
-                            socket = new Socket(IP_Address, changedPort);
                         }
                         if (sendIdPassword(id, password)) {
                             SingletonSocket.setSocket(socket);
@@ -132,10 +124,11 @@ public class HomeFragment extends Fragment {
             }
             printWriter.println(id);
             printWriter.flush();
-            printWriter.println(password);
-            printWriter.flush();
+            /*printWriter.println(password);
+            printWriter.flush();*/
 
-            Log.d(TAG, "ID " + id + " and Password " + password + " send ");
+            //Log.d(TAG, "ID " + id + " and Password " + password + " send ");
+            Log.d(TAG, "ID " + id +" send ");
 
             String data = bufferedReader.readLine();
             Log.d(TAG, "Received response  " + data);

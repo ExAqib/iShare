@@ -174,6 +174,8 @@ public class displayData extends Fragment {
                     map.put("Name",PcName);
                     DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("Clients");
                     databaseReference.child(LoginDetails.userKey).child("devices").child(ID).setValue(map);
+                    LinkedDevices.AddDevice(PcName,ID);
+
                 }
 
             }
