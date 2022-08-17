@@ -6,6 +6,11 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import androidx.room.Room;
+
+import com.fyp.iShare.ui.downloads.DB.FileHistoryDatabase;
+import com.fyp.iShare.ui.downloads.DownloadedFiles;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -51,7 +56,7 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
 
         int i = 0;
         for (String s : SingletonSocket.getNavigationPath()) {
-            Log.d(TAG, " String s : SingletonSocket.getNavigationPath() is "+s);
+            Log.d(TAG, " String s : SingletonSocket.getNavigationPath() is " + s);
             if (i < 2) {
                 path2.append(s);
             } else {
@@ -71,11 +76,17 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
             String fileName = bufferedReader.readLine();
 
-            String FileSize = bufferedReader.readLine();
+            String fileSize = bufferedReader.readLine();
 
-            DownloadedFiles.AddFile(fileName,FileSize);
-            fileSize = Integer.parseInt(FileSize);
-            progressDialog.setMax(fileSize / 1000000);
+            FileHistoryDatabase db = Room.databaseBuilder(context.getApplicationContext(),
+                    FileHistoryDatabase.class, "File").build();
+
+            db.FileDao().insert(new com.fyp.iShare.ui.downloads.DB.File(fileName, Long.parseLong(fileSize)));
+
+            DownloadedFiles.AddFile(fileName, fileSize);
+
+            this.fileSize = Integer.parseInt(fileSize);
+            progressDialog.setMax(this.fileSize / 1000000);
 
             startDownloading(fileName);
 

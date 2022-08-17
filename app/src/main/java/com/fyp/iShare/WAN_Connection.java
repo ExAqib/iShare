@@ -91,7 +91,7 @@ public class WAN_Connection extends AppCompatActivity {
                 new Thread(()->{
                     printWriter.println("POWEROFF");
                     printWriter.flush();
-
+                    dialog.dismiss();
                 }).start();
             });
 
@@ -100,7 +100,7 @@ public class WAN_Connection extends AppCompatActivity {
 
                     printWriter.println("RESTART");
                     printWriter.flush();
-
+                    dialog.dismiss();
                 }).start();
             });
 
@@ -109,7 +109,7 @@ public class WAN_Connection extends AppCompatActivity {
 
                     printWriter.println("SLEEP");
                     printWriter.flush();
-
+                    dialog.dismiss();
                 }).start();
             });
 
@@ -118,7 +118,7 @@ public class WAN_Connection extends AppCompatActivity {
 
                     printWriter.println("LOCK");
                     printWriter.flush();
-
+                    dialog.dismiss();
                 }).start();
             });
 

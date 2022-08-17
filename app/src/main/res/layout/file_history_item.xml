@@ -30,9 +30,11 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@id/cardViewOfUser"
+            android:maxWidth="220dp"
+            android:maxLines="1"
             android:text="File Name"
             android:textColor="@color/text_primary"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
 
@@ -68,6 +70,7 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_alignParentStart="true"
+            android:elevation="0.5dp"
             android:layout_centerVertical="true"
             android:layout_marginBottom="20dp">
 

@@ -1,48 +1,69 @@
 package com.fyp.iShare.ui.downloads;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
-import com.fyp.iShare.DownloadedFiles;
 import com.fyp.iShare.databinding.FragmentDownloadsBinding;
+import com.fyp.iShare.ui.downloads.DB.File;
+import com.fyp.iShare.ui.downloads.DB.FileHistoryDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFileListener {
 
     private FragmentDownloadsBinding binding;
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
+    public List<File> files = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DownloadsViewModel downloadsViewModel =
-                new ViewModelProvider(this).get(DownloadsViewModel.class);
 
         binding = FragmentDownloadsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        List<String> devices = new ArrayList<String>();
-        devices.add("File1");
-
-        recyclerView = binding.rvDownloads;
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        adapter = new RecyclerAdapter(DownloadedFiles.GetFiles(), this);
-
-        //adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        Maybe.empty().subscribeOn(Schedulers.io()).subscribe(s -> s.toString(),
+                Throwable::printStackTrace,
+                () -> loadFileHistory()
+        );
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setAdapter();
+    }
+
+    void loadFileHistory() {
+        FileHistoryDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
+                FileHistoryDatabase.class, "File").build();
+        // long ID = db.FileDao().insert(new com.fyp.iShare.ui.downloads.DB.File("fileName", (long) 156446));
+        files = db.FileDao().getAll();
+    }
+
+    void setAdapter() {
+        recyclerView = binding.rvDownloads;
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new RecyclerAdapter(files, this);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

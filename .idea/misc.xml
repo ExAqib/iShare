@@ -37,8 +37,13 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/devices_headers.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/directories_layout_shape.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/download_ripple.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/draft_48px.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/drive_layout_shape.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/folder_48px.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/folder_zip_48px.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_baseline_arrow_downward_24.xml" value="0.3675" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/image_48px.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_ID_view.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_id_box.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_id_view.xml" value="0.3305" />
@@ -91,7 +96,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

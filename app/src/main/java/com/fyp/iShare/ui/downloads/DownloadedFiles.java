@@ -1,4 +1,4 @@
-package com.fyp.iShare;
+package com.fyp.iShare.ui.downloads;
 
 import android.util.Log;
 
@@ -8,6 +8,7 @@ import java.util.List;
 public class DownloadedFiles {
     static List<String> fileNames =  new ArrayList<>() ;
     public static List<String> fileSize =  new ArrayList<>() ;
+    public static List<String> fileType =  new ArrayList<>() ;
 
 
     public static void AddFile(String FileName,String FileSize){
