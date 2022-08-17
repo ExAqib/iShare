@@ -163,7 +163,7 @@ public class LoginFragment extends Fragment {
                                 AccountNotFound=false;
                                 if(enteredPassword.equals(password)){
                                     //ToDo:Success Login
-                                    Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireActivity(), "Login Success", Toast.LENGTH_SHORT).show();
 
                                     //Start (Get all logged devices)
                                     LoginDetails.LoggedIn=true;

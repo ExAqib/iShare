@@ -23,15 +23,30 @@ import com.fyp.iShare.databinding.ActivityWanConnectionBinding;
 import com.fyp.iShare.ui.messages.chat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 public class WAN_Connection extends AppCompatActivity {
 
     private static final String TAG = "Tag";
+    PrintWriter printWriter ;
+    BufferedReader bufferedReader ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityWanConnectionBinding binding = ActivityWanConnectionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        try{
+             printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
+             bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+
+        }catch (Exception e){
+            Log.d(TAG, "onCreate: "+e);
+        }
 
         displayData displayDataFragment = displayData.newInstance(null);
 
@@ -64,14 +79,31 @@ public class WAN_Connection extends AppCompatActivity {
 
             powerOff.setOnClickListener(v1 -> {
                 // TODO: 8/14/2022 send command
+                new Thread(()->{
+                    printWriter.println("_power_off_");
+                    printWriter.flush();
+
+                }).start();
             });
 
             restart.setOnClickListener(v1 -> {
                 // TODO: 8/14/2022 send command
+                new Thread(()->{
+
+                    printWriter.println("_restart_");
+                    printWriter.flush();
+
+                }).start();
             });
 
             sleep.setOnClickListener(v1 -> {
                 // TODO: 8/14/2022 send command
+                new Thread(()->{
+
+                    printWriter.println("_sleep_");
+                    printWriter.flush();
+
+                }).start();
             });
 
             ConstraintLayout footer = dialogView.findViewById(R.id.footer);

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fyp.iShare.DownloadedFiles;
 import com.fyp.iShare.databinding.FragmentDownloadsBinding;
 
 import java.util.ArrayList;
@@ -32,12 +33,11 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
 
         List<String> devices = new ArrayList<String>();
         devices.add("File1");
-        devices.add("File2");
-        devices.add("File3");
+
         recyclerView = binding.rvDownloads;
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        adapter = new RecyclerAdapter(devices, this);
+        adapter = new RecyclerAdapter(DownloadedFiles.GetFiles(), this);
 
         //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);

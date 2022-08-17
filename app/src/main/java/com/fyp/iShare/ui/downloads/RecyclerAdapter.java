@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fyp.iShare.DownloadedFiles;
 import com.fyp.iShare.R;
 
 import java.util.List;
@@ -34,8 +35,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(files.get(position));
-        // TODO: 8/15/2022 bind other file info 
+        if(files.size()<=0){
+            String no = "No Files Downloaded Yet";
+            holder.name.setText(no);
+        }else{
+            holder.name.setText(files.get(position));
+            holder.size.setText(DownloadedFiles.fileSize.get(position));
+
+        }
+        // TODO: 8/15/2022 bind other file info
     }
 
 

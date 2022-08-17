@@ -51,6 +51,7 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
 
         int i = 0;
         for (String s : SingletonSocket.getNavigationPath()) {
+            Log.d(TAG, " String s : SingletonSocket.getNavigationPath() is "+s);
             if (i < 2) {
                 path2.append(s);
             } else {
@@ -71,6 +72,8 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
             String fileName = bufferedReader.readLine();
 
             String FileSize = bufferedReader.readLine();
+
+            DownloadedFiles.AddFile(fileName,FileSize);
             fileSize = Integer.parseInt(FileSize);
             progressDialog.setMax(fileSize / 1000000);
 
@@ -108,8 +111,6 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
     }
 
     private String getFilePath(String Name) {
-
-
         int copies = 1;
         String PdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
         File file = new File(PdfPath, Name);
@@ -129,7 +130,8 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
 
     private void startDownloading(String fileName) {
         try {
-            Log.d(TAG, "Received File size is " + (float) fileSize / 100000 + "MB (" + fileSize + "byes)");
+            Log.d(TAG, "Received File size is " + (float) fileSize / 1000000 + "MB (" + fileSize + "byes)");
+
 
             DataInputStream dIn = new DataInputStream(SingletonSocket.getSocket().getInputStream());
             FileOutputStream fos = new FileOutputStream(getFilePath(fileName));

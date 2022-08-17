@@ -290,11 +290,11 @@ public class directories extends Fragment {
 
         private void getDirectory(String path) {
             sendRequest("subDirectories");
-            sendRequest(path);
+            //sendRequest(path);
 
             // TODO: 8/12/2022 @Aqib, fix your stupid code, and name things with meaningful names
 
-            /*SingletonSocket.getNavigationPath().add(path);
+            SingletonSocket.getNavigationPath().add(path);
 
             StringBuilder path2 = new StringBuilder();
 
@@ -311,7 +311,7 @@ public class directories extends Fragment {
             Log.d(TAG, "sending !:" + path2.toString());
             sendRequest(path2.toString());
             //sendRequest(path2.toString());
-*/
+
             try {
                 String data;
                 boolean emptyDirectory = true;

@@ -168,7 +168,7 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
     }
     private void sendToast(String message) {
         requireActivity().runOnUiThread(() -> {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show();
         });
     }
 
