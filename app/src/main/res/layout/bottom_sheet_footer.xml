@@ -11,7 +11,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_extra_small"
         android:layout_marginBottom="@dimen/margin_small"
-        android:background="@color/background"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
@@ -33,7 +33,7 @@
         android:layout_marginEnd="@dimen/margin_small"
         android:layout_marginBottom="@dimen/margin_small"
         android:background="?attr/selectableItemBackground"
-        android:clickable="true"
+        android:clickable="false"
         android:gravity="center"
         android:paddingStart="@dimen/margin_mid_large"
         android:paddingTop="@dimen/margin_small"
@@ -43,6 +43,7 @@
         android:textColor="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:enabled="false"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

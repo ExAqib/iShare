@@ -12,7 +12,7 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-       <!-- <androidx.constraintlayout.widget.ConstraintLayout
+       <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cns_available_devices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cns_saved_devices"

@@ -71,11 +71,12 @@ public class WAN_Connection extends AppCompatActivity {
         });
         binding.btnPower.setOnClickListener(v -> {
             BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheet);
-            View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_power_control, null);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_power_control, binding.getRoot());
 
             Button powerOff = dialogView.findViewById(R.id.btn_off);
             Button restart = dialogView.findViewById(R.id.btn_restart);
             Button sleep = dialogView.findViewById(R.id.btn_sleep);
+            Button lock = dialogView.findViewById(R.id.btn_lock);
 
             powerOff.setOnClickListener(v1 -> {
                 // TODO: 8/14/2022 send command
@@ -105,6 +106,11 @@ public class WAN_Connection extends AppCompatActivity {
 
                 }).start();
             });
+
+            lock.setOnClickListener(v1 -> {
+                // TODO: 8/14/2022 send command
+            });
+
 
             ConstraintLayout footer = dialogView.findViewById(R.id.footer);
             TextView cancel = footer.findViewById(R.id.cancel);
