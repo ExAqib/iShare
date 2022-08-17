@@ -96,9 +96,7 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "manualConnectionState: is On");
                 IP_Address = sharedPreferences.getString("IP", "");
                 Port_Num = Integer.parseInt(sharedPreferences.getString("port", ""));
-                //id = sharedPreferences.getString("ID", "");
-                id = binding.edtID.getText().toString().trim();
-
+                id = sharedPreferences.getString("ID", "");
                 password = sharedPreferences.getString("password", "");
             } else {
                 IP_Address = "192.168.10.99";

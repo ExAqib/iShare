@@ -63,6 +63,7 @@ public class WAN_Connection extends AppCompatActivity {
         layoutParams.setBehavior(new BottomToolBarBehavior());
 
         binding.btnClose.setOnClickListener(v -> {
+            // TODO: 8/17/2022 close all connection
             this.finish();
         });
         binding.btnMessage.setOnClickListener(v -> {
@@ -71,7 +72,7 @@ public class WAN_Connection extends AppCompatActivity {
         });
         binding.btnPower.setOnClickListener(v -> {
             BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheet);
-            View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_power_control, binding.getRoot());
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_power_control, null);
 
             Button powerOff = dialogView.findViewById(R.id.btn_off);
             Button restart = dialogView.findViewById(R.id.btn_restart);
@@ -79,36 +80,38 @@ public class WAN_Connection extends AppCompatActivity {
             Button lock = dialogView.findViewById(R.id.btn_lock);
 
             powerOff.setOnClickListener(v1 -> {
-                // TODO: 8/14/2022 send command
                 new Thread(()->{
-                    printWriter.println("_power_off_");
+                    printWriter.println("POWEROFF");
                     printWriter.flush();
 
                 }).start();
             });
 
             restart.setOnClickListener(v1 -> {
-                // TODO: 8/14/2022 send command
                 new Thread(()->{
 
-                    printWriter.println("_restart_");
+                    printWriter.println("RESTART");
                     printWriter.flush();
 
                 }).start();
             });
 
             sleep.setOnClickListener(v1 -> {
-                // TODO: 8/14/2022 send command
                 new Thread(()->{
 
-                    printWriter.println("_sleep_");
+                    printWriter.println("SLEEP");
                     printWriter.flush();
 
                 }).start();
             });
 
             lock.setOnClickListener(v1 -> {
-                // TODO: 8/14/2022 send command
+                new Thread(()->{
+
+                    printWriter.println("LOCK");
+                    printWriter.flush();
+
+                }).start();
             });
 
 
