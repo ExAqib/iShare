@@ -140,12 +140,25 @@ public class displayData extends Fragment {
             format.setText(values[0].getString("format"));
 
             // TODO: 8/15/2022 bind capacity data
-           /* totalStore.setText(values[0].getString("total"));
-            availableStore.setText(Integer.parseInt(values[0].getString("total")) - Integer.parseInt(values[0].getString("used")));
-            bar.setProgress(Integer.parseInt(values[0].getString("used"));
-            */
+            try {
 
-            linearLayout.addView(driveLayout);
+                int totalData=Integer.parseInt(values[0].getString("totalSize"));
+
+                int availableData = Integer.parseInt(values[0].getString("totalSize")) - Integer.parseInt(values[0].getString("usedSize"));
+                totalStore.setText(String.valueOf(availableData));
+
+                String AvailableData= totalData +"GB ";
+                availableStore.setText(AvailableData);
+                float percent =(availableData*100/totalData);
+                Log.d(TAG, "onProgressUpdate: pervent "+percent+" " +availableData+" "+totalData);
+                bar.setProgress((int)percent);
+
+
+                linearLayout.addView(driveLayout);
+            }
+            catch (Exception e){
+                Log.d(TAG, "onProgressUpdate: "+e);
+            }
 
             driveLayout.setOnClickListener(v -> {
 
@@ -219,6 +232,12 @@ public class displayData extends Fragment {
                             break;
                         case 3:
                             bundle.putString("format", data);
+                            break;
+                        case 4:
+                            bundle.putString("totalSize", data);
+                            break;
+                        case 5:
+                            bundle.putString("usedSize", data);
                             publishProgress(bundle);
                             bundle = new Bundle();
                             loop = -1;

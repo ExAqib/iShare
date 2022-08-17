@@ -1,5 +1,6 @@
 package com.fyp.iShare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class WAN_Connection extends AppCompatActivity {
     private static final String TAG = "Tag";
     PrintWriter printWriter ;
     BufferedReader bufferedReader ;
+    Context ActivityContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +65,14 @@ public class WAN_Connection extends AppCompatActivity {
         layoutParams.setBehavior(new BottomToolBarBehavior());
 
         binding.btnClose.setOnClickListener(v -> {
-            // TODO: 8/17/2022 close all connection
+            new Thread(()->{
+                printWriter.println("CLOSE_CONNECTION");
+                printWriter.flush();
+                SingletonSocket.CloseSocket();
+
+            }).start();
             this.finish();
+
         });
         binding.btnMessage.setOnClickListener(v -> {
             Intent intent = new Intent(this, chat.class);

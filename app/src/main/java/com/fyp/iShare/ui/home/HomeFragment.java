@@ -40,7 +40,6 @@ public class HomeFragment extends Fragment {
 
     static final String TAG = "tag";
     boolean NewConnection = true;
-    Socket socket = null;
     private FragmentHomeBinding binding;
     String[] Permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     int RequestCode = 1122;
@@ -108,13 +107,14 @@ public class HomeFragment extends Fragment {
             if (!id.equals("")) {
                 Thread t1 = new Thread(() -> {
                     try {
-                        if (socket == null) {
+                        if (SingletonSocket.getSocket() == null) {
                             Log.d(TAG, "fileTransferClickListener: Connecting at "+IP_Address+":"+Port_Num);
-                            socket = new Socket(IP_Address, Port_Num);
+
+                            Socket socket = new Socket(IP_Address, Port_Num);
+                            SingletonSocket.setSocket(socket);
+                            NewConnection=true;
                         }
                         if (sendIdPassword(id, password)) {
-                            SingletonSocket.setSocket(socket);
-
                             Intent intent = new Intent(getActivity(), WAN_Connection.class);
                             startActivity(intent);
                         }
@@ -140,8 +140,8 @@ public class HomeFragment extends Fragment {
 
     private boolean sendIdPassword(String id, String password) {
         try {
-            PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
 
             if (NewConnection) {
                 printWriter.println("MOBILE");

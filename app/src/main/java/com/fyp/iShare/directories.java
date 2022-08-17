@@ -292,7 +292,6 @@ public class directories extends Fragment {
             sendRequest("subDirectories");
             //sendRequest(path);
 
-            // TODO: 8/12/2022 @Aqib, fix your stupid code, and name things with meaningful names
 
             SingletonSocket.getNavigationPath().add(path);
 

@@ -57,4 +57,18 @@ public class SingletonSocket {
         SingletonSocket.socket = socket;
     }
 
+    public static  void CloseSocket (){
+        if(socket!=null){
+            try{
+                socket.close();
+            }catch(Exception e){
+                Log.d(TAG, "CloseSocket: "+e);
+            }finally{
+                socket=null;
+
+            }
+        }
+        
+    }
+
 }
