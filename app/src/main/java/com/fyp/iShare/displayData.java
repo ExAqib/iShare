@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.HashMap;
 
 public class displayData extends Fragment {
@@ -139,25 +141,24 @@ public class displayData extends Fragment {
 
             format.setText(values[0].getString("format"));
 
-            // TODO: 8/15/2022 bind capacity data
             try {
+                long totalData = Long.parseLong(values[0].getString("totalSize"));
+                long availableData = Long.parseLong(values[0].getString("totalSize")) - Long.parseLong(values[0].getString("usedSize"));
 
-                int totalData=Integer.parseInt(values[0].getString("totalSize"));
+                totalStore.setText(humanReadableByte(totalData));
+                availableStore.setText(humanReadableByte(availableData));
 
-                int availableData = Integer.parseInt(values[0].getString("totalSize")) - Integer.parseInt(values[0].getString("usedSize"));
-                totalStore.setText(String.valueOf(availableData));
+                //totalStore.setText(String.valueOf(availableData));
+                //String AvailableData = totalData + "GB ";
 
-                String AvailableData= totalData +"GB ";
-                availableStore.setText(AvailableData);
-                float percent =(availableData*100/totalData);
-                Log.d(TAG, "onProgressUpdate: pervent "+percent+" " +availableData+" "+totalData);
-                bar.setProgress((int)percent);
+                long percent = (availableData * 100 / totalData);
+                Log.d(TAG, "onProgressUpdate: percent " + percent + " " + availableData + " " + totalData);
+                bar.setProgress((int) percent);
 
-
+                // TODO: 8/18/2022 this layout will bot be added in an exception
                 linearLayout.addView(driveLayout);
-            }
-            catch (Exception e){
-                Log.d(TAG, "onProgressUpdate: "+e);
+            } catch (Exception e) {
+                Log.d(TAG, "onProgressUpdate Error: " + e);
             }
 
             driveLayout.setOnClickListener(v -> {
@@ -175,28 +176,28 @@ public class displayData extends Fragment {
             });
         }
 
-        private void getPcInfo()  {
+        private void getPcInfo() {
             try {
-                if(LoginDetails.LoggedIn){
+                if (LoginDetails.LoggedIn) {
                     sendRequest("_PC_INFO_");
-                    String ID= bufferedReader.readLine();
+                    String ID = bufferedReader.readLine();
                     String PcName = bufferedReader.readLine();
 
-                    HashMap<String,String> map = new HashMap<>();
-                    map.put("ID",ID);
-                    map.put("Name",PcName);
-                    DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("Clients");
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("ID", ID);
+                    map.put("Name", PcName);
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Clients");
                     databaseReference.child(LoginDetails.userKey).child("devices").child(ID).setValue(map);
-                    LinkedDevices.AddDevice(PcName,ID);
+                    LinkedDevices.AddDevice(PcName, ID);
 
                 }
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(TAG, "Exception in getDriveNames()>> " + e);
             }
         }
+
         private void setDriveNames() {
             try {
                 sendRequest("driveNames");
@@ -266,6 +267,21 @@ public class displayData extends Fragment {
                 e.printStackTrace();
                 Log.d(TAG, "Exception in sendRequest() " + e);
             }
+        }
+
+        private String humanReadableByte(long fileSize) {
+            long absB = fileSize == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(fileSize);
+            if (absB < 1024) {
+                return fileSize + " B";
+            }
+            long value = absB;
+            CharacterIterator ci = new StringCharacterIterator("KMGTPE");
+            for (int i = 40; i >= 0 && absB > 0xfffccccccccccccL >> i; i -= 10) {
+                value >>= 10;
+                ci.next();
+            }
+            value *= Long.signum(fileSize);
+            return String.format("%.1f %cB", value / 1024.0, ci.current());
         }
 
     }
