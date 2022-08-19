@@ -21,7 +21,7 @@ public class chat extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
 // TODO: 8/4/2022 testing users, remove later
-        User userobj1 = new User("7odaifa", "drawable-v24/send_file_icon.png");
+        User userobj1 = new User("7odaifa", "drawable-v24/ic_home");
         User userobj2 = new User("M. Aqib", "drawable/ic_dashboard_black_24dp.xml");
 
         List<UserMessage> messageList = new ArrayList<>();

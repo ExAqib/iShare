@@ -49,6 +49,13 @@ public class LoginFragment extends Fragment {
                 .addToBackStack(null)
                 .commit());
 
+        binding.forgetPassword.setOnClickListener(v -> getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_view, ForgotPasswordFragment.class, null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit());
+
+
         return binding.getRoot();
 
     }
@@ -59,7 +66,7 @@ public class LoginFragment extends Fragment {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = binding.username;
+        final EditText usernameEditText = binding.email;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
@@ -107,6 +114,7 @@ public class LoginFragment extends Fragment {
                         passwordEditText.getText().toString());
             }
         };
+
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
@@ -123,8 +131,8 @@ public class LoginFragment extends Fragment {
             String enteredPassword = passwordEditText.getText().toString().trim();
 
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference databaseReference1 = firebaseDatabase.getReference("Clients");
-            databaseReference1.addValueEventListener(new ValueEventListener() {
+            DatabaseReference databaseReference = firebaseDatabase.getReference("Clients");
+            databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

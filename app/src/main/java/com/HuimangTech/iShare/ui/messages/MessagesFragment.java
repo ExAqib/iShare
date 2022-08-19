@@ -29,7 +29,7 @@ public class MessagesFragment extends Fragment implements ContactsListAdapter.On
         binding = FragmentMessagesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        User userobj1 = new User("7odaifa", "drawable-v24/send_file_icon.png");
+        User userobj1 = new User("7odaifa", "drawable-v24/ic_dashboard_black_24dp.png");
         User userobj2 = new User("M. Aqib", "drawable/ic_dashboard_black_24dp.xml");
         User userobj3 = new User("Abdullah", "drawable/ic_dashboard_black_24dp.xml");
 

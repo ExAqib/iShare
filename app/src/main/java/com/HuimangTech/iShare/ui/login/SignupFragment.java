@@ -23,8 +23,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.HuimangTech.iShare.R;
-import com.HuimangTech.iShare.Users;
 import com.HuimangTech.iShare.databinding.FragmentSignupBinding;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +35,7 @@ public class SignupFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
     private FragmentSignupBinding binding;
+    private FirebaseAuth fbAuth;
 
     @Nullable
     @Override
@@ -53,7 +54,7 @@ public class SignupFragment extends Fragment {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText userEmailEditText = binding.username;
+        final EditText userEmailEditText = binding.email;
         final EditText userNameEditText = binding.name;
         final EditText passwordEditText = binding.password;
         final Button signUpButton = binding.signup;
@@ -122,45 +123,73 @@ public class SignupFragment extends Fragment {
             }
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+        signUpButton.setOnClickListener(v -> {
+            loadingProgressBar.setVisibility(View.VISIBLE);
 
-                String name = userNameEditText.getText().toString().trim();
-                String mail = userEmailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
+            String name = userNameEditText.getText().toString().trim();
+            String mail = userEmailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
 
-                String TAG = "tag";
+            String TAG = "tag";
 
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference databaseReference1 = firebaseDatabase.getReference("Clients");
 
-                databaseReference1.orderByChild("email").equalTo(mail).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            userEmailEditText.setError("This email already exists");
-                            Toast.makeText(requireContext(), "Email Already Registered", Toast.LENGTH_SHORT).show();
-                            loadingProgressBar.setVisibility(View.INVISIBLE);
-                        } else {
-                            DatabaseReference ref = firebaseDatabase.getReference();
+            fbAuth = FirebaseAuth.getInstance();
 
-                            Users user = new Users(name, mail, password);
-                            ref.child("Clients").push().setValue(user);
-                            loginViewModel.login(userEmailEditText.getText().toString(),
-                                    passwordEditText.getText().toString());
-                            Toast.makeText(requireContext(), "Account Created", Toast.LENGTH_SHORT).show();
+            fbAuth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+
+                    User user = new User(name, mail, password);
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference databaseReference = firebaseDatabase.getReference("Clients");
+
+                    FirebaseDatabase.getInstance().getReference("Clients")
+                            .child(fbAuth.getCurrentUser().getUid())
+                            .setValue(user).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Toast.makeText(requireContext(), "Account Created Auth", Toast.LENGTH_LONG).show();
+                                    loadingProgressBar.setVisibility(View.INVISIBLE);
+                                } else {
+                                    Toast.makeText(requireContext(), "Account Created Failed", Toast.LENGTH_LONG).show();
+                                    loadingProgressBar.setVisibility(View.INVISIBLE);
+                                }
+
+                            });
+
+
+                    /*databaseReference.orderByChild("email").equalTo(mail).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+
+                                userEmailEditText.setError("This email already exists");
+                                Toast.makeText(requireContext(), "Email Already Registered", Toast.LENGTH_SHORT).show();
+                                loadingProgressBar.setVisibility(View.INVISIBLE);
+
+                            } else {
+                                DatabaseReference ref = firebaseDatabase.getReference();
+
+                                User user = new User(name, mail, password);
+                                ref.child("Clients").push().setValue(user);
+
+                                loginViewModel.login(userEmailEditText.getText().toString(),
+                                        passwordEditText.getText().toString());
+
+                                Toast.makeText(requireContext(), "Account Created", Toast.LENGTH_SHORT).show();
+
+                                requireActivity().finish();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(requireContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onDataChange: Error " + error);
-                    }
-                });
-            }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(requireContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onDataChange: Error " + error);
+                        }
+                    });*/
+                }
+            });
+
+
         });
     }
 

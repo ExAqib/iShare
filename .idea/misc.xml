@@ -41,9 +41,16 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/drive_layout_shape.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/folder_48px.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/folder_zip_48px.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_add.xml" value="0.326" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_arrow.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_baseline_arrow_downward_24.xml" value="0.3675" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_email.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_home.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_notification.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/ic_person.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/image_48px.xml" value="0.3305" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/logout_48px.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_ID_view.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_id_box.xml" value="0.3305" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/drawable/main_id_view.xml" value="0.3305" />
@@ -70,16 +77,22 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/drive_info_item.xml" value="0.22" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/exception_file.xml" value="0.75" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/file_history_item.xml" value="0.5" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_account.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_dashboard.xml" value="0.3625" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_devices.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_directories.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_display_data.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_downloads.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_forgot_password.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_login.xml" value="0.28931623931623934" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_messages.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_notifications.xml" value="0.3625" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/fragment_signup.xml" value="0.28931623931623934" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/item_add.xml" value="0.29743589743589743" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/item_email.xml" value="0.30085470085470084" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/item_image.xml" value="0.30085470085470084" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/item_info.xml" value="0.29743589743589743" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/layout_power_control.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/message_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/received_message_item.xml" value="0.365625" />
