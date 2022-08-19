@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fyp.iShare">
+    package="com.HuimangTech.iShare">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -17,21 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.iShare">
         <activity
-            android:name=".LoginActivity"
+            android:name="com.HuimangTech.iShare.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.HuimangTech.iShare.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login" />
-        <activity
-            android:name=".ui.messages.chat"
+            android:name="com.HuimangTech.iShare.ui.messages.chat"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
+            android:name="com.HuimangTech.iShare.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,19 +36,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".lan_connect"
+            android:name="com.HuimangTech.iShare.lan_connect"
             android:exported="false" />
         <activity
-            android:name=".Internal_Storage"
+            android:name="com.HuimangTech.iShare.Internal_Storage"
             android:exported="true" />
         <activity
-            android:name=".WAN_Connection"
+            android:name="com.HuimangTech.iShare.WAN_Connection"
             android:exported="false" />
         <activity
-            android:name=".Connect"
+            android:name="com.HuimangTech.iShare.Connect"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.HuimangTech.iShare.CallActivity"
             android:exported="true" />
     </application>
 
