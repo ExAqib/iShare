@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="3dp"
 
-    tools:context=".Internal_Storage">
+    tools:context=".ui.fileTransfer.Internal_Storage">
 
     <TextView
         android:id="@+id/no_files_tv"

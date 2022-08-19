@@ -1,4 +1,4 @@
-package com.HuimangTech.iShare;
+package com.HuimangTech.iShare.ui.fileTransfer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +20,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.HuimangTech.iShare.databinding.ActivityWanConnectionBinding;
+import com.HuimangTech.iShare.R;
+import com.HuimangTech.iShare.SingletonSocket;
 import com.HuimangTech.iShare.ui.messages.chat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 

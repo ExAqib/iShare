@@ -1,4 +1,4 @@
-package com.HuimangTech.iShare;
+package com.HuimangTech.iShare.ui.login;
 
 public class LoginDetails {
     public static boolean LoggedIn = false;

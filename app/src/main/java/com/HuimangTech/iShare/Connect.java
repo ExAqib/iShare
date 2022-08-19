@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.HuimangTech.iShare.databinding.ActivityConnectBinding;
+import com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection;
 
 import java.io.BufferedReader;
 import java.io.IOException;

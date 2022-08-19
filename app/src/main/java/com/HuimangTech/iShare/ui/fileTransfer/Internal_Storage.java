@@ -1,4 +1,4 @@
-package com.HuimangTech.iShare;
+package com.HuimangTech.iShare.ui.fileTransfer;
 
 
 import android.Manifest;

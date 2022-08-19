@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.HuimangTech.iShare.LinkedDevices;
-import com.HuimangTech.iShare.LoginDetails;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.databinding.FragmentLoginBinding;
 import com.google.firebase.database.DataSnapshot;

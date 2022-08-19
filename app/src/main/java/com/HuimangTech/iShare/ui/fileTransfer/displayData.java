@@ -1,4 +1,4 @@
-package com.HuimangTech.iShare;
+package com.HuimangTech.iShare.ui.fileTransfer;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.HuimangTech.iShare.LinkedDevices;
+import com.HuimangTech.iShare.ui.login.LoginDetails;
+import com.HuimangTech.iShare.Parameters;
+import com.HuimangTech.iShare.R;
+import com.HuimangTech.iShare.SingletonSocket;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

@@ -1,4 +1,4 @@
-package com.HuimangTech.iShare;
+package com.HuimangTech.iShare.ui.fileTransfer;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import com.HuimangTech.iShare.DownloadFile;
+import com.HuimangTech.iShare.Parameters;
+import com.HuimangTech.iShare.R;
+import com.HuimangTech.iShare.SingletonSocket;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;

@@ -39,10 +39,10 @@
             android:name="com.HuimangTech.iShare.lan_connect"
             android:exported="false" />
         <activity
-            android:name="com.HuimangTech.iShare.Internal_Storage"
+            android:name="com.HuimangTech.iShare.ui.fileTransfer.Internal_Storage"
             android:exported="true" />
         <activity
-            android:name="com.HuimangTech.iShare.WAN_Connection"
+            android:name="com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection"
             android:exported="false" />
         <activity
             android:name="com.HuimangTech.iShare.Connect"

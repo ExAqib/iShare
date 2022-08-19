@@ -1,4 +1,4 @@
-package com.HuimangTech.iShare;
+package com.HuimangTech.iShare.ui.fileTransfer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.HuimangTech.iShare.R;
+import com.HuimangTech.iShare.SingletonSocket;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

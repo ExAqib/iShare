@@ -9,7 +9,6 @@ import android.util.Log;
 import androidx.room.Room;
 
 import com.HuimangTech.iShare.ui.downloads.DB.FileHistoryDatabase;
-import com.HuimangTech.iShare.ui.downloads.DownloadedFiles;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -83,7 +82,7 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
 
             db.FileDao().insert(new com.HuimangTech.iShare.ui.downloads.DB.File(fileName, Long.parseLong(fileSize)));
 
-            DownloadedFiles.AddFile(fileName, fileSize);
+
 
             this.fileSize = Integer.parseInt(fileSize);
             progressDialog.setMax(this.fileSize / 1000000);

@@ -26,7 +26,7 @@ import androidx.preference.PreferenceManager;
 import com.HuimangTech.iShare.LoginActivity;
 import com.HuimangTech.iShare.SettingsActivity;
 import com.HuimangTech.iShare.SingletonSocket;
-import com.HuimangTech.iShare.WAN_Connection;
+import com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection;
 import com.HuimangTech.iShare.databinding.FragmentHomeBinding;
 
 import java.io.BufferedReader;

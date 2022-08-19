@@ -11,14 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.HuimangTech.iShare.LinkedDevices;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.SingletonSocket;
-import com.HuimangTech.iShare.WAN_Connection;
+import com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection;
 import com.HuimangTech.iShare.databinding.FragmentDevicesBinding;
 
 import java.io.BufferedReader;
@@ -40,9 +39,6 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DevicesViewModel devicesViewModel =
-                new ViewModelProvider(this).get(DevicesViewModel.class);
-
         binding = FragmentDevicesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
