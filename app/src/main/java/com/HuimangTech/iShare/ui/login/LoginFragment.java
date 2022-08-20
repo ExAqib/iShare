@@ -3,7 +3,6 @@ package com.HuimangTech.iShare.ui.login;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +18,18 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.HuimangTech.iShare.LinkedDevices;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.databinding.FragmentLoginBinding;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class LoginFragment extends Fragment {
 
     private static final String TAG = "tag";
     private LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
+    FirebaseAuth fbAuth;
 
     @Nullable
     @Override
@@ -125,14 +122,32 @@ public class LoginFragment extends Fragment {
         });
 
         loginButton.setOnClickListener(v -> {
-            loadingProgressBar.setVisibility(View.VISIBLE);
             String enteredMail = usernameEditText.getText().toString().trim();
             String enteredPassword = passwordEditText.getText().toString().trim();
 
-            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-            DatabaseReference databaseReference = firebaseDatabase.getReference("Clients");
+            if (!enteredMail.equals("") && !enteredPassword.equals("")) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                fbAuth = FirebaseAuth.getInstance();
+                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                DatabaseReference databaseReference = firebaseDatabase.getReference("Clients");
 
-            databaseReference.addValueEventListener(new ValueEventListener() {
+                fbAuth.signInWithEmailAndPassword(enteredMail, enteredPassword)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // TODO: 8/20/2022  after log in 
+                                Toast.makeText(requireActivity(), "Login Success", Toast.LENGTH_SHORT).show();
+                                
+                                getParentFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container_view, AccountFragment.class, null)
+                                        .setReorderingAllowed(true)
+                                        .commit();
+                            } else {
+                                Toast.makeText(requireActivity(), "Login Failed", Toast.LENGTH_SHORT).show();
+                            }
+                            loadingProgressBar.setVisibility(View.INVISIBLE);
+                        });
+
+            /*databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -205,8 +220,8 @@ public class LoginFragment extends Fragment {
                     Log.d(TAG, " Cancelled:" + databaseError);
                 }
 
-            });
-
+            });*/
+            }
         });
     }
 

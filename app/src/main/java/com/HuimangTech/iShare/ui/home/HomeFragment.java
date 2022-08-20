@@ -26,8 +26,10 @@ import androidx.preference.PreferenceManager;
 import com.HuimangTech.iShare.LoginActivity;
 import com.HuimangTech.iShare.SettingsActivity;
 import com.HuimangTech.iShare.SingletonSocket;
-import com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection;
 import com.HuimangTech.iShare.databinding.FragmentHomeBinding;
+import com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -60,6 +62,13 @@ public class HomeFragment extends Fragment {
 
         if (!permissionsGranted()) {
             grantPermissions();
+        }
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            //binding.username.setText();
+        } else {
+            // No user is signed in
         }
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

@@ -3,7 +3,6 @@ package com.HuimangTech.iShare.ui.login;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +24,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.databinding.FragmentSignupBinding;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class SignupFragment extends Fragment {
 
+    String TAG = "tag";
     private LoginViewModel loginViewModel;
     private FragmentSignupBinding binding;
     private FirebaseAuth fbAuth;
@@ -124,36 +121,36 @@ public class SignupFragment extends Fragment {
         });
 
         resetButton.setOnClickListener(v -> {
-            loadingProgressBar.setVisibility(View.VISIBLE);
-
             String name = userNameEditText.getText().toString().trim();
             String mail = userEmailEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
 
-            String TAG = "tag";
+            if (!name.equals("") && !mail.equals("") && !password.equals("")) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
 
+                fbAuth = FirebaseAuth.getInstance();
 
-            fbAuth = FirebaseAuth.getInstance();
+                fbAuth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-            fbAuth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
+                        // TODO: 8/20/2022 remove password from realtime database
+                        User user = new User(name, mail, password);
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference databaseReference = firebaseDatabase.getReference("Clients");
 
-                    User user = new User(name, mail, password);
-                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                    DatabaseReference databaseReference = firebaseDatabase.getReference("Clients");
-
-                    FirebaseDatabase.getInstance().getReference("Clients")
-                            .child(fbAuth.getCurrentUser().getUid())
-                            .setValue(user).addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    Toast.makeText(requireContext(), "Account Created Auth", Toast.LENGTH_LONG).show();
-                                    loadingProgressBar.setVisibility(View.INVISIBLE);
-                                } else {
-                                    Toast.makeText(requireContext(), "Account Created Failed", Toast.LENGTH_LONG).show();
-                                    loadingProgressBar.setVisibility(View.INVISIBLE);
-                                }
-
-                            });
+                        FirebaseDatabase.getInstance().getReference("Clients")
+                                .child(fbAuth.getCurrentUser().getUid())
+                                .setValue(user).addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        // TODO: 8/20/2022 set proper toasets
+                                        Toast.makeText(requireContext(), "Account Created Auth", Toast.LENGTH_LONG).show();
+                                        requireActivity().finish();
+                                        loadingProgressBar.setVisibility(View.INVISIBLE);
+                                    } else {
+                                        Toast.makeText(requireContext(), "Account Created Failed", Toast.LENGTH_LONG).show();
+                                        loadingProgressBar.setVisibility(View.INVISIBLE);
+                                    }
+                                });
 
 
                     /*databaseReference.orderByChild("email").equalTo(mail).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -186,10 +183,10 @@ public class SignupFragment extends Fragment {
                             Log.d(TAG, "onDataChange: Error " + error);
                         }
                     });*/
-                }
-            });
+                    }
+                });
 
-
+            }
         });
     }
 

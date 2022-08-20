@@ -76,6 +76,7 @@
     </LinearLayout>
 
     <include
+        android:id="@+id/profile_name_item"
         layout="@layout/profile_name_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -92,11 +93,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/profile_email_item" />
+            <include
+                android:id="@+id/profile_email_item"
+                layout="@layout/profile_email_item" />
 
-            <include layout="@layout/profile_pass_item" />
+            <include
+                android:id="@+id/profile_pass_item"
+                layout="@layout/profile_pass_item" />
 
-            <include layout="@layout/profile_device_remove_item" />
+            <include
+                android:id="@+id/profile_device_remove_item"
+                layout="@layout/profile_device_remove_item" />
 
         </LinearLayout>
     </ScrollView>

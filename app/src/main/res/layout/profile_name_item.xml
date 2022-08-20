@@ -28,6 +28,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -63,5 +64,5 @@
         android:layout_centerHorizontal="true"
         android:elevation="15dp"
         android:padding="5dp"
-        android:src="@drawable/ic_baseline_person_24" />
+        android:src="@drawable/user_avatar" />
 </RelativeLayout>

@@ -61,6 +61,7 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/font/pacifico.xml" value="0.3958333333333333" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.23560910307898258" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout-w936dp/activity_login.xml" value="0.275" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_call.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_chat.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_connect.xml" value="0.5" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/activity_login.xml" value="0.33" />
@@ -95,6 +96,9 @@
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/item_info.xml" value="0.29743589743589743" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/layout_power_control.xml" value="0.33" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/message_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/profile_device_remove_item.xml" value="0.30085470085470084" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/profile_email_item.xml" value="0.30085470085470084" />
+        <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/profile_name_item.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/received_message_item.xml" value="0.365625" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/recycler_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/iShare/app/src/main/res/layout/sent_message_item.xml" value="0.36666666666666664" />
@@ -109,7 +113,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

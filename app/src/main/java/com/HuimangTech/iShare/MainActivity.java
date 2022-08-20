@@ -1,5 +1,6 @@
 package com.HuimangTech.iShare;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -7,16 +8,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
-import com.HuimangTech.iShare.databinding.ActivityMain2Binding;
+import com.HuimangTech.iShare.databinding.ActivityMainBinding;
+import com.HuimangTech.iShare.ui.devices.DevicesFragment;
+import com.HuimangTech.iShare.ui.downloads.DownloadsFragment;
+import com.HuimangTech.iShare.ui.home.HomeFragment;
+import com.HuimangTech.iShare.ui.messages.MessagesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMain2Binding binding;
+    private ActivityMainBinding binding;
 
 
     @Override
@@ -25,38 +33,58 @@ public class MainActivity extends AppCompatActivity {
 
         setTheme();
 
-        binding = ActivityMain2Binding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_devices, R.id.navigation_messages, R.id.navigation_downloads)
-                .build();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main2);
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+        final NavController navController = navHostFragment.getNavController();
+
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-       /* navView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_devices) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                //navView.setSelectedItemId(R.id.navigation_downloads);
-            } else {
-                // Create new fragment and transaction
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment_activity_main2, DownloadsFragment.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack("name")
+        navView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_home) {
+                item.setChecked(true);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main, HomeFragment.class, null)
                         .commit();
-                Log.d("tag", "onNavigationItemSelected: devices clicked");
+            } else if (item.getItemId() == R.id.navigation_devices) {
+                // TODO: 8/15/2022 if logged in then go to devices
+
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.nav_host_fragment_activity_main, DevicesFragment.class, null)
+                            .commit();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    navView.setSelectedItemId(R.id.navigation_home);
+                    // No user is signed in
+                }
+
+
+            } else if (item.getItemId() == R.id.navigation_messages) {
+                item.setChecked(true);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main, MessagesFragment.class, null)
+                        .commit();
+
+            } else if (item.getItemId() == R.id.navigation_downloads) {
+                item.setChecked(true);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment_activity_main, DownloadsFragment.class, null)
+                        .commit();
+
             }
             return false;
-        });*/
+        });
 
     }
 

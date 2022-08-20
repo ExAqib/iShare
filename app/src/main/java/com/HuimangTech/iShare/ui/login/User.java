@@ -4,6 +4,10 @@ public class User {
 
     public String name;
     public String email;
+
+    public User() {
+    }
+
     public String password;
 
     public User(String name, String email, String password) {

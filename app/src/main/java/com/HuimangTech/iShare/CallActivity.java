@@ -17,7 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.HuimangTech.iShare.databinding.ActivityMainBinding;
+import com.HuimangTech.iShare.databinding.ActivityCallBinding;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -59,14 +59,14 @@ public class CallActivity extends AppCompatActivity {
     int bufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);//3840
     DataOutputStream dataOutputStream;
     OutputStream outputStream;
-    private ActivityMainBinding binding;
+    private ActivityCallBinding binding;
     //final File file = new File(Environment.getExternalStorageDirectory() + "/myAudio.mp3");
     private boolean audioPlaying = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityCallBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
