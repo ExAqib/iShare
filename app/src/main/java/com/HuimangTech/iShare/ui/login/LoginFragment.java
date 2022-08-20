@@ -128,6 +128,7 @@ public class LoginFragment extends Fragment {
             if (!enteredMail.equals("") && !enteredPassword.equals("")) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 fbAuth = FirebaseAuth.getInstance();
+
                 FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                 DatabaseReference databaseReference = firebaseDatabase.getReference("Clients");
 

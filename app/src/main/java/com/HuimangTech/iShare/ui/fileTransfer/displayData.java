@@ -20,6 +20,8 @@ import com.HuimangTech.iShare.ui.login.LoginDetails;
 import com.HuimangTech.iShare.Parameters;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.SingletonSocket;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -183,7 +185,11 @@ public class displayData extends Fragment {
 
         private void getPcInfo() {
             try {
-                if (LoginDetails.LoggedIn) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    //todo: save id of Mobile not PC
+
                     sendRequest("_PC_INFO_");
                     String ID = bufferedReader.readLine();
                     String PcName = bufferedReader.readLine();
@@ -195,6 +201,9 @@ public class displayData extends Fragment {
                     databaseReference.child(LoginDetails.userKey).child("devices").child(ID).setValue(map);
                     LinkedDevices.AddDevice(PcName, ID);
 
+
+                } else {
+                    // No user is signed in
                 }
 
             } catch (Exception e) {
