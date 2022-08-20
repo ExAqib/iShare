@@ -26,7 +26,7 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
     int fileSize = 0;
     DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-    DownloadFile(Context context) {
+    public DownloadFile(Context context) {
         this.context = context;
     }
 

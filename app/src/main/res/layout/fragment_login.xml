@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:background="@android:color/transparent"
+        android:background="?selectableItemBackground"
         android:text="Forgot Password ?"
         android:textColor="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"

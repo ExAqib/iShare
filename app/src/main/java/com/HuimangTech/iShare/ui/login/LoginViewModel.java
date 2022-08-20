@@ -41,6 +41,14 @@ public class LoginViewModel extends ViewModel {
         }
     }
 
+    public void resetDataChanged(String username) {
+        if (!isUserNameValid(username)) {
+            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
+        } else {
+            loginFormState.setValue(new LoginFormState(true));
+        }
+    }
+
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
@@ -59,7 +67,8 @@ public class LoginViewModel extends ViewModel {
         if (username.contains("@")) {
             return Patterns.EMAIL_ADDRESS.matcher(username).matches();
         } else {
-            return !username.trim().isEmpty();
+            //changed to not accept username, but emails only
+            return username.trim().isEmpty();
         }
     }
 
