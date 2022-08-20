@@ -35,11 +35,6 @@ public class LinkedDevices {
     }
 
     static public List<String> GetAllDeviceNames() {
-        if (devices.size() == 0) {
-            List<String> emptyDevices = new ArrayList<>();
-            emptyDevices.add("No Saved Device Available");
-            return emptyDevices;
-        }
         return devices;
     }
 

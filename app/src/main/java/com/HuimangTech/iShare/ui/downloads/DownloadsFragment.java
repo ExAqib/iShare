@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFileListener {
@@ -27,6 +29,9 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
     private FragmentDownloadsBinding binding;
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
+    private Disposable disposable;
+
+    private TextView emptyView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +39,7 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
         binding = FragmentDownloadsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        Maybe.empty().subscribeOn(Schedulers.io()).subscribe(s -> s.toString(),
+        disposable = Maybe.empty().subscribeOn(Schedulers.io()).subscribe(s -> s.toString(),
                 Throwable::printStackTrace,
                 () -> loadFileHistory()
         );
@@ -63,12 +68,22 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
         adapter = new RecyclerAdapter(files, this);
         //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+        emptyView = binding.emptyView;
+
+        if (files.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        disposable.dispose();
     }
 
     @Override

@@ -47,7 +47,7 @@ public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapte
     }
 
     public interface OnDeviceListener {
-        void onDeviceClick(int position, String deviceName, String RecyclerView);
+        void onSavedDeviceClick(int position, String deviceName, String RecyclerView);
     }
 
     // convenience method for getting data at click position
@@ -82,7 +82,7 @@ public class SavedDevicesAdapter extends RecyclerView.Adapter<SavedDevicesAdapte
         public void onClick(View view) {
 
             TextView deviceName = view.findViewById(R.id.tv_deviceName);
-            onDeviceListener.onDeviceClick(getAdapterPosition(), deviceName.getText().toString(), "SavedDevicesRecyclerView");
+            onDeviceListener.onSavedDeviceClick(getAdapterPosition(), deviceName.getText().toString(), "SavedDevicesRecyclerView");
 
             /*if(RecycleView.equals(AvailableDevicesRecyclerView)){
                 onDeviceListener.onDeviceClick(getAdapterPosition(),deviceName.getText().toString(),"SavedDevicesRecyclerView");

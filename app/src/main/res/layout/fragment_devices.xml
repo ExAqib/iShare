@@ -12,7 +12,7 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-       <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cns_available_devices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:padding="15dp"
                     android:text="Available"
                     android:textSize="20sp"
@@ -69,6 +68,17 @@
                     android:layout_height="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/available_empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="40dp"
+                    android:paddingBottom="40dp"
+                    android:text="Under Construction"
+                    android:textColor="@color/text_secondary"
+                    android:visibility="gone" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -128,7 +138,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/saved_empty_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="40dp"
+                    android:paddingBottom="40dp"
+                    android:text="you don't have any linked devices yet!"
+                    android:textColor="@color/text_secondary"
+                    android:visibility="gone" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

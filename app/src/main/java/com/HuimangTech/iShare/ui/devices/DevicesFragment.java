@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.HuimangTech.iShare.LinkedDevices;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.SingletonSocket;
-import com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection;
 import com.HuimangTech.iShare.databinding.FragmentDevicesBinding;
+import com.HuimangTech.iShare.ui.fileTransfer.WAN_Connection;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,71 +28,68 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnDeviceListener {
+public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnDeviceListener, AvailableDevicesAdapter.OnDeviceListener {
 
     Socket socket;
     PrintWriter printWriter;
+
+    List<String> savedDevicesList = LinkedDevices.GetAllDeviceNames();
+    List<String> availableDevicesList = new ArrayList<>();
+
     private FragmentDevicesBinding binding;
     private RecyclerView savedRecyclerView, availableRecyclerView;
-    private SavedDevicesAdapter adapter;
+    private AvailableDevicesAdapter availableAdapter;
+    private SavedDevicesAdapter savedAdapter;
     private LinearLayout availableDevices, savedDevices;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDevicesBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        List<String> devices = new ArrayList<String>();
-        devices.add("No Devices");
-        savedRecyclerView = binding.rvSavedDevices;
-        savedRecyclerView.setHasFixedSize(true);
-        savedRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+        // TODO: 8/20/2022 test deviced to remove later 
+        //savedDevicesList.add("No Devices");
+        //availableDevicesList.add("No Devices");
 
-        //Getting value from LinkedDevices class
-        //adapter = new SavedDevicesAdapter(devices, this);
-        adapter = new SavedDevicesAdapter(LinkedDevices.GetAllDeviceNames(), this);
-        //adapter.setClickListener(this);
-        savedRecyclerView.setAdapter(adapter);
+        setSavedDevicesAdapter();
+        setAvailableDevicesAdapter();
 
-       /* availableRecyclerView = binding.rvAvailableDevices;
-        availableRecyclerView.setHasFixedSize(true);
-        availableRecyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        adapter = new SavedDevicesAdapter(devices, this);
-        //adapter.setClickListener(this);
-        availableRecyclerView.setAdapter(adapter);*/
+        //check if RV list are empty
+        if (savedDevicesList.isEmpty()) {
+            savedRecyclerView.setVisibility(View.GONE);
+            binding.savedEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            savedRecyclerView.setVisibility(View.VISIBLE);
+            binding.savedEmptyView.setVisibility(View.GONE);
+        }
 
-/*
-        availableDevices = binding.tvAvailableDevices;
-*/
-        savedDevices = binding.tvSavedDevices;
+        if (availableDevicesList.isEmpty()) {
+            availableRecyclerView.setVisibility(View.GONE);
+            binding.availableEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            availableRecyclerView.setVisibility(View.VISIBLE);
+            binding.availableEmptyView.setVisibility(View.GONE);
+        }
 
-     /*   availableDevices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.cnsAvailableRv.getVisibility() == View.VISIBLE) {
-                    binding.cnsAvailableRv.setVisibility(getView().GONE);
-                    binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
-                } else {
-                    binding.cnsAvailableRv.setVisibility(getView().VISIBLE);
-                    binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
-
-                }
+        binding.tvAvailableDevices.setOnClickListener(v -> {
+            if (binding.cnsAvailableRv.getVisibility() == View.VISIBLE) {
+                binding.cnsAvailableRv.setVisibility(getView().GONE);
+                binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
+            } else {
+                binding.cnsAvailableRv.setVisibility(getView().VISIBLE);
+                binding.icAvailable.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
             }
-        });*/
+        });
 
-        savedDevices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.tvSavedDevices.setOnClickListener(v -> {
 
-                if (binding.cnsSavedRv.getVisibility() == View.VISIBLE) {
-                    binding.cnsSavedRv.setVisibility(getView().GONE);
-                    binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
-
-                } else {
-                    binding.cnsSavedRv.setVisibility(getView().VISIBLE);
-                    binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
-
-                }
+            if (binding.cnsSavedRv.getVisibility() == View.VISIBLE) {
+                binding.cnsSavedRv.setVisibility(getView().GONE);
+                binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right_24);
+            } else {
+                binding.cnsSavedRv.setVisibility(getView().VISIBLE);
+                binding.icSaved.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
             }
         });
         return root;
@@ -104,8 +101,30 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
         binding = null;
     }
 
+    private void setSavedDevicesAdapter() {
+        savedRecyclerView = binding.rvSavedDevices;
+        savedRecyclerView.setHasFixedSize(true);
+        savedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //Getting value from LinkedDevices class
+        //adapter = new SavedDevicesAdapter(devices, this);
+        savedAdapter = new SavedDevicesAdapter(LinkedDevices.GetAllDeviceNames(), this::onSavedDeviceClick);
+        //adapter.setClickListener(this);
+        savedRecyclerView.setAdapter(savedAdapter);
+
+    }
+
+    private void setAvailableDevicesAdapter() {
+        availableRecyclerView = binding.rvAvailableDevices;
+        availableRecyclerView.setHasFixedSize(true);
+        availableRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        availableAdapter = new AvailableDevicesAdapter(availableDevicesList, this::onAvailableDeviceClick);
+        //adapter.setClickListener(this);
+        availableRecyclerView.setAdapter(availableAdapter);
+    }
+
     @Override
-    public void onDeviceClick(int position, String DeviceName, String RecyclerView) {
+    public void onSavedDeviceClick(int position, String DeviceName, String RecyclerView) {
+
         String DeviceID = LinkedDevices.GetDeviceID(DeviceName);
 
         if (DeviceName.equals("No Saved Device Available"))
@@ -169,6 +188,7 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
     }
 
     private boolean ConnectPC(String id) {
+        // TODO: 8/20/2022 this should not be here
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -193,9 +213,7 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
             e.printStackTrace();
             Log.d("tag", "Exception  " + e);
             sendToast(e.getMessage());
-
         }
-
         return false;
     }
 
@@ -210,5 +228,10 @@ public class DevicesFragment extends Fragment implements SavedDevicesAdapter.OnD
             Log.d("tag", "Exception  " + e);
             sendToast(e.getMessage());
         }
+    }
+
+    @Override
+    public void onAvailableDeviceClick(int position) {
+        Toast.makeText(getContext(), "Available Device Clicked", Toast.LENGTH_SHORT).show();
     }
 }

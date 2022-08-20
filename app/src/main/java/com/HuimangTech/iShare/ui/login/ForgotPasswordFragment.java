@@ -3,6 +3,7 @@ package com.HuimangTech.iShare.ui.login;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +103,7 @@ public class ForgotPasswordFragment extends Fragment {
                 Toast.makeText(getContext(), "check your email to reset you password!", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getContext(), "something wrong happened, try again later!", Toast.LENGTH_LONG).show();
+                Log.d("tag", "resetPassword: Error");
             }
             binding.loading.setVisibility(View.GONE);
         });

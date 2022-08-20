@@ -48,7 +48,7 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
     }
 
     public interface OnDeviceListener {
-        void onDeviceClick(int position);
+        void onAvailableDeviceClick(int position);
     }
 
     // convenience method for getting data at click position
@@ -83,7 +83,7 @@ public class AvailableDevicesAdapter extends RecyclerView.Adapter<AvailableDevic
 
         @Override
         public void onClick(View view) {
-            onDeviceListener.onDeviceClick(getAdapterPosition());
+            onDeviceListener.onAvailableDeviceClick(getAdapterPosition());
 
         }
     }
