@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -187,6 +188,9 @@ public class directories extends Fragment {
         myLayout.setLayoutParams(layoutParams);
 
         TextView directoryName = myLayout.findViewById(R.id.directory_name);
+        ImageView fileType = myLayout.findViewById(R.id.img_FileType);
+
+        fileType.setImageResource(extractFileType(data));
         directoryName.setText(data);
         return myLayout;
     }
@@ -261,6 +265,9 @@ public class directories extends Fragment {
                     myLayout.setLayoutParams(layoutParams);
 
                     TextView directoryName = myLayout.findViewById(R.id.directory_name);
+                    ImageView fileType = myLayout.findViewById(R.id.img_FileType);
+
+                    fileType.setImageResource(extractFileType(values[0]));
                     directoryName.setText(values[0]);
 
                     size++;
@@ -289,8 +296,7 @@ public class directories extends Fragment {
             }
         }
 
-        private void getDirectory(String path)
-        {
+        private void getDirectory(String path) {
             sendRequest("subDirectories");
             //sendRequest(path);
 
@@ -340,6 +346,40 @@ public class directories extends Fragment {
                 e.printStackTrace();
             }
 
+        }
+
+
+
+    }
+
+    private int extractFileType(String name) {
+
+        String[] fileArray = name.split("\\.");
+
+        if (fileArray[fileArray.length - 1].equals(name)) {
+            return R.drawable.folder_48px;
+        }
+        switch (fileArray[fileArray.length - 1]) {
+            case "txt": {
+                return R.drawable.draft_48px;
+            }
+            case "mp3":
+            case "m4a": {
+                return R.drawable.music_note_48px;
+            }
+            case "png":
+            case "jpg":
+            case "jpeg": {
+                return R.drawable.image_48px;
+            }
+            case "mp4": {
+                return R.drawable.movie_48px;
+            }
+            case "rar": {
+                return R.drawable.folder_zip_48px;
+            }
+            default:
+                return R.drawable.draft_48px;
         }
 
     }
