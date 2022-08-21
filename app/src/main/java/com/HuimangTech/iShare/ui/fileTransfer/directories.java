@@ -40,12 +40,10 @@ public class directories extends Fragment {
     LinearLayout linearlayout;
     ArrayList<Bundle> PcData = new ArrayList<>();
 
-
     public directories() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static directories newInstance(String param1, String param2, Parameters p) {
         directories fragment = new directories();
         parameters = p;
@@ -79,7 +77,6 @@ public class directories extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated called for directory fragment");
-
 
     }
 
@@ -118,7 +115,6 @@ public class directories extends Fragment {
 
         DirectoryProcessor directoryProcessor = new DirectoryProcessor();
         directoryProcessor.execute(parameters.getPath());
-
 
     }
 
@@ -293,7 +289,8 @@ public class directories extends Fragment {
             }
         }
 
-        private void getDirectory(String path) {
+        private void getDirectory(String path)
+        {
             sendRequest("subDirectories");
             //sendRequest(path);
 

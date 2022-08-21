@@ -23,6 +23,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.HuimangTech.iShare.DeviceID;
+import com.HuimangTech.iShare.DirectlyReceivePCfile;
+import com.HuimangTech.iShare.DownloadFile;
 import com.HuimangTech.iShare.LoginActivity;
 import com.HuimangTech.iShare.SettingsActivity;
 import com.HuimangTech.iShare.SingletonSocket;
@@ -36,6 +39,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
@@ -43,6 +47,10 @@ public class HomeFragment extends Fragment {
     boolean NewConnection = true;
     String[] Permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     int RequestCode = 1122;
+    BufferedReader bufferedReader = null;
+    PrintWriter printWriter = null;
+    Context context;
+
     ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -85,6 +93,95 @@ public class HomeFragment extends Fragment {
 
         fileTransferClickListener(root.getContext());
 
+        context =requireContext();
+        Thread t1 = new Thread(() -> {
+            try {
+                String IP_Address = "192.168.10.99";
+                int Port_Num = 9999;
+                Log.d(TAG, " Connecting at " + IP_Address + ":" + Port_Num);
+
+                Socket socket = new Socket(IP_Address, Port_Num);
+                SingletonSocket.setSocket(socket);
+
+                printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
+                printWriter.println("MOBILE");
+                printWriter.flush();
+
+                NewConnection = false;
+                String id;
+                String fileName = "Unique_ID_file";
+                SharedPreferences sp = requireActivity().getSharedPreferences(fileName, Context.MODE_PRIVATE);
+
+                id = sp.getString("ID", null);
+                if (id == null) {
+                    StringBuilder ID = new StringBuilder();
+                    Log.d(TAG, "No previous ID found ");
+                    Random random = new Random();
+                    for (int i = 0; i < 8; i++) {
+                        ID.append(random.nextInt(9));
+                    }
+                    id = ID.toString();
+
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("ID", id);
+                    editor.apply();
+                }
+                DeviceID.deviceID = id;
+                Log.d(TAG, "ID is " + DeviceID.deviceID);
+
+                String finalId = id;
+                requireActivity().runOnUiThread(()->{
+                    binding.mobileDataUsage.setText(finalId);
+                });
+
+
+                DeviceID.deviceName = Settings.Global.getString(requireActivity().getContentResolver(), "device_name");
+                Log.d(TAG, "deviceName is " + DeviceID.deviceName);
+
+                printWriter.println(id);
+                printWriter.flush();
+
+                printWriter.println(DeviceID.deviceName);
+                printWriter.flush();
+
+                Log.d(TAG, "deviceId and deviceName Send ");
+
+
+                bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+
+                while(true){
+                    String PC_Response = bufferedReader.readLine();
+                    Log.d(TAG, "onCreateView:  PC_Response is " + PC_Response);
+                    if (PC_Response.equals("RECEIVE_FILE")) {
+                        Log.d(TAG, "onCreateView: Receive file from PC");
+                        requireActivity().runOnUiThread(()->{
+                            DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
+                            receiveFile.execute("");
+                        });
+                        break;
+                    }
+                    else if(PC_Response.equals("ERROR")){
+                    //If User Enters a wrong ID
+                        requireActivity().runOnUiThread(()->{
+                            Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                    else if(PC_Response.equals("SUCCESS")){
+                        Intent intent = new Intent(getActivity(), WAN_Connection.class);
+                        startActivity(intent);
+                        break;
+                    }
+                }
+
+
+
+            } catch (Exception e) {
+                //sendToast(e.toString());
+                e.printStackTrace();
+                Log.d(TAG, "Exception  " + e);
+            }
+        });
+        t1.start();
         return root;
     }
 
@@ -124,8 +221,9 @@ public class HomeFragment extends Fragment {
                             NewConnection = true;
                         }
                         if (sendIdPassword(id, password)) {
-                            Intent intent = new Intent(getActivity(), WAN_Connection.class);
-                            startActivity(intent);
+
+                            /*Intent intent = new Intent(getActivity(), WAN_Connection.class);
+                            startActivity(intent);*/
                         }
                     } catch (Exception e) {
                         //sendToast(e.toString());
@@ -149,8 +247,13 @@ public class HomeFragment extends Fragment {
 
     private boolean sendIdPassword(String id, String password) {
         try {
-            PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+
+            if (printWriter == null) {
+                printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
+            }
+            if (bufferedReader == null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+            }
 
             if (NewConnection) {
                 printWriter.println("MOBILE");
@@ -169,7 +272,7 @@ public class HomeFragment extends Fragment {
             //Log.d(TAG, "ID " + id + " and Password " + password + " send ");
             Log.d(TAG, "ID " + id + " send ");
 
-            String data = bufferedReader.readLine();
+            /*String data = bufferedReader.readLine();
             Log.d(TAG, "Received response  " + data);
 
             if (data.equals("ERROR")) {
@@ -181,7 +284,7 @@ public class HomeFragment extends Fragment {
             } else {
                 Log.d(TAG, "Invalid response from server");
                 //sendToast("Invalid response from server");
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "Exception  " + e);

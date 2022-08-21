@@ -20,6 +20,7 @@ import com.HuimangTech.iShare.ui.login.LoginDetails;
 import com.HuimangTech.iShare.Parameters;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.SingletonSocket;
+import com.HuimangTech.iShare.ui.login.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -80,7 +81,6 @@ public class displayData extends Fragment {
 
         linearLayout = getView().findViewById(R.id.fragmentLinear);
         Log.d(TAG, "calling start ");
-
         start();
     }
 
@@ -187,6 +187,7 @@ public class displayData extends Fragment {
             try {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
+
                     // User is signed in
                     //todo: save id of Mobile not PC
 
@@ -198,7 +199,8 @@ public class displayData extends Fragment {
                     map.put("ID", ID);
                     map.put("Name", PcName);
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Clients");
-                    databaseReference.child(LoginDetails.userKey).child("devices").child(ID).setValue(map);
+                    //databaseReference.child(LoginDetails.userKey).child("devices").child(ID).setValue(map);
+                    databaseReference.child(user.getUid()).child("devices").child(ID).setValue(map);
                     LinkedDevices.AddDevice(PcName, ID);
 
 

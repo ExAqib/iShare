@@ -17,16 +17,14 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 
-public class DownloadFile extends AsyncTask<String, String, Void> {
+public class DirectlyReceivePCfile extends AsyncTask<String, String, Void> {
 
     private static final String TAG = "tag";
     Context context;
-    String FilePath;
     ProgressDialog progressDialog;
     int fileSize = 0;
-    DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-    public DownloadFile(Context context) {
+    public DirectlyReceivePCfile(Context context) {
         this.context = context;
     }
 
@@ -36,8 +34,8 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
         super.onPreExecute();
         progressDialog = new ProgressDialog(context);
 
-        progressDialog.setTitle("Downloading");
-        progressDialog.setMessage("Your File is being downloaded in background. You can use any other app.");
+        progressDialog.setTitle("Receiving File...");
+        progressDialog.setMessage("Your File that is being send from PC, is being received in background. Feel free to use any other app.");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
@@ -47,41 +45,16 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
 
     @Override
     protected Void doInBackground(String... strings) {
-
-        SingletonSocket.sendRequest("downloadFile");
-        FilePath = strings[0];
-
-        StringBuilder path2 = new StringBuilder();
-
-        int i = 0;
-        for (String s : SingletonSocket.getNavigationPath()) {
-            Log.d(TAG, " String s : SingletonSocket.getNavigationPath() is " + s);
-            if (i < 2) {
-                path2.append(s);
-            } else {
-                path2.append("\\").append(s);
-            }
-            i++;
-        }
-
-        SingletonSocket.sendRequest(path2.toString());
-
-        SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size() - 1);
-
-
         try {
             Log.d(TAG, "Receiving File");
-
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
             String fileName = bufferedReader.readLine();
 
             String fileSize = bufferedReader.readLine();
-
             FileHistoryDatabase db = Room.databaseBuilder(context.getApplicationContext(),
                     FileHistoryDatabase.class, "File").build();
 
             db.FileDao().insert(new com.HuimangTech.iShare.ui.downloads.DB.File(fileName, Long.parseLong(fileSize)));
-
 
 
             this.fileSize = Integer.parseInt(fileSize);
@@ -151,17 +124,20 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
             int totalBytesRead = 0;
             int bytesReadPerCycle;
 
+            int chunk =0;
             while (totalBytesRead < fileSize) {
-
-                //checking if the buffer size exceeds, the size of file or remaining data of file
+                chunk++;
+             /*
+              //checking if the buffer size exceeds, the size of file or remaining data of file
                 if (bufferSize > (fileSize - totalBytesRead)) {
                     Log.d(TAG, "Adjusting buffer size from " + bufferSize);
                     bufferSize = fileSize - totalBytesRead;
                     Log.d(TAG, "to " + bufferSize);
                 }
+                */
                 data = new byte[bufferSize];
 
-                Log.d(TAG, "Trying to Read");
+                Log.d(TAG, "Trying to Read chunk "+chunk);
                 bytesReadPerCycle = dIn.read(data, 0, bufferSize);
                 Log.d(TAG, "Read " + totalBytesRead + " of " + fileSize + " bytes");
 
@@ -176,7 +152,8 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
             if (totalBytesRead == fileSize) {
                 Log.d(TAG, " Download Completed Successfully ");
                 SingletonSocket.sendRequest("DONE");
-
+                //sendToast("File saved in Downloads folder ");
+                // context.requireActivity().startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
             }
             Log.d(TAG, "doInBackground for Receive File is returning  ");
 
