@@ -17,7 +17,7 @@
     <color name="bg_home">#D6FFDF</color>
     <color name="contact">#E6E6E6</color>
 
-
+    <color name="account_background">#80b9ee</color>
     <color name="primary_variant">#002F66</color>
     <color name="background">#F6F6F6</color>
     <color name="surface">@color/white</color>

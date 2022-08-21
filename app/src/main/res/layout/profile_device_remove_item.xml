@@ -4,14 +4,16 @@
     xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="15dp"
-    app:cardElevation="10dp"
     android:layout_marginBottom="10dp"
+    android:background="?selectableItemBackground"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="2dp"
     card_view:cardCornerRAdius="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/contact_ripple"
         android:orientation="vertical"
         android:padding="14dp">
 
@@ -31,14 +33,15 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:padding="5dp"
-                    android:src="@drawable/ic_baseline_devices_24" />
+                    android:src="@drawable/ic_baseline_devices_24"
+                    app:tint="@color/text_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:text="Devices"
-                    android:textColor="#F8554A4A"
+                    android:textColor="@color/text_secondary"
                     android:textSize="16sp"
                     android:textStyle="bold|normal" />
 
@@ -90,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="__under construction__"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="17sp" />
 
 

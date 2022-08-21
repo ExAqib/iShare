@@ -67,13 +67,34 @@
     <ProgressBar
         android:id="@+id/capacityBar"
         style="@android:style/Widget.Material.ProgressBar.Horizontal"
-        android:layout_width="190dp"
+        android:layout_width="120dp"
         android:layout_height="9dp"
+        android:layout_marginEnd="5dp"
         android:progress="25"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rl_titles"
-        app:layout_constraintTop_toBottomOf="@+id/rl_titles"
-        app:layout_constraintEnd_toStartOf="@id/tv_totalStorage"/>
+        app:layout_constraintTop_toBottomOf="@+id/rl_titles" />
+
+    <TextView
+        android:id="@+id/tv_totalStorage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2TB"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_slash" />
+
+    <TextView
+        android:id="@+id/tv_slash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="/"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_availableStorage" />
 
     <TextView
         android:id="@+id/tv_availableStorage"
@@ -82,35 +103,10 @@
         android:text="700GB"
         android:textColor="@color/text_secondary"
         android:textSize="12sp"
-        android:layout_marginRight="15dp"
-        app:layout_constraintStart_toEndOf="@id/tv_slash"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+ />
 
-    <TextView
-        android:id="@+id/tv_slash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="/"
-        android:textSize="12sp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginStart="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_totalStorage"
-        app:layout_constraintEnd_toStartOf="@+id/tv_availableStorage" />
-
-    <TextView
-        android:id="@+id/tv_totalStorage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="0dp"
-        android:text="2TB"
-        android:textColor="@color/text_secondary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_slash"
-        app:layout_constraintStart_toEndOf="@+id/capacityBar" />
 
     <TextView
         android:id="@+id/tv_drive_format"
