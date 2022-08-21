@@ -27,6 +27,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Locale;
+
 public class SignupFragment extends Fragment {
 
     String TAG = "tag";
@@ -122,7 +124,7 @@ public class SignupFragment extends Fragment {
 
         resetButton.setOnClickListener(v -> {
             String name = userNameEditText.getText().toString().trim();
-            String mail = userEmailEditText.getText().toString().trim();
+            String mail = userEmailEditText.getText().toString().trim().toLowerCase();
             String password = passwordEditText.getText().toString().trim();
 
             if (!name.equals("") && !mail.equals("") && !password.equals("")) {
