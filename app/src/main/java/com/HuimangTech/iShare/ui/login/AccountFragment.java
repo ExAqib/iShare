@@ -1,7 +1,6 @@
 package com.HuimangTech.iShare.ui.login;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,12 +63,11 @@ public class AccountFragment extends Fragment {
                 User userProfile = snapshot.getValue(User.class);
 
                 if (userProfile != null) {
-                    name.setText(userProfile.name);
-                    email.setText(userProfile.email);
-                    Log.d("tag", "onDataChange: I here " + userProfile.name + " " + userProfile.email);
+                    name.setText(userProfile.Name);
+                    email.setText(userProfile.Email);
 
                 } else
-                    Log.d("tag", "onDataChange: i was here");
+                    requireActivity().finish();
             }
 
             @Override
