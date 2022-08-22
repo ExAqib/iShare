@@ -7,9 +7,9 @@
     android:layout_marginLeft="16dp"
     android:layout_marginTop="12dp"
     android:layout_marginRight="16dp"
+    android:backgroundTint="@color/surface"
     android:clickable="true"
     android:focusable="true"
-    android:backgroundTint="@color/surface"
     card_view:cardCornerRadius="8dp"
     card_view:contentPadding="0dp">
 
@@ -57,7 +57,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
-            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@id/tv_fileName"
             android:text="100%"
@@ -70,15 +69,17 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_alignParentStart="true"
-            android:elevation="0.5dp"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="20dp">
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="0.5dp">
 
 
             <ImageView
                 android:id="@+id/img_FileType"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
                 android:contentDescription="File Type"
                 android:scaleType="centerCrop"
                 android:src="@color/primary">

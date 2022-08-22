@@ -21,7 +21,8 @@ import com.HuimangTech.iShare.ui.downloads.DB.FileHistoryDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -41,11 +42,10 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
         binding = FragmentDownloadsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        disposable = Maybe.empty().subscribeOn(Schedulers.io()).subscribe(s -> s.toString(),
-                Throwable::printStackTrace,
-                () -> loadFileHistory()
-        );
-
+        //set adapter only after loadFileHistory
+        disposable = loadFileHistory().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(files -> setAdapter());
         return root;
     }
 
@@ -53,15 +53,18 @@ public class DownloadsFragment extends Fragment implements RecyclerAdapter.OnFil
     public void onResume() {
         super.onResume();
 
-        setAdapter();
     }
 
-    void loadFileHistory() {
-        FileHistoryDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
-                FileHistoryDatabase.class, "File").build();
-        // long ID = db.FileDao().insert(new com.fyp.iShare.ui.downloads.DB.File("fileName", (long) 156446));
-        files = db.FileDao().getAll();
+    private Single<List> loadFileHistory() {
+        return Single.create(emitter -> {
+            FileHistoryDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
+                    FileHistoryDatabase.class, "File").build();
+            // long ID = db.FileDao().insert(new com.fyp.iShare.ui.downloads.DB.File("fileName", (long) 156446));
+            files = db.FileDao().getAll();
+            emitter.onSuccess(files);
+        });
     }
+
 
     void setAdapter() {
         recyclerView = binding.rvDownloads;

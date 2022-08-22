@@ -3,8 +3,6 @@ package com.HuimangTech.iShare;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -14,9 +12,16 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Properties;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.PasswordAuthentication;
@@ -29,6 +34,7 @@ import jakarta.mail.internet.MimeMessage;
 public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences.OnSharedPreferenceChangeListener onChangeListener;
+    public static Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +71,28 @@ public class SettingsActivity extends AppCompatActivity {
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(onChangeListener);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.dispose();
+    }
+
+
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        ProgressBar loading;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             Preference preference = findPreference("update");
             preference.setOnPreferenceClickListener(preference1 -> {
-                checkForUpdates(getAppVersion());
+                disposable = getAppVersion()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(ver -> {
+                            if (ver != null) {
+                                checkForUpdates(ver);
+                            }
+                        });
                 return false;
             });
         }
@@ -97,23 +116,20 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        public String getAppVersion() {
-            /// TODO: 8/22/2022 check for update
-            /*try {
-                new Thread(() -> {
-                    PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
-                    printWriter.println("APP_VER");
-                    printWriter.flush();
 
-                    String response = "version 1.0";
-                    //after getting response
-                    return response;
-                }).start();
-            } catch (Exception e) {
-                Log.d("tag", "onCreate: " + e);
-            }*/
-            return "2.0";
+        private Single<String> getAppVersion() {
+            return Single.create(emitter -> {
+                String response = null;
+
+                SingletonSocket.sendRequest("APP_VER");
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+                    response = bufferedReader.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                emitter.onSuccess(response);
+            });
         }
     }
 
