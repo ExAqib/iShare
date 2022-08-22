@@ -51,4 +51,14 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory>
+        <EditTextPreference
+            app:defaultValue=""
+            app:enabled="true"
+            app:key="feedback"
+            app:summary="Report technical issues or suggest new features"
+            app:dialogMessage="Enter Your Feedback Details:"
+            app:title="Send feedback" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

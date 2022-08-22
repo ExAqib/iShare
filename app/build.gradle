@@ -5,8 +5,8 @@ plugins {
 
 android {
     compileSdk 31
-    viewBinding{
-        enabled =true
+    viewBinding {
+        enabled = true
     }
     defaultConfig {
         applicationId "com.fyp.iShare"
@@ -16,6 +16,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/LICENSE.md'
     }
 
     buildTypes {
@@ -34,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation "io.reactivex.rxjava3:rxjava:3.1.5"
     implementation 'androidx.appcompat:appcompat:1.4.1'
