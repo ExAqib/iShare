@@ -151,7 +151,6 @@ public class WAN_Connection extends AppCompatActivity {
 
         restart.setOnClickListener(v1 -> {
             new Thread(() -> {
-
                 printWriter.println("RESTART");
                 printWriter.flush();
                 dialog.dismiss();

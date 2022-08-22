@@ -51,14 +51,21 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory>
+    <PreferenceCategory
+        app:key="App"
+        app:title="App Support">
         <EditTextPreference
             app:defaultValue=""
+            app:dialogMessage="Enter Your Feedback Details:"
             app:enabled="true"
             app:key="feedback"
             app:summary="Report technical issues or suggest new features"
-            app:dialogMessage="Enter Your Feedback Details:"
             app:title="Send feedback" />
+
+        <Preference
+            android:title="Check for Updates"
+            app:key="update"
+            app:summary="get the the last released version" />
     </PreferenceCategory>
 
 </PreferenceScreen>

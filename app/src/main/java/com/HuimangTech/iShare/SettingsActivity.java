@@ -3,8 +3,11 @@ package com.HuimangTech.iShare;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
@@ -22,15 +25,17 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-public class SettingsActivity extends AppCompatActivity implements Preference.OnPreferenceClickListener {
+
+public class SettingsActivity extends AppCompatActivity {
 
     SharedPreferences.OnSharedPreferenceChangeListener onChangeListener;
-    Preference.OnPreferenceClickListener onClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+
+        setContentView(R.layout.activity_settings);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -42,37 +47,10 @@ public class SettingsActivity extends AppCompatActivity implements Preference.On
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
         onChangeListener = (sharedPreferences, key) -> {
-            switch (key) {
-
-                case "theme": {
-                    switch (sharedPreferences.getString(key, "system")) {
-                        case "dark":
-                            AppCompatDelegate.setDefaultNightMode(
-                                    AppCompatDelegate.MODE_NIGHT_YES);
-                            break;
-                        case "light":
-                            AppCompatDelegate.setDefaultNightMode(
-                                    AppCompatDelegate.MODE_NIGHT_NO);
-                            break;
-                        case "system":
-                            AppCompatDelegate.setDefaultNightMode(
-                                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                            break;
-                    }
-                }
-                break;
-                case "feedback": {
-                    Thread t = new Thread(() -> {
-                        final String toEmail = "loffy@live.com"; // support person in charge
-                        sendEmail(toEmail, "iShare Bug Report", sharedPreferences.getString(key, "Null message"));
-                        sharedPreferences.edit().putString(key, "").apply();
-                    });
-                    t.start();
-                }
-            }
+            onChangeListener(sharedPreferences, key);
         };
+
     }
 
     @Override
@@ -87,27 +65,92 @@ public class SettingsActivity extends AppCompatActivity implements Preference.On
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(onChangeListener);
     }
 
-    @Override
-    public boolean onPreferenceClick(Preference preference) {
-        Log.d("tag", "onPreferenceClick: " + preference.getKey());
-
-        switch (preference.getKey()) {
-            case "theme":
-            case "feedback": {
-            }
-            break;
-        }
-        return false;
-    }
-
     public static class SettingsFragment extends PreferenceFragmentCompat {
+        ProgressBar loading;
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            Preference preference = findPreference("update");
+            preference.setOnPreferenceClickListener(preference1 -> {
+                checkForUpdates(getAppVersion());
+                return false;
+            });
+        }
+
+        public void checkForUpdates(String response) {
+            if (response.equals(BuildConfig.VERSION_NAME)) {
+                new AlertDialog.Builder(getContext())
+                        .setMessage("You are up to date")
+                        .setNegativeButton(android.R.string.yes, null)
+                        .show();
+            } else {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("App Version")
+                        .setMessage("New Version Available, Version " + BuildConfig.VERSION_NAME + " -> " + response)
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            // Continue with delete operation
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_menu_upload)
+                        .show();
+            }
+        }
+
+        public String getAppVersion() {
+            /// TODO: 8/22/2022 check for update
+            /*try {
+                new Thread(() -> {
+                    PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+                    printWriter.println("APP_VER");
+                    printWriter.flush();
+
+                    String response = "version 1.0";
+                    //after getting response
+                    return response;
+                }).start();
+            } catch (Exception e) {
+                Log.d("tag", "onCreate: " + e);
+            }*/
+            return "2.0";
         }
     }
 
-    public static void sendEmail(String toEmail, String subject, String body) {
+
+    public void onChangeListener(SharedPreferences sharedPreferences, String key) {
+        switch (key) {
+
+            case "theme": {
+                switch (sharedPreferences.getString(key, "system")) {
+                    case "dark":
+                        AppCompatDelegate.setDefaultNightMode(
+                                AppCompatDelegate.MODE_NIGHT_YES);
+                        break;
+                    case "light":
+                        AppCompatDelegate.setDefaultNightMode(
+                                AppCompatDelegate.MODE_NIGHT_NO);
+                        break;
+                    case "system":
+                        AppCompatDelegate.setDefaultNightMode(
+                                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                        break;
+                }
+            }
+            break;
+            case "feedback": {
+                Thread t = new Thread(() -> {
+                    final String toEmail = "loffy@live.com"; // support person in charge
+                    sendEmail(toEmail, "iShare Bug Report", sharedPreferences.getString(key, "Null message"));
+                    sharedPreferences.edit().putString(key, "").apply();
+                });
+                t.start();
+            }
+        }
+    }
+
+
+    public void sendEmail(String toEmail, String subject, String body) {
         try {
             final String fromEmail = "loffy@live.com"; //requires valid gmail id
             final String password = "TyVHG3Bg0tMkEPIr"; // correct password for gmail id
