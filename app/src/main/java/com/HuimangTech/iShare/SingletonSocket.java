@@ -65,7 +65,7 @@ public class SingletonSocket {
                 Log.d(TAG, "CloseSocket: " + e);
             } finally {
                 socket = null;
-
+                Log.d(TAG, "CloseSocket: is complete");
             }
         }
 

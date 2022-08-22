@@ -25,7 +25,6 @@ import androidx.preference.PreferenceManager;
 
 import com.HuimangTech.iShare.DeviceID;
 import com.HuimangTech.iShare.DirectlyReceivePCfile;
-import com.HuimangTech.iShare.DownloadFile;
 import com.HuimangTech.iShare.LoginActivity;
 import com.HuimangTech.iShare.SettingsActivity;
 import com.HuimangTech.iShare.SingletonSocket;
@@ -93,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         fileTransferClickListener(root.getContext());
 
-        context =requireContext();
+        context = requireContext();
         Thread t1 = new Thread(() -> {
             try {
                 String IP_Address = "192.168.10.99";
@@ -130,7 +129,7 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "ID is " + DeviceID.deviceID);
 
                 String finalId = id;
-                requireActivity().runOnUiThread(()->{
+                requireActivity().runOnUiThread(() -> {
                     binding.mobileDataUsage.setText(finalId);
                 });
 
@@ -149,30 +148,27 @@ public class HomeFragment extends Fragment {
 
                 bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
 
-                while(true){
+                while (true) {
                     String PC_Response = bufferedReader.readLine();
                     Log.d(TAG, "onCreateView:  PC_Response is " + PC_Response);
                     if (PC_Response.equals("RECEIVE_FILE")) {
                         Log.d(TAG, "onCreateView: Receive file from PC");
-                        requireActivity().runOnUiThread(()->{
+                        requireActivity().runOnUiThread(() -> {
                             DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
                             receiveFile.execute("");
                         });
                         break;
-                    }
-                    else if(PC_Response.equals("ERROR")){
-                    //If User Enters a wrong ID
-                        requireActivity().runOnUiThread(()->{
+                    } else if (PC_Response.equals("ERROR")) {
+                        //If User Enters a wrong ID
+                        requireActivity().runOnUiThread(() -> {
                             Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show();
                         });
-                    }
-                    else if(PC_Response.equals("SUCCESS")){
+                    } else if (PC_Response.equals("SUCCESS")) {
                         Intent intent = new Intent(getActivity(), WAN_Connection.class);
                         startActivity(intent);
                         break;
                     }
                 }
-
 
 
             } catch (Exception e) {
@@ -194,23 +190,24 @@ public class HomeFragment extends Fragment {
 
             String IP_Address;
             int Port_Num;
-            String id;
+            String partnerId;
             String password;
 
             if (manualConnectionState) {
                 Log.d(TAG, "manualConnectionState: is On");
-                IP_Address = sharedPreferences.getString("IP", "");
-                Port_Num = Integer.parseInt(sharedPreferences.getString("port", ""));
-                id = sharedPreferences.getString("ID", "");
+                IP_Address = sharedPreferences.getString("IP", "192.168.10.99");
+                Port_Num = Integer.parseInt(sharedPreferences.getString("port", "9999"));
+                partnerId = sharedPreferences.getString("ID", "");
                 password = sharedPreferences.getString("password", "");
+
             } else {
                 IP_Address = "192.168.10.99";
                 Port_Num = 9999;
-                id = binding.edtID.getText().toString().trim();
+                partnerId = binding.edtID.getText().toString().trim();
                 password = "1";
             }
             //if ID is not empty then he will try to connect
-            if (!id.equals("")) {
+            if (!partnerId.equals("")) {
                 Thread t1 = new Thread(() -> {
                     try {
                         if (SingletonSocket.getSocket() == null) {
@@ -220,7 +217,7 @@ public class HomeFragment extends Fragment {
                             SingletonSocket.setSocket(socket);
                             NewConnection = true;
                         }
-                        if (sendIdPassword(id, password)) {
+                        if (sendIdPassword(partnerId, password)) {
 
                             /*Intent intent = new Intent(getActivity(), WAN_Connection.class);
                             startActivity(intent);*/

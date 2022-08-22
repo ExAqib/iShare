@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class AccountFragment extends Fragment {
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
-
+    ProgressBar loadingProgressBar;
     TextView name;
     TextView email;
     View itemName;
@@ -48,6 +49,9 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentAccountBinding.inflate(inflater, container, false);
+
+        loadingProgressBar = binding.loading;
+        loadingProgressBar.setVisibility(View.VISIBLE);
 
         binding.btnLogout.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
@@ -80,6 +84,7 @@ public class AccountFragment extends Fragment {
                 if (userProfile != null) {
                     name.setText(userProfile.Name);
                     email.setText(userProfile.Email);
+                    loadingProgressBar.setVisibility(View.GONE);
                 } else
                     requireActivity().finish();
             }

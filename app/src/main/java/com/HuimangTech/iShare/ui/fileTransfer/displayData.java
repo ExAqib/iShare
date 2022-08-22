@@ -217,7 +217,7 @@ public class displayData extends Fragment {
         private void setDriveNames() {
             try {
                 sendRequest("driveNames");
-                Log.d(TAG, "Receiving Data from client");
+                Log.d(TAG, "Receiving Data from client \" under tag: data \"");
 
                 String data;
                 Bundle bundle = new Bundle();
@@ -225,7 +225,7 @@ public class displayData extends Fragment {
 
                 while (!(data = bufferedReader.readLine()).equals("EndOfStream")) {
 
-                    Log.d(TAG, "Data received is " + data);
+                    Log.d("data", "Data received is " + data);
                     if (data.equals("Exception")) {
                         data = bufferedReader.readLine();
                         Log.d(TAG, "setDriveNames: Exception>> " + data);

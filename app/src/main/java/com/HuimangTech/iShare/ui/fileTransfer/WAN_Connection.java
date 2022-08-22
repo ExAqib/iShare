@@ -3,6 +3,8 @@ package com.HuimangTech.iShare.ui.fileTransfer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +40,8 @@ public class WAN_Connection extends AppCompatActivity {
     PrintWriter printWriter;
     BufferedReader bufferedReader;
     Context ActivityContext;
+    boolean doubleBackToExitPressedOnce = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +72,7 @@ public class WAN_Connection extends AppCompatActivity {
         layoutParams.setBehavior(new BottomToolBarBehavior());
 
         binding.btnClose.setOnClickListener(v -> {
-            new Thread(() -> {
-                printWriter.println("CLOSE_CONNECTION");
-                printWriter.flush();
-                SingletonSocket.CloseSocket();
-
-            }).start();
-            this.finish();
+            CloseConnection();
 
         });
         binding.btnMessage.setOnClickListener(v -> {
@@ -81,70 +80,37 @@ public class WAN_Connection extends AppCompatActivity {
             startActivity(intent);
         });
         binding.btnPower.setOnClickListener(v -> {
-            BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheet);
-            View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_power_control, null);
-
-            Button powerOff = dialogView.findViewById(R.id.btn_off);
-            Button restart = dialogView.findViewById(R.id.btn_restart);
-            Button sleep = dialogView.findViewById(R.id.btn_sleep);
-            Button lock = dialogView.findViewById(R.id.btn_lock);
-
-            powerOff.setOnClickListener(v1 -> {
-                new Thread(() -> {
-                    printWriter.println("POWEROFF");
-                    printWriter.flush();
-                    dialog.dismiss();
-                }).start();
-            });
-
-            restart.setOnClickListener(v1 -> {
-                new Thread(() -> {
-
-                    printWriter.println("RESTART");
-                    printWriter.flush();
-                    dialog.dismiss();
-                }).start();
-            });
-
-            sleep.setOnClickListener(v1 -> {
-                new Thread(() -> {
-
-                    printWriter.println("SLEEP");
-                    printWriter.flush();
-                    dialog.dismiss();
-                }).start();
-            });
-
-            lock.setOnClickListener(v1 -> {
-                new Thread(() -> {
-
-                    printWriter.println("LOCK");
-                    printWriter.flush();
-                    dialog.dismiss();
-                }).start();
-            });
-
-
-            ConstraintLayout footer = dialogView.findViewById(R.id.footer);
-            TextView cancel = footer.findViewById(R.id.cancel);
-            TextView setTimer = footer.findViewById(R.id.ok);
-
-            cancel.setOnClickListener(v12 -> dialog.dismiss());
-
-            setTimer.setOnClickListener(v1 -> {
-                // TODO: 8/14/2022 extra Timer feature
-            });
-
-            dialog.setContentView(dialogView);
-            dialog.setOnShowListener(dialog1 -> {
-               /* BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog1;
-                FrameLayout bottomSheet = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
-                BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);*/
-            });
-            dialog.show();
+            PowerControlDialog();
 
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            CloseConnection();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to Close Connection", Toast.LENGTH_SHORT).show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+    }
+
+    private void CloseConnection() {
+        new Thread(() -> {
+            printWriter.println("CLOSE_CONNECTION");
+            printWriter.flush();
+            SingletonSocket.CloseSocket();
+            this.finish();
+        }).start();
     }
 
     @Override
@@ -165,4 +131,71 @@ public class WAN_Connection extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+    private void PowerControlDialog() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.BottomSheet);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_power_control, null);
+
+        Button powerOff = dialogView.findViewById(R.id.btn_off);
+        Button restart = dialogView.findViewById(R.id.btn_restart);
+        Button sleep = dialogView.findViewById(R.id.btn_sleep);
+        Button lock = dialogView.findViewById(R.id.btn_lock);
+
+        powerOff.setOnClickListener(v1 -> {
+            new Thread(() -> {
+                printWriter.println("POWEROFF");
+                printWriter.flush();
+                dialog.dismiss();
+            }).start();
+        });
+
+        restart.setOnClickListener(v1 -> {
+            new Thread(() -> {
+
+                printWriter.println("RESTART");
+                printWriter.flush();
+                dialog.dismiss();
+            }).start();
+        });
+
+        sleep.setOnClickListener(v1 -> {
+            new Thread(() -> {
+
+                printWriter.println("SLEEP");
+                printWriter.flush();
+                dialog.dismiss();
+            }).start();
+        });
+
+        lock.setOnClickListener(v1 -> {
+            new Thread(() -> {
+
+                printWriter.println("LOCK");
+                printWriter.flush();
+                dialog.dismiss();
+            }).start();
+        });
+
+
+        ConstraintLayout footer = dialogView.findViewById(R.id.footer);
+        TextView cancel = footer.findViewById(R.id.cancel);
+        TextView setTimer = footer.findViewById(R.id.ok);
+
+        cancel.setOnClickListener(v12 -> dialog.dismiss());
+
+        setTimer.setOnClickListener(v1 -> {
+            // TODO: 8/14/2022 extra Timer feature
+        });
+
+        dialog.setContentView(dialogView);
+        dialog.setOnShowListener(dialog1 -> {
+           /* BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog1;
+            FrameLayout bottomSheet = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+            BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);*/
+        });
+        dialog.show();
+    }
+
+
 }
