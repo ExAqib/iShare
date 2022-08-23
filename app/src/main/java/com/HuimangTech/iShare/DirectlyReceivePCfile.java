@@ -141,6 +141,10 @@ public class DirectlyReceivePCfile extends AsyncTask<String, String, Void> {
                 bytesReadPerCycle = dIn.read(data, 0, bufferSize);
                 Log.d(TAG, "Read " + totalBytesRead + " of " + fileSize + " bytes");
 
+                if(bytesReadPerCycle==-1){
+                    Log.d(TAG, "startDownloading bytesReadPerCycle "+bytesReadPerCycle);
+                    break;
+                }
                 fos.write(data, 0, bytesReadPerCycle);
                 totalBytesRead += bytesReadPerCycle;
                 Log.d(TAG, "Total data read " + totalBytesRead / 1000000 + " MB's (" + totalBytesRead + " bytes)");
