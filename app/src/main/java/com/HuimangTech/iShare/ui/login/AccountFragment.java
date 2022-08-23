@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.HuimangTech.iShare.R;
@@ -58,6 +59,8 @@ public class AccountFragment extends Fragment {
             requireActivity().finish();
         });
 
+        binding.btnDelete.setOnClickListener(view -> deleteUserAccount());
+
         setUserInfo();
         updateUserInfoListeners();
 
@@ -90,6 +93,26 @@ public class AccountFragment extends Fragment {
             }
         });
 
+    }
+
+    void deleteUserAccount() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Delete Account")
+                .setMessage("Are you sure you want to delete your account ?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    user.delete()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getContext(), "Account Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                    FirebaseAuth.getInstance().signOut();
+                                    requireActivity().finish();
+                                }
+                            });
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_delete)
+                .show();
     }
 
     void updateUserInfoListeners() {
