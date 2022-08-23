@@ -166,39 +166,40 @@ public class HomeFragment extends Fragment {
                     printWriter.println(DeviceID.deviceName);
                     printWriter.flush();
 
-                    Log.d(TAG, "deviceID and deviceName Send ");
+                    Log.d(TAG, "deviceID and deviceName has benn sent ");
+
+                    // TODO: 8/24/2022  here the Activity is being restarted for some reason
+
                     bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
-                    label:
                     while (true) {
                         try {
                             String PC_Response = bufferedReader.readLine();
                             Log.d(TAG, "onCreateView:  PC_Response is " + PC_Response);
-                            switch (PC_Response) {
-                                case "RECEIVE_FILE":
-                                    Log.d(TAG, "onCreateView: Receive file from PC");
-                                    requireActivity().runOnUiThread(() -> {
-                                        DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
-                                        receiveFile.execute("");
-                                    });
-                                    startThread = true;
-                                    break label;
-                                case "ERROR":
-                                    //If User Enters a wrong ID
-                                    requireActivity().runOnUiThread(() ->
-                                            Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show());
-                                    break label;
-                                case "SUCCESS":
-                                    Intent intent = new Intent(getActivity(), WAN_Connection.class);
-                                    startActivity(intent);
-                                    startThread = true;
-                                    break label;
-                                default:
-                                    Log.d(TAG, "onStart: Invalid response that is " + PC_Response);
+                            if (PC_Response.equals("RECEIVE_FILE")) {
+                                Log.d(TAG, "onCreateView: Receive file from PC");
+                                requireActivity().runOnUiThread(() -> {
+                                    DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
+                                    receiveFile.execute("");
+                                });
+                                startThread = true;
+                                break;
+                            } else if (PC_Response.equals("ERROR")) {
+                                //If User Enters a wrong ID
+                                requireActivity().runOnUiThread(() -> {
+                                    Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show();
+                                });
+                            } else if (PC_Response.equals("SUCCESS")) {
+                                Intent intent = new Intent(getActivity(), WAN_Connection.class);
+                                startActivity(intent);
+                                startThread = true;
+                                break;
+                            }
+                            else  {
+                                Log.d(TAG, "onStart: Invalid response that is "+PC_Response);
 
-                                    break label;
                             }
                         } catch (Exception e) {
-                            Log.d(TAG, "On Start Exception  " + e);
+                            Log.d(TAG, "Exception  " + e);
                         }
                     }
                 } catch (Exception e) {
