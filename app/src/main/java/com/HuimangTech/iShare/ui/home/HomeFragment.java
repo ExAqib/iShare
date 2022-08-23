@@ -42,14 +42,15 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
-    static final String TAG = "tag";
-    boolean NewConnection = true;
     String[] Permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    static final String TAG = "tag";
+    String serverIP = "192.168.10.99";
+    boolean NewConnection = true;
+    boolean startThread = true;
     int RequestCode = 1122;
     BufferedReader bufferedReader = null;
     PrintWriter printWriter = null;
     Context context;
-    boolean startThread=true;
 
     ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -68,18 +69,21 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
         if (!permissionsGranted()) {
             grantPermissions();
         }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            //binding.username.setText();
+            Log.d(TAG, "Current User Found: " + user.getDisplayName());
+            binding.tvUsername.setText(user.getDisplayName());
+            binding.tvUsername.setVisibility(View.VISIBLE);
         } else {
-            // No user is signed in
+            binding.tvUsername.setVisibility(View.INVISIBLE);
         }
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 
         binding.btnUser.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -91,7 +95,11 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        fileTransferClickListener(root.getContext());
+        binding.btnFileTransfer.setOnClickListener(v -> {
+
+            fileTransferClickListener(getContext());
+
+        });
 
         context = requireContext();
 
@@ -105,24 +113,29 @@ public class HomeFragment extends Fragment {
         if (startThread) {
             startThread = false;
             new Thread(() -> {
+                //close any unclosed connection
+                if (printWriter != null) {
+                    printWriter.println("CLOSE_CONNECTION");
+                    printWriter.flush();
+                    SingletonSocket.CloseSocket();
+                }
                 try {
-                    String IP_Address = "192.168.10.99";
+                    // TODO: 8/24/2022 remove fixed Ip
+                    String IP_Address = serverIP;
                     int Port_Num = 9999;
                     String id = getDeviceID();
 
                     DeviceID.deviceID = id;
                     Log.d(TAG, "ID is " + DeviceID.deviceID);
 
-                    requireActivity().runOnUiThread(() -> {
-                        binding.mobileDataUsage.setText(DeviceID.deviceID);
-                    });
+                    requireActivity().runOnUiThread(() -> binding.localID.setText(DeviceID.deviceID));
 
                     DeviceID.deviceName = Settings.Global.getString(requireActivity().getContentResolver(), "device_name");
                     Log.d(TAG, "deviceName is " + DeviceID.deviceName);
 
                     Socket socket = SingletonSocket.getSocket();
                     if (socket == null) {
-                        Log.d(TAG, " Connecting at " + IP_Address + ":" + Port_Num);
+                        Log.d(TAG, "Connecting at " + IP_Address + ":" + Port_Num);
                         socket = new Socket(IP_Address, Port_Num);
                         SingletonSocket.setSocket(socket);
                     }
@@ -141,50 +154,50 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG, "deviceId and deviceName Send ");
                     bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
 
+                    label:
                     while (true) {
                         try {
                             String PC_Response = bufferedReader.readLine();
                             Log.d(TAG, "onCreateView:  PC_Response is " + PC_Response);
-                            if (PC_Response.equals("RECEIVE_FILE")) {
-                                Log.d(TAG, "onCreateView: Receive file from PC");
-                                requireActivity().runOnUiThread(() -> {
-                                    DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
-                                    receiveFile.execute("");
-                                });
-                                startThread = true;
-                                break;
-                            } else if (PC_Response.equals("ERROR")) {
-                                //If User Enters a wrong ID
-                                requireActivity().runOnUiThread(() -> {
-                                    Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show();
-                                });
-                            } else if (PC_Response.equals("SUCCESS")) {
-                                Intent intent = new Intent(getActivity(), WAN_Connection.class);
-                                startActivity(intent);
-                                startThread = true;
-                                break;
-                            }
-                            else  {
-                                Log.d(TAG, "onStart: Invalid response that is "+PC_Response);
+                            switch (PC_Response) {
+                                case "RECEIVE_FILE":
+                                    Log.d(TAG, "onCreateView: Receive file from PC");
+                                    requireActivity().runOnUiThread(() -> {
+                                        DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
+                                        receiveFile.execute("");
+                                    });
+                                    startThread = true;
+                                    break label;
+                                case "ERROR":
+                                    //If User Enters a wrong ID
+                                    requireActivity().runOnUiThread(() ->
+                                            Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show());
+                                    break;
+                                case "SUCCESS":
+                                    Intent intent = new Intent(getActivity(), WAN_Connection.class);
+                                    startActivity(intent);
+                                    startThread = true;
+                                    break label;
+                                default:
+                                    Log.d(TAG, "onStart: Invalid response that is " + PC_Response);
 
+                                    break;
                             }
                         } catch (Exception e) {
-                            Log.d(TAG, "Exception  " + e);
+                            Log.d(TAG, "On Start Exception  " + e);
                         }
                     }
-                }
-
-                catch (Exception e) {
+                } catch (Exception e) {
                     //sendToast(e.toString());
                     e.printStackTrace();
-                    Log.d(TAG, "Exception  " + e);
+                    Log.d(TAG, "On start Thread Exception  " + e);
                 }
             }).start();
-    }
-
         }
 
-     String getDeviceID() {
+    }
+
+    String getDeviceID() {
         String id;
         String fileName = "Unique_ID_file";
         SharedPreferences sp = requireActivity().getSharedPreferences(fileName, Context.MODE_PRIVATE);
@@ -206,59 +219,57 @@ public class HomeFragment extends Fragment {
         }
         return id;
     }
-     private void fileTransferClickListener(Context context) {
-        binding.btnFileTransfer.setOnClickListener(v -> {
 
-            SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(context);
-            boolean manualConnectionState = sharedPreferences.getBoolean("manual", false);
+    private void fileTransferClickListener(Context context) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        boolean manualConnectionState = sharedPreferences.getBoolean("manual", false);
 
-            String IP_Address;
-            int Port_Num;
-            String partnerId;
-            String password;
+        String IP_Address;
+        int Port_Num;
+        String partnerId;
+        String password;
 
-            if (manualConnectionState) {
-                Log.d(TAG, "manualConnectionState: is On");
-                IP_Address = sharedPreferences.getString("IP", "192.168.10.99");
-                Port_Num = Integer.parseInt(sharedPreferences.getString("port", "9999"));
-                partnerId = sharedPreferences.getString("ID", "");
-                password = sharedPreferences.getString("password", "");
+        if (manualConnectionState) {
+            Log.d(TAG, "manualConnectionState: is On");
+            IP_Address = sharedPreferences.getString("IP", serverIP);
+            Port_Num = Integer.parseInt(sharedPreferences.getString("port", "9999"));
+            partnerId = sharedPreferences.getString("ID", "");
+            password = sharedPreferences.getString("password", "");
 
-            } else {
-                IP_Address = "192.168.10.99";
-                Port_Num = 9999;
-                partnerId = binding.edtID.getText().toString().trim();
-                password = "1";
-            }
-            //if ID is not empty then he will try to connect
-            if (!partnerId.equals("")) {
-                Thread t1 = new Thread(() -> {
-                    try {
-                        if (SingletonSocket.getSocket() == null) {
-                            Log.d(TAG, "fileTransferClickListener: Connecting at " + IP_Address + ":" + Port_Num);
+        } else {
+            IP_Address = serverIP;
+            Port_Num = 9999;
+            partnerId = binding.edtID.getText().toString().trim();
+            password = "1";
+        }
+        //if ID is not empty then he will try to connect
+        if (!partnerId.equals("")) {
+            Thread t1 = new Thread(() -> {
+                try {
+                    if (SingletonSocket.getSocket() == null) {
+                        Log.d(TAG, "fileTransferClickListener: Connecting at " + IP_Address + ":" + Port_Num);
 
-                            Socket socket = new Socket(IP_Address, Port_Num);
-                            SingletonSocket.setSocket(socket);
-                            NewConnection = true;
-                        }
-                        if (sendIdPassword(partnerId, password)) {
+                        Socket socket = new Socket(IP_Address, Port_Num);
+                        SingletonSocket.setSocket(socket);
+                        NewConnection = true;
+                    }
+                    if (sendIdPassword(partnerId, password)) {
+                        // TODO: 8/24/2022 what is this ?
 /*
                             Intent intent = new Intent(getActivity(), WAN_Connection.class);
                             startActivity(intent);*/
-                        }
-                    } catch (Exception e) {
-                        //sendToast(e.toString());
-                        e.printStackTrace();
-                        Log.d(TAG, "Exception  " + e);
                     }
-                });
-                t1.start();
-            } else {
-                Toast.makeText(getContext(), "ID is Empty", Toast.LENGTH_SHORT).show();
-            }
-
-        });
+                } catch (Exception e) {
+                    //sendToast(e.toString());
+                    e.printStackTrace();
+                    Log.d(TAG, "Exception  " + e);
+                }
+            });
+            t1.start();
+        } else {
+            Toast.makeText(getContext(), "ID is Empty", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
