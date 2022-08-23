@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
                     navView.setSelectedItemId(R.id.navigation_home);
                     // No user is signed in
                 }
-
-
             } else if (item.getItemId() == R.id.navigation_messages) {
                 item.setChecked(true);
                 getSupportFragmentManager()

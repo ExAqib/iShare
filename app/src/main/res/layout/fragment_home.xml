@@ -187,10 +187,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:hint="Partner ID"
+                    android:enabled="true"
                     android:inputType="number"
                     android:textColor="@color/text_primary"
-                    android:textColorHint="@color/text_primary"
-                    android:textColorLink="@color/text_primary" />
+                    android:textColorHint="@color/text_secondary" />
 
                 <Button
                     android:id="@+id/btn_fileTransfer"

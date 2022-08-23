@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment {
     String serverIP = "192.168.10.99";
     boolean NewConnection = true;
     boolean startThread = true;
+    boolean manualConnectionState = false;
     int RequestCode = 1122;
     BufferedReader bufferedReader = null;
     PrintWriter printWriter = null;
@@ -60,10 +61,9 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(requireActivity(), "Please Allow permission for storage access!", Toast.LENGTH_LONG).show();
                     }
                 }
-
             }
-
     );
+
     private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -97,13 +97,29 @@ public class HomeFragment extends Fragment {
 
         binding.btnFileTransfer.setOnClickListener(v -> {
 
-            fileTransferClickListener(getContext());
+            fileTransferClick(getContext());
 
         });
 
         context = requireContext();
 
+
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        manualConnectionState = sharedPreferences.getBoolean("manual", false);
+        if (manualConnectionState) {
+            binding.edtID.setEnabled(false);
+            binding.edtID.setHint("Auto Entered: " + sharedPreferences.getString("ID", ""));
+        } else {
+            binding.edtID.setEnabled(true);
+        }
+
     }
 
     @Override
@@ -120,7 +136,6 @@ public class HomeFragment extends Fragment {
                     SingletonSocket.CloseSocket();
                 }
                 try {
-                    // TODO: 8/24/2022 remove fixed Ip
                     String IP_Address = serverIP;
                     int Port_Num = 9999;
                     String id = getDeviceID();
@@ -151,9 +166,8 @@ public class HomeFragment extends Fragment {
                     printWriter.println(DeviceID.deviceName);
                     printWriter.flush();
 
-                    Log.d(TAG, "deviceId and deviceName Send ");
+                    Log.d(TAG, "deviceID and deviceName Send ");
                     bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
-
                     label:
                     while (true) {
                         try {
@@ -172,7 +186,7 @@ public class HomeFragment extends Fragment {
                                     //If User Enters a wrong ID
                                     requireActivity().runOnUiThread(() ->
                                             Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show());
-                                    break;
+                                    break label;
                                 case "SUCCESS":
                                     Intent intent = new Intent(getActivity(), WAN_Connection.class);
                                     startActivity(intent);
@@ -181,7 +195,7 @@ public class HomeFragment extends Fragment {
                                 default:
                                     Log.d(TAG, "onStart: Invalid response that is " + PC_Response);
 
-                                    break;
+                                    break label;
                             }
                         } catch (Exception e) {
                             Log.d(TAG, "On Start Exception  " + e);
@@ -194,7 +208,6 @@ public class HomeFragment extends Fragment {
                 }
             }).start();
         }
-
     }
 
     String getDeviceID() {
@@ -220,10 +233,10 @@ public class HomeFragment extends Fragment {
         return id;
     }
 
-    private void fileTransferClickListener(Context context) {
+    private void fileTransferClick(Context context) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
-        boolean manualConnectionState = sharedPreferences.getBoolean("manual", false);
+        manualConnectionState = sharedPreferences.getBoolean("manual", false);
 
         String IP_Address;
         int Port_Num;
