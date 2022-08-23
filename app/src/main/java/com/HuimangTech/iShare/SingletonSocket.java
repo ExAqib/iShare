@@ -62,10 +62,11 @@ public class SingletonSocket {
             try {
                 socket.close();
             } catch (Exception e) {
-                Log.d(TAG, "CloseSocket: " + e);
+                Log.d(TAG, "CloseSocket Exception: " + e);
             } finally {
                 socket = null;
-                Log.d(TAG, "CloseSocket: is complete");
+                Log.d(TAG, "CloseSocket: Done");
+
             }
         }
 

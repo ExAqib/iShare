@@ -57,12 +57,10 @@ public class displayData extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate called for fragment");
     }
 
     @Override
     public void onStart() {
-        Log.d(TAG, "onStart called for fragment");
         super.onStart();
     }
 
@@ -78,9 +76,8 @@ public class displayData extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Log.d(TAG, "onViewCreated called for fragment");
-
         linearLayout = getView().findViewById(R.id.fragmentLinear);
-        Log.d(TAG, "calling start ");
+
         start();
     }
 
@@ -159,7 +156,7 @@ public class displayData extends Fragment {
                 //String AvailableData = totalData + "GB ";
 
                 long percent = (availableData * 100 / totalData);
-                Log.d(TAG, "onProgressUpdate: percent " + percent + " " + availableData + " " + totalData);
+                Log.d("data", "onProgressUpdate: percent " + percent + " " + availableData + " " + totalData);
                 bar.setProgress((int) percent);
 
                 // TODO: 8/18/2022 this layout will bot be added in an exception

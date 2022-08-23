@@ -31,10 +31,7 @@ import java.util.ArrayList;
 public class directories extends Fragment {
 
     private static final String TAG = "tag";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     static Parameters parameters;
     static PrintWriter printWriter;
     static BufferedReader bufferedReader;
@@ -51,8 +48,6 @@ public class directories extends Fragment {
         printWriter = p.getPrintWriter();
         bufferedReader = p.getBufferedReader();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,6 +84,7 @@ public class directories extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 // Handle the back button event
+                SingletonSocket.getFragmentManger();
                 if (PcData.isEmpty()) {
                     try {
                         SingletonSocket.getNavigationPath().clear();
@@ -96,7 +92,6 @@ public class directories extends Fragment {
                         Log.d(TAG, "Exception " + e);
                     }
                     SingletonSocket.getFragmentManger().popBackStack();
-
                 } else {
                     try {
                         SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size() - 1);

@@ -24,10 +24,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.HuimangTech.iShare.R;
 import com.HuimangTech.iShare.databinding.FragmentSignupBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Locale;
 
 public class SignupFragment extends Fragment {
 
@@ -134,6 +134,9 @@ public class SignupFragment extends Fragment {
 
                 fbAuth.createUserWithEmailAndPassword(mail, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        FirebaseUser FBuser = fbAuth.getCurrentUser();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+                        FBuser.updateProfile(profileUpdates);
 
                         // TODO: 8/20/2022 remove password from realtime database
                         User user = new User(name, mail, password);
@@ -144,7 +147,7 @@ public class SignupFragment extends Fragment {
                                 .child(fbAuth.getCurrentUser().getUid())
                                 .setValue(user).addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
-                                        // TODO: 8/20/2022 set proper toasets
+                                        // TODO: 8/20/2022 set proper toasts
                                         Toast.makeText(requireContext(), "Account Created Auth", Toast.LENGTH_LONG).show();
                                         requireActivity().finish();
                                         loadingProgressBar.setVisibility(View.INVISIBLE);

@@ -52,10 +52,9 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.nav_host_fragment_activity_main, HomeFragment.class, null)
                         .commit();
             } else if (item.getItemId() == R.id.navigation_devices) {
-                // TODO: 8/15/2022 if logged in then go to devices
-
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
+                    item.setChecked(true);
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.nav_host_fragment_activity_main, DevicesFragment.class, null)

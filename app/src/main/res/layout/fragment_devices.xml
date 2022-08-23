@@ -1,160 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical"
     tools:context=".ui.devices.DevicesFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cns_available_devices"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cns_available_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        app:layout_constraintBaseline_toBottomOf="@id/cns_available_rv"
+        app:layout_constraintBaseline_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/tv_available_devices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
+            android:background="@drawable/devices_headers"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintBaseline_toBottomOf="@id/cns_available_rv"
             app:layout_constraintBaseline_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/tv_available_devices"
+            <ImageView
+                android:id="@+id/ic_available"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                app:tint="@color/text_primary" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/devices_headers"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="horizontal"
+                android:padding="15dp"
+                android:text="Available"
+                android:textSize="20sp"
                 app:layout_constraintBaseline_toBottomOf="@id/cns_available_rv"
-                app:layout_constraintBaseline_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/ic_available"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                    app:tint="@color/text_primary" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:text="Available"
-                    android:textSize="20sp"
-                    app:layout_constraintBaseline_toBottomOf="@id/cns_available_rv"
-                    app:layout_constraintBaseline_toTopOf="parent" />
+                app:layout_constraintBaseline_toTopOf="parent" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cns_available_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_available_devices">
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_available_devices"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/available_empty_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="40dp"
-                    android:text="Under Construction"
-                    android:textColor="@color/text_secondary"
-                    android:visibility="gone" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cns_saved_devices"
+            android:id="@+id/cns_available_rv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
+            app:layout_constraintTop_toBottomOf="@+id/tv_available_devices">
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cns_available_devices">
 
-            <LinearLayout
-                android:id="@+id/tv_saved_devices"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_available_devices"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/devices_headers"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintBaseline_toBottomOf="@id/cns_saved_rv"
-                app:layout_constraintBaseline_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/ic_saved"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                    app:tint="@color/text_primary" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:text="Saved"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cns_saved_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_saved_devices">
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/available_empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:text="Under Construction"
+                android:textColor="@color/text_secondary"
+                android:visibility="gone" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_saved_devices"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/saved_empty_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="40dp"
-                    android:text="you don't have any linked devices yet!"
-                    android:textColor="@color/text_secondary"
-                    android:visibility="gone" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cns_saved_devices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cns_available_devices">
+
+        <LinearLayout
+            android:id="@+id/tv_saved_devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/devices_headers"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBaseline_toBottomOf="@id/cns_saved_rv"
+            app:layout_constraintBaseline_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ic_saved"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                app:tint="@color/text_primary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:text="Saved"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cns_saved_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            app:layout_constraintTop_toBottomOf="@+id/tv_saved_devices">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_saved_devices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/saved_empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:text="you don't have any linked devices yet!"
+                android:textColor="@color/text_secondary"
+                android:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

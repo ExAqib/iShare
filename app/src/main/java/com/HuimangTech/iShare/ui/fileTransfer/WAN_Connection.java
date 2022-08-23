@@ -3,8 +3,6 @@ package com.HuimangTech.iShare.ui.fileTransfer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,9 +59,8 @@ public class WAN_Connection extends AppCompatActivity {
         FragmentManager manager = getSupportFragmentManager();
         SingletonSocket.setFragmentManger(manager);
         FragmentTransaction transaction = manager.beginTransaction();
-
-        transaction.replace(R.id.myFrameLayoutWan, displayDataFragment);
-        transaction.commit();
+        transaction.replace(R.id.myFrameLayoutWan, displayDataFragment)
+                .commit();
         Log.d(TAG, "loadFragment: Transaction committed");
 
         LinearLayout mBottomToolView = findViewById(R.id.li_toolBar);
@@ -72,8 +68,8 @@ public class WAN_Connection extends AppCompatActivity {
         layoutParams.setBehavior(new BottomToolBarBehavior());
 
         binding.btnClose.setOnClickListener(v -> {
-            CloseConnection();
-
+            closeConnection();
+            this.finish();
         });
         binding.btnMessage.setOnClickListener(v -> {
             Intent intent = new Intent(this, chat.class);
@@ -85,31 +81,12 @@ public class WAN_Connection extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            CloseConnection();
-            return;
-        }
 
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to Close Connection", Toast.LENGTH_SHORT).show();
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-    }
-
-    private void CloseConnection() {
+    public void closeConnection() {
         new Thread(() -> {
             printWriter.println("CLOSE_CONNECTION");
             printWriter.flush();
             SingletonSocket.CloseSocket();
-            this.finish();
         }).start();
     }
 
