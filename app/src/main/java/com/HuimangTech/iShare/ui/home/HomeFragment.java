@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment {
     BufferedReader bufferedReader = null;
     PrintWriter printWriter = null;
     Context context;
+    boolean startThread=true;
 
     ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -93,95 +94,119 @@ public class HomeFragment extends Fragment {
         fileTransferClickListener(root.getContext());
 
         context = requireContext();
-        Thread t1 = new Thread(() -> {
-            try {
-                String IP_Address = "192.168.10.99";
-                int Port_Num = 9999;
-                Log.d(TAG, " Connecting at " + IP_Address + ":" + Port_Num);
 
-                Socket socket = new Socket(IP_Address, Port_Num);
-                SingletonSocket.setSocket(socket);
-
-                printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
-                printWriter.println("MOBILE");
-                printWriter.flush();
-
-                NewConnection = false;
-                String id;
-                String fileName = "Unique_ID_file";
-                SharedPreferences sp = requireActivity().getSharedPreferences(fileName, Context.MODE_PRIVATE);
-
-                id = sp.getString("ID", null);
-                if (id == null) {
-                    StringBuilder ID = new StringBuilder();
-                    Log.d(TAG, "No previous ID found ");
-                    Random random = new Random();
-                    for (int i = 0; i < 8; i++) {
-                        ID.append(random.nextInt(9));
-                    }
-                    id = ID.toString();
-
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("ID", id);
-                    editor.apply();
-                }
-                DeviceID.deviceID = id;
-                Log.d(TAG, "ID is " + DeviceID.deviceID);
-
-                String finalId = id;
-                requireActivity().runOnUiThread(() -> {
-                    binding.mobileDataUsage.setText(finalId);
-                });
-
-
-                DeviceID.deviceName = Settings.Global.getString(requireActivity().getContentResolver(), "device_name");
-                Log.d(TAG, "deviceName is " + DeviceID.deviceName);
-
-                printWriter.println(id);
-                printWriter.flush();
-
-                printWriter.println(DeviceID.deviceName);
-                printWriter.flush();
-
-                Log.d(TAG, "deviceId and deviceName Send ");
-
-
-                bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
-
-                while (true) {
-                    String PC_Response = bufferedReader.readLine();
-                    Log.d(TAG, "onCreateView:  PC_Response is " + PC_Response);
-                    if (PC_Response.equals("RECEIVE_FILE")) {
-                        Log.d(TAG, "onCreateView: Receive file from PC");
-                        requireActivity().runOnUiThread(() -> {
-                            DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
-                            receiveFile.execute("");
-                        });
-                        break;
-                    } else if (PC_Response.equals("ERROR")) {
-                        //If User Enters a wrong ID
-                        requireActivity().runOnUiThread(() -> {
-                            Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show();
-                        });
-                    } else if (PC_Response.equals("SUCCESS")) {
-                        Intent intent = new Intent(getActivity(), WAN_Connection.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
-
-
-            } catch (Exception e) {
-                //sendToast(e.toString());
-                e.printStackTrace();
-                Log.d(TAG, "Exception  " + e);
-            }
-        });
-        t1.start();
         return root;
     }
 
-    private void fileTransferClickListener(Context context) {
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: triggered");
+        if (startThread) {
+            startThread = false;
+            new Thread(() -> {
+                try {
+                    String IP_Address = "192.168.10.99";
+                    int Port_Num = 9999;
+                    String id = getDeviceID();
+
+                    DeviceID.deviceID = id;
+                    Log.d(TAG, "ID is " + DeviceID.deviceID);
+
+                    requireActivity().runOnUiThread(() -> {
+                        binding.mobileDataUsage.setText(DeviceID.deviceID);
+                    });
+
+                    DeviceID.deviceName = Settings.Global.getString(requireActivity().getContentResolver(), "device_name");
+                    Log.d(TAG, "deviceName is " + DeviceID.deviceName);
+
+                    Socket socket = SingletonSocket.getSocket();
+                    if (socket == null) {
+                        Log.d(TAG, " Connecting at " + IP_Address + ":" + Port_Num);
+                        socket = new Socket(IP_Address, Port_Num);
+                        SingletonSocket.setSocket(socket);
+                    }
+                    printWriter = new PrintWriter(new OutputStreamWriter(SingletonSocket.getSocket().getOutputStream()));
+                    printWriter.println("MOBILE");
+                    printWriter.flush();
+
+                    NewConnection = false;
+
+                    printWriter.println(id);
+                    printWriter.flush();
+
+                    printWriter.println(DeviceID.deviceName);
+                    printWriter.flush();
+
+                    Log.d(TAG, "deviceId and deviceName Send ");
+                    bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
+
+                    while (true) {
+                        try {
+                            String PC_Response = bufferedReader.readLine();
+                            Log.d(TAG, "onCreateView:  PC_Response is " + PC_Response);
+                            if (PC_Response.equals("RECEIVE_FILE")) {
+                                Log.d(TAG, "onCreateView: Receive file from PC");
+                                requireActivity().runOnUiThread(() -> {
+                                    DirectlyReceivePCfile receiveFile = new DirectlyReceivePCfile(context);
+                                    receiveFile.execute("");
+                                });
+                                startThread = true;
+                                break;
+                            } else if (PC_Response.equals("ERROR")) {
+                                //If User Enters a wrong ID
+                                requireActivity().runOnUiThread(() -> {
+                                    Toast.makeText(context, "PC not found", Toast.LENGTH_SHORT).show();
+                                });
+                            } else if (PC_Response.equals("SUCCESS")) {
+                                Intent intent = new Intent(getActivity(), WAN_Connection.class);
+                                startActivity(intent);
+                                startThread = true;
+                                break;
+                            }
+                            else  {
+                                Log.d(TAG, "onStart: Invalid response that is "+PC_Response);
+
+                            }
+                        } catch (Exception e) {
+                            Log.d(TAG, "Exception  " + e);
+                        }
+                    }
+                }
+
+                catch (Exception e) {
+                    //sendToast(e.toString());
+                    e.printStackTrace();
+                    Log.d(TAG, "Exception  " + e);
+                }
+            }).start();
+    }
+
+        }
+
+     String getDeviceID() {
+        String id;
+        String fileName = "Unique_ID_file";
+        SharedPreferences sp = requireActivity().getSharedPreferences(fileName, Context.MODE_PRIVATE);
+
+        id = sp.getString("ID", null);
+        if (id == null) {
+            StringBuilder ID = new StringBuilder();
+            Log.d(TAG, "No previous ID found ");
+            Random random = new Random();
+            for (int i = 0; i < 8; i++) {
+                ID.append(random.nextInt(9));
+                id = ID.toString();
+
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("ID", id);
+                editor.apply();
+            }
+
+        }
+        return id;
+    }
+     private void fileTransferClickListener(Context context) {
         binding.btnFileTransfer.setOnClickListener(v -> {
 
             SharedPreferences sharedPreferences =
@@ -218,8 +243,8 @@ public class HomeFragment extends Fragment {
                             NewConnection = true;
                         }
                         if (sendIdPassword(partnerId, password)) {
-
-                            /*Intent intent = new Intent(getActivity(), WAN_Connection.class);
+/*
+                            Intent intent = new Intent(getActivity(), WAN_Connection.class);
                             startActivity(intent);*/
                         }
                     } catch (Exception e) {
@@ -268,8 +293,8 @@ public class HomeFragment extends Fragment {
 
             //Log.d(TAG, "ID " + id + " and Password " + password + " send ");
             Log.d(TAG, "ID " + id + " send ");
-
-            /*String data = bufferedReader.readLine();
+/*
+            String data = bufferedReader.readLine();
             Log.d(TAG, "Received response  " + data);
 
             if (data.equals("ERROR")) {
@@ -324,3 +349,4 @@ public class HomeFragment extends Fragment {
     }
 
 }
+

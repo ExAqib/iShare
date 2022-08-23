@@ -35,7 +35,7 @@ public class DirectlyReceivePCfile extends AsyncTask<String, String, Void> {
         progressDialog = new ProgressDialog(context);
 
         progressDialog.setTitle("Receiving File...");
-        progressDialog.setMessage("Your File that is being send from PC, is being received in background. Feel free to use any other app.");
+        progressDialog.setMessage("Your File is being received in background. Feel free to use any other app!");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
