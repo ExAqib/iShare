@@ -85,8 +85,9 @@ public class AccountFragment extends Fragment {
             } else {
                 User userProfile = task.getResult().getValue(User.class);
                 if (userProfile != null) {
-                    name.setText(userProfile.Name);
+                    name.setText("Welcome " +  userProfile.Name);
                     email.setText(userProfile.Email);
+
                     loadingProgressBar.setVisibility(View.GONE);
                 } else
                     requireActivity().finish();

@@ -23,6 +23,7 @@
         <entry key="..\:/Users/aqibn/Documents/GitHub/AwaCam/app/src/main/res/layout/drive_info_item.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/aqibn/Documents/GitHub/AwaCam/app/src/main/res/layout/file_history_item.xml" value="0.1" />
         <entry key="..\:/Users/aqibn/Documents/GitHub/AwaCam/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/do7aa/StudioProjects/iShare/app/src/main/res/layout/fragment_account.xml" value="0.25" />
         <entry key="..\:/Users/loffy/Documents/GitHub/AwaCam/app/src/main/res/layout/activity_connect.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/AwaCam/app/src/main/res/layout/activity_lan_connect.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/loffy/Documents/GitHub/AwaCam/app/src/main/res/layout/activity_main.xml" value="0.245018115942029" />
@@ -118,7 +119,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

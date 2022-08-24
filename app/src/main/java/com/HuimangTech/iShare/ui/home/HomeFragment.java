@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
 
     String[] Permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     static final String TAG = "tag";
-    String serverIP = "192.168.10.99";
+    String serverIP = "10.140.49.145";
     boolean NewConnection = true;
     boolean startThread = true;
     boolean manualConnectionState = false;
