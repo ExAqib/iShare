@@ -47,29 +47,28 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
 
     @Override
     protected Void doInBackground(String... strings) {
-
-        SingletonSocket.sendRequest("downloadFile");
-        FilePath = strings[0];
-
-        StringBuilder path2 = new StringBuilder();
-
-        int i = 0;
-        for (String s : SingletonSocket.getNavigationPath()) {
-            Log.d(TAG, " String s : SingletonSocket.getNavigationPath() is " + s);
-            if (i < 2) {
-                path2.append(s);
-            } else {
-                path2.append("\\").append(s);
-            }
-            i++;
-        }
-
-        SingletonSocket.sendRequest(path2.toString());
-
-        SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size() - 1);
-
-
         try {
+            SingletonSocket.sendRequest("downloadFile");
+            FilePath = strings[0];
+
+            StringBuilder path2 = new StringBuilder();
+
+            int i = 0;
+            for (String s : SingletonSocket.getNavigationPath()) {
+                Log.d(TAG, " String s : SingletonSocket.getNavigationPath() is " + s);
+                if (i < 2) {
+                    path2.append(s);
+                } else {
+                    path2.append("\\").append(s);
+                }
+                i++;
+            }
+
+            SingletonSocket.sendRequest(path2.toString());
+
+            SingletonSocket.getNavigationPath().remove(SingletonSocket.getNavigationPath().size() - 1);
+
+
             Log.d(TAG, "Receiving File");
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(SingletonSocket.getSocket().getInputStream()));
@@ -81,8 +80,6 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
                     FileHistoryDatabase.class, "File").build();
 
             db.FileDao().insert(new com.HuimangTech.iShare.ui.downloads.DB.File(fileName, Long.parseLong(fileSize)));
-
-
 
             this.fileSize = Integer.parseInt(fileSize);
             progressDialog.setMax(this.fileSize / 1000000);
@@ -146,23 +143,25 @@ public class DownloadFile extends AsyncTask<String, String, Void> {
             DataInputStream dIn = new DataInputStream(SingletonSocket.getSocket().getInputStream());
             FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
 
-            byte[] data;
             int bufferSize = 2048 * 8;
             int totalBytesRead = 0;
             int bytesReadPerCycle;
+            byte []data = new byte[bufferSize];
 
             while (totalBytesRead < fileSize) {
 
                 //checking if the buffer size exceeds, the size of file or remaining data of file
-                if (bufferSize > (fileSize - totalBytesRead)) {
+               /* if (bufferSize > (fileSize - totalBytesRead)) {
                     Log.d(TAG, "Adjusting buffer size from " + bufferSize);
                     bufferSize = fileSize - totalBytesRead;
                     Log.d(TAG, "to " + bufferSize);
                 }
                 data = new byte[bufferSize];
-
+*/
                 Log.d(TAG, "Trying to Read");
-                bytesReadPerCycle = dIn.read(data, 0, bufferSize);
+                //bytesReadPerCycle = dIn.read(data, 0, bufferSize);
+                bytesReadPerCycle = dIn.read(data);
+
                 Log.d(TAG, "Read " + totalBytesRead + " of " + fileSize + " bytes");
 
                 fos.write(data, 0, bytesReadPerCycle);

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,15 @@ public class SingletonSocket {
     }
 
     public static void setSocket(Socket socket) {
-        SingletonSocket.socket = socket;
+
+        try {
+            SingletonSocket.socket = socket;
+
+            //  SingletonSocket.getSocket().setSoTimeout(20000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static void CloseSocket() {
@@ -66,7 +75,6 @@ public class SingletonSocket {
             } finally {
                 socket = null;
                 Log.d(TAG, "CloseSocket: Done");
-
             }
         }
 

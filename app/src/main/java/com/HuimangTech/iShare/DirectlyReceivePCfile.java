@@ -119,10 +119,10 @@ public class DirectlyReceivePCfile extends AsyncTask<String, String, Void> {
             DataInputStream dIn = new DataInputStream(SingletonSocket.getSocket().getInputStream());
             FileOutputStream fos = new FileOutputStream(getFilePath(fileName));
 
-            byte[] data;
             int bufferSize = 2048 * 8;
             int totalBytesRead = 0;
             int bytesReadPerCycle;
+            byte[] data=new byte[bufferSize];
 
             int chunk =0;
             while (totalBytesRead < fileSize) {
@@ -135,10 +135,12 @@ public class DirectlyReceivePCfile extends AsyncTask<String, String, Void> {
                     Log.d(TAG, "to " + bufferSize);
                 }
                 */
-                data = new byte[bufferSize];
+                //data = new byte[bufferSize];
 
                 Log.d(TAG, "Trying to Read chunk "+chunk);
-                bytesReadPerCycle = dIn.read(data, 0, bufferSize);
+                //bytesReadPerCycle = dIn.read(data, 0, bufferSize);
+                bytesReadPerCycle = dIn.read(data);
+
                 Log.d(TAG, "Read " + totalBytesRead + " of " + fileSize + " bytes");
 
                 fos.write(data, 0, bytesReadPerCycle);
@@ -146,7 +148,6 @@ public class DirectlyReceivePCfile extends AsyncTask<String, String, Void> {
                 Log.d(TAG, "Total data read " + totalBytesRead / 1000000 + " MB's (" + totalBytesRead + " bytes)");
 
                 publishProgress(String.valueOf(totalBytesRead));
-
             }
 
             if (totalBytesRead == fileSize) {
