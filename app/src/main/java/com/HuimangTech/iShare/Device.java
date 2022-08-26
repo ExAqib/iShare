@@ -1,6 +1,6 @@
 package com.HuimangTech.iShare;
 
-public class DeviceID {
+public class Device {
     public static String deviceID = null;
     public static String deviceName = null;
 

@@ -85,7 +85,7 @@ public class AccountFragment extends Fragment {
             } else {
                 User userProfile = task.getResult().getValue(User.class);
                 if (userProfile != null) {
-                    name.setText("Welcome " +  userProfile.Name);
+                    name.setText("Welcome " + userProfile.Name);
                     email.setText(userProfile.Email);
 
                     loadingProgressBar.setVisibility(View.GONE);
@@ -135,7 +135,7 @@ public class AccountFragment extends Fragment {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 reference.child(userID).child("Name").setValue(newName.getText().toString());
-                                name.setText(newName.getText());
+                                setUserInfo();
                                 Toast.makeText(getContext(), "Display name is updated", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -180,7 +180,7 @@ public class AccountFragment extends Fragment {
                                                 .addOnCompleteListener(task1 -> {
                                                     if (task1.isSuccessful()) {
                                                         reference.child(userID).child("Password").setValue(newPassword.getText().toString());
-                                                        Toast.makeText(getContext(), "password is successfully updated!", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getContext(), "Password is successfully updated!", Toast.LENGTH_SHORT).show();
                                                         dialog.cancel();
                                                     }
                                                 });

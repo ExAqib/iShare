@@ -56,7 +56,7 @@ public class SignupFragment extends Fragment {
         final EditText userEmailEditText = binding.email;
         final EditText userNameEditText = binding.name;
         final EditText passwordEditText = binding.password;
-        final Button resetButton = binding.signup;
+        final Button signupButton = binding.signup;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
@@ -65,7 +65,7 @@ public class SignupFragment extends Fragment {
                 if (loginFormState == null) {
                     return;
                 }
-                resetButton.setEnabled(loginFormState.isDataValid());
+                signupButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
                     userEmailEditText.setError(getString(loginFormState.getUsernameError()));
                 }
@@ -122,7 +122,7 @@ public class SignupFragment extends Fragment {
             }
         });
 
-        resetButton.setOnClickListener(v -> {
+        signupButton.setOnClickListener(v -> {
             String name = userNameEditText.getText().toString().trim();
             String mail = userEmailEditText.getText().toString().trim().toLowerCase();
             String password = passwordEditText.getText().toString().trim();

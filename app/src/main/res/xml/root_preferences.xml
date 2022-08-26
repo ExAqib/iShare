@@ -22,7 +22,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
-            app:defaultValue="1"
+            app:defaultValue="34133581"
             app:dependency="manual"
             app:key="ID"
             app:title="Partner ID"
